@@ -54,7 +54,7 @@ class get_EKS_cluster_endpoint_url(Rule):
 class get_cluster_vpc_subnets(Rule):
     _type = "cluster_wide"
     pillar = "cluster_data"
-    section = "control_plane"
+    section = "data_plane"
     message = "Get EKS Cluster VPC & Subnets"
     url = "https://aws.github.io/aws-eks-best-practices/scalability/docs/control-plane/#use-eks-124-or-above"
 
@@ -71,11 +71,11 @@ class get_cluster_vpc_subnets(Rule):
                     
 
         
-class get_cluster_vpc_subnets(Rule):
+class get_available_free_ips_in_vpc(Rule):
     _type = "cluster_wide"
     pillar = "cluster_data"
-    section = "control_plane"
-    message = "Get EKS Cluster VPC & Subnets"
+    section = "data_plane"
+    message = "Check Available Free IPs in EKS VPC"
     url = "https://aws.github.io/aws-eks-best-practices/scalability/docs/control-plane/#use-eks-124-or-above"
 
 
@@ -85,8 +85,37 @@ class get_cluster_vpc_subnets(Rule):
         cluster_metadata = eksclient.describe_cluster(name=resources.cluster)
         vpcId  = cluster_metadata["cluster"]["resourcesVpcConfig"]["vpcId"]
         subnetIds = cluster_metadata["cluster"]["resourcesVpcConfig"]["subnetIds"]
-        subnetIdsString = " ".join(subnetIds)
-        resource=f"vpcId {vpcId} subnetIds {subnetIdsString}"
-        self.result = Result(status=checkStatus, resource_type="EKS Cluster VPC & Subnet Ids",resources=[resource],)
+        subnets = boto3.resource("ec2").subnets.filter(
+            Filters=[{"Name": "vpc-id", "Values": [vpcId]}]
+        )        
+        subnet_ids = [sn.id for sn in subnets]
+        ec2client = boto3.client('ec2')
+        subnetsList = ec2client.describe_subnets(SubnetIds=subnet_ids)
+        
+        totalAvailableIpAddressCount = 0
+        for subnet in subnetsList['Subnets']:
+            totalAvailableIpAddressCount += subnet['AvailableIpAddressCount']
+        
+        resource=f"Availablle Free IPs {totalAvailableIpAddressCount}"
+        self.result = Result(status=checkStatus, resource_type="Available Free IPs in EKS VPC",resources=[resource],)
                     
+
+class get_cluster_size_details(Rule):
+    _type = "cluster_wide"
+    pillar = "cluster_data"
+    section = "data_plane"
+    message = "Get Cluster Size Details"
+    url = "https://aws.github.io/aws-eks-best-practices/scalability/docs/control-plane/#use-eks-124-or-above"
+
+
+    def check(self, resources: Resources):
+        checkStatus = True
+        deployments = kubernetes.client.AppsV1Api().list_deployment_for_all_namespaces().items    
+        services = kubernetes.client.CoreV1Api().list_service_for_all_namespaces().items
+        pods = kubernetes.client.CoreV1Api().list_pod_for_all_namespaces().items
+        nodeList = (kubernetes.client.CoreV1Api().list_node().items)
+        resource=f"Deployments : {len(deployments)} Services : {len(services)} Pods : {len(pods)} Nodes # {len(nodeList)}"
+        self.result = Result(status=checkStatus, resource_type="Cluster Size Details",resources=[resource],)
+                    
+
 
