@@ -24,6 +24,7 @@ from hardeneks import helpers
 app = typer.Typer()
 console = Console(record=True)
 
+pillarsList = []
 
 def _config_callback(value: str):
 
@@ -65,7 +66,12 @@ def _get_cluster_name(context, region):
     except EndpointConnectionError:
         raise ValueError(f"{region} seems like a bad region name")
 
+def _get_default_pillars() -> list:
+    return ["security", "reliability", "cluster-autoscaling", "networking"]
 
+def get_pillars_list() -> list:
+    return pillarsList
+    
 def _get_region():
     return boto3.session.Session().region_name
 
@@ -169,6 +175,10 @@ def run_hardeneks(
         False,
         "--insecure-skip-tls-verify",
     ),
+    pillars: str = typer.Option(
+        default=None,
+        help="Specific pillars to harden. Default is all pillars.",
+    ),     
 ):
     """
     Main entry point to hardeneks.
@@ -188,6 +198,8 @@ def run_hardeneks(
         None
 
     """
+    global pillarsList
+    
     if insecure_skip_tls_verify:
         _add_tls_verify()
     else:
@@ -204,7 +216,7 @@ def run_hardeneks(
 
     console.rule("[b]HARDENEKS", characters="*  ")
     console.print(f"You are operating at {region}")
-    console.print(f"You context is {context}")
+    console.print(f"You context used is {context}")
     console.print(f"Your cluster name is {cluster}")
     console.print(f"You are using {config} as your config file")
     console.print()
@@ -216,7 +228,15 @@ def run_hardeneks(
         namespaces = _get_namespaces(config["ignore-namespaces"])
     else:
         namespaces = [namespace]
-
+        
+    if not pillars:
+        pillarsList = _get_default_pillars()
+    else:
+        #namespaces = [namespace]
+        pillarsList = pillars.split(',')
+                
+    #print("pillarsList={}".format(pillarsList))
+    
     rules = config["rules"]
 
     resources = Resources(region, context, cluster, namespaces)
@@ -224,13 +244,16 @@ def run_hardeneks(
 
     results = []
 
+    print("calling harden for cluster_wide")
     cluster_wide_results = harden(resources, rules, "cluster_wide")
 
     results = results + cluster_wide_results
+    print("results={}".format(results))
 
     for ns in namespaces:
         resources = NamespacedResources(region, context, cluster, ns)
         resources.set_resources()
+        print("calling harden for ns={}".format(ns))
         namespace_based_results = harden(resources, rules, "namespace_based")
         results = results + namespace_based_results
 

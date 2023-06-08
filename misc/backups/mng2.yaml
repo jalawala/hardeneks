@@ -1,0 +1,23 @@
+---
+apiVersion: eksctl.io/v1alpha5
+kind: ClusterConfig
+
+metadata:
+  name: eksworkshop-eksctl
+  region: us-east-1
+  version: "1.23"
+  
+managedNodeGroups:
+  - name: mng2
+    instanceTypes:
+    - m4.xlarge
+    - m5.large
+    - m5a.2xlarge
+    - m5ad.4xlarge
+    - m5d.xlarge
+    - t2.xlarge
+    - t3.xlarge
+    - t3a.xlarge    
+    minSize: 1
+    maxSize: 5
+    desiredCapacity: 5

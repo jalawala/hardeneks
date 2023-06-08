@@ -13,9 +13,31 @@ ignore-namespaces:
   - vpa
 rules: 
   cluster_wide:
-    cluster_data:
-      cluster_data:
-        - check_EKS_version  
+    cluster-autoscaling:
+      cluster-autoscaler:
+        #- deploy_nodes_to_private_subnets
+        - check_any_cluster_autoscaler_exists
+        - ensure_cluster_autoscaler_and_cluster_versions_match
+        - ensure_cluster_autoscaler_has_autodiscovery_mode
+        - ensure_cluster_autoscaler_has_three_replicas
+        - use_separate_iam_role_for_cluster_autoscaler
+        - employ_least_privileged_access_to_the_IAM_role
+        - use_managed_nodegroups
+        - ensure_uniform_instance_types_in_nodegroups
+    networking:
+      vpc_subnets:
+        #- deploy_nodes_to_private_subnets
+        - consider_public_and_private_mode
+      vpc-cni:
+        #- deploy_nodes_to_private_subnets
+        - deploy_vpc_cni_managed_add_on
+        - use_separate_iam_role_for_cni
+        - monitor_IP_adress_inventory
+        - use_dedicated_and_small_subnets_for_cluster_creation
+      prefix_mode:
+        - use_prefix_mode
+      load-balancing:
+        - use_aws_lb_controller  
     security:
       iam:
         - disable_anonymous_access_for_cluster_roles
@@ -46,19 +68,14 @@ rules:
       applications:
         - check_metrics_server_is_running
         - check_vertical_pod_autoscaler_exists
-    cluster_autoscaling:
-      cluster_autoscaler:
-        - check_any_cluster_autoscaler_exists
-        - ensure_cluster_autoscaler_and_cluster_versions_match
-        - ensure_cluster_autoscaler_has_autodiscovery_mode
-        - use_separate_iam_role_for_cluster_autoscaler
-        - employ_least_privileged_access_cluster_autoscaler_role
-        - use_managed_nodegroups
-    scalability:
-      control_plane:
-        - check_EKS_version
-        - check_kubectl_compression
   namespace_based:
+    networking: 
+      load-balancing:
+        - use_IP_target_type_service_load_balancers
+        - use_IP_target_type_ingress_load_balancers
+        - utilize_pod_readiness_gates
+        - ensure_pods_deregister_from_LB_before_termination
+        - configure_pod_disruption_budget  
     security: 
       iam:
         - disable_anonymous_access_for_roles
@@ -86,3 +103,15 @@ rules:
         - schedule_replicas_across_nodes
         - run_multiple_replicas
         - avoid_running_singleton_pods
+        - check_readiness_probes
+        - check_liveness_probes
+    #   data_plane:
+    # networking:
+    #   vpc_subnets:
+    #   vpc_cni:
+    #   prefix_mode:
+    #   ipv6:
+    #   security_groups:
+    #   custom_networking:
+    #   load_balancing:
+

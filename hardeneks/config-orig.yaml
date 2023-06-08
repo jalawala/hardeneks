@@ -13,9 +13,6 @@ ignore-namespaces:
   - vpa
 rules: 
   cluster_wide:
-    cluster_data:
-      cluster_data:
-        - check_EKS_version  
     security:
       iam:
         - disable_anonymous_access_for_cluster_roles

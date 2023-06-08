@@ -1,0 +1,6 @@
+*  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  HARDENEKS *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * 
+You are operating at us-east-1
+You context is k8s-cluster.kops.com
+Your cluster name is k8s-cluster.kops.com
+You are using ./hardeneks/config.yaml as your config file
+
