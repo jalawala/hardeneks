@@ -116,7 +116,7 @@ def print_consolidated_results(rules: list):
         table.add_column("Section")
         table.add_column("Namespace")
         table.add_column("Rule")
-        table.add_column("Resource")
+        table.add_column("Resource", no_wrap=False)
         table.add_column("Resource Type")
         table.add_column("Resolution")
         filtered_rules = [i for i in rules if i.pillar == pillar]
@@ -137,7 +137,7 @@ def print_consolidated_results(rules: list):
                     f"[link={rule.url}]Link[/link]",
                     style=color,
                 )
-        console.print(Panel(table, title=f"[cyan][bold]{pillar} rules"))
+        console.print(Panel(table, title=f"[cyan][bold]{pillar} rules", title_align="left"))
         console.print()
 
 
