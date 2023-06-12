@@ -133,7 +133,7 @@ def print_consolidated_results(rules: list):
             if rule.result.namespace:
                 namespace = rule.result.namespace
             
-            print("rule.result.namespace={} namespace={}".format(rule.result.namespace, namespace))
+            #print("rule.result.namespace={} namespace={}".format(rule.result.namespace, namespace))
             
             for resource in rule.result.resources:
                 table.add_row(
@@ -278,16 +278,16 @@ def run_hardeneks(
         for ns in namespaces:
             resources = NamespacedResources(region, context, cluster, ns)
             resources.set_resources()
-            print("calling harden for ns={}".format(ns))
+            #print("calling harden for ns={}".format(ns))
             namespace_based_results = harden(resources, rules, "namespace_based")
-            print("ns={} namespace_based_results={}".format(ns, namespace_based_results))
-            print_consolidated_results(namespace_based_results)
+            #print("ns={} namespace_based_results={}".format(ns, namespace_based_results))
+            #print_consolidated_results(namespace_based_results)
             results = results + namespace_based_results
 
     console.rule("[b]Generating the Consolidated Report", characters="- ")
     console.print()
     
-    #print_consolidated_results(results)
+    print_consolidated_results(results)
 
     if export_txt:
         console.save_text(export_txt)

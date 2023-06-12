@@ -6,10 +6,10 @@ def harden(resources, config, _type):
     config = config[_type]
     results = []
     #pillarsList = get_pillars_list()
-    print("pillarsList={} in hardeneks".format(hardeneks.pillarsList))
+    #print("pillarsList={} in hardeneks".format(hardeneks.pillarsList))
     
     for pillar in config.keys():
-        print("pillar={} _type={}".format(pillar, _type))
+        #print("pillar={} _type={}".format(pillar, _type))
         if pillar in hardeneks.pillarsList:
             for section in config[pillar]:
                 for rule in config[pillar][section]:

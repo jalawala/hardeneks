@@ -114,7 +114,7 @@ class disable_anonymous_access_for_roles(Rule):
                 namespace=namespaced_resources.namespace,
             )
         
-        print("self.result={}".format(self.result))
+        #print("self.result={}".format(self.result))
         
 
 
@@ -220,7 +220,7 @@ class use_dedicated_service_accounts_for_each_daemon_set(
                 if k == deployment.spec.template.spec.service_account_name:
                     offenders.append(deployment)
 
-        self.result = Result(status=True, resource_type="DaemonSet")
+        self.result = Result(status=True, resource_type="DaemonSet",namespace=namespaced_resources.namespace)
         if offenders:
             self.result = Result(
                 status=False,

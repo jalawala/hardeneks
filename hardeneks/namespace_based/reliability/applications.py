@@ -16,7 +16,7 @@ class avoid_running_singleton_pods(Rule):
             if not owner:
                 offenders.append(pod)
 
-        self.result = Result(status=True, resource_type="Pod")
+        self.result = Result(status=True, resource_type="Pod",namespace=namespaced_resources.namespace)
         if offenders:
             self.result = Result(
                 status=False,
@@ -41,7 +41,7 @@ class run_multiple_replicas(Rule):
             if deployment.spec.replicas < 2:
                 offenders.append(deployment)
 
-        self.result = Result(status=True, resource_type="Deployment")
+        self.result = Result(status=True, resource_type="Deployment", namespace=namespaced_resources.namespace)
         if offenders:
             self.result = Result(
                 status=False,
@@ -73,7 +73,7 @@ class schedule_replicas_across_nodes(Rule):
                 ):
                     offenders.append(deployment)
 
-        self.result = Result(status=True, resource_type="Deployment")
+        self.result = Result(status=True, resource_type="Deployment", namespace=namespaced_resources.namespace)
         if offenders:
             self.result = Result(
                 status=False,
@@ -102,7 +102,7 @@ class check_horizontal_pod_autoscaling_exists(Rule):
             if deployment.metadata.name not in hpas:
                 offenders.append(deployment)
 
-        self.result = Result(status=True, resource_type="Deployment")
+        self.result = Result(status=True, resource_type="Deployment", namespace=namespaced_resources.namespace)
         if offenders:
             self.result = Result(
                 status=False,
@@ -128,7 +128,7 @@ class check_readiness_probes(Rule):
                 if not container.readiness_probe:
                     offenders.append(pod)
 
-        self.result = Result(status=True, resource_type="Pod")
+        self.result = Result(status=True, resource_type="Pod", namespace=namespaced_resources.namespace)
         if offenders:
             self.result = Result(
                 status=False,
@@ -154,7 +154,7 @@ class check_liveness_probes(Rule):
                 if not container.liveness_probe:
                     offenders.append(pod)
 
-        self.result = Result(status=True, resource_type="Pod")
+        self.result = Result(status=True, resource_type="Pod", namespace=namespaced_resources.namespace)
         if offenders:
             self.result = Result(
                 status=False,
