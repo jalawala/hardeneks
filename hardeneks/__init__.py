@@ -274,6 +274,8 @@ def run_hardeneks(
     """
     global pillarsList
     
+    (context, cluster) = _get_cluster_context_and_name(context, cluster)
+    
     if insecure_skip_tls_verify:
         _add_tls_verify()
     else:
@@ -285,7 +287,7 @@ def run_hardeneks(
     #if not cluster:
         #cluster = _get_cluster_name(context, region)
     
-    (context, cluster) = _get_cluster_context_and_name(context, cluster)
+    
 
     if not region:
         region = _get_region()
@@ -306,7 +308,10 @@ def run_hardeneks(
         #namespaces = [namespace]
         namespaces = namespace.split(',')
     
+    
     print("namespaces={}".format(namespaces))
+    #namespaces = _get_namespaces(config["ignore-namespaces"])
+    print("namespaces={}".format(_get_namespaces(config["ignore-namespaces"])))
         
     if not pillars:
         pillarsList = _get_default_pillars()
