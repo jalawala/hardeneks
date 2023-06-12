@@ -14,12 +14,14 @@ class restrict_wildcard_for_roles(Rule):
     def check(self, namespaced_resources: NamespacedResources):
         offenders = []
 
-        for role in namespaced_resources.roles:
-            for rule in role.rules:
-                if "*" in rule.verbs:
-                    offenders.append(role)
-                if "*" in rule.resources:
-                    offenders.append(role)
+        if namespaced_resources.roles:
+            for role in namespaced_resources.roles:
+                if role.rules:
+                    for rule in role.rules:
+                        if "*" in rule.verbs:
+                            offenders.append(role)
+                        if "*" in rule.resources:
+                            offenders.append(role)
 
         self.result = Result(status=True, resource_type="Role", namespace=namespaced_resources.namespace)
         if offenders:

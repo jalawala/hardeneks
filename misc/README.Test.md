@@ -32,7 +32,7 @@ hardeneks --only_cluster_level_rules
 
 hardeneks --only_namespace_level_rules
 
-hardeneks --namespace default,kubecost
+hardeneks --namespace default,kubecost --pillars security
 
 
 
