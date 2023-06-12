@@ -100,3 +100,25 @@ class get_available_free_ips_in_vpc(Rule):
         self.result = Result(status=checkStatus, resource_type="Available Free IPs in EKS VPC",resources=[resource],)
                     
 
+
+class get_cluster_size_details(Rule):
+    _type = "cluster_wide"
+    pillar = "cluster_data"
+    section = "data_plane"
+    message = "Get Cluster Size Details"
+    url = "https://aws.github.io/aws-eks-best-practices/scalability/docs/control-plane/#use-eks-124-or-above"
+
+
+    def check(self, resources: Resources):
+        checkStatus = True
+        
+        deployments = kubernetes.client.AppsV1Api().list_deployment_for_all_namespaces().items
+        services = kubernetes.client.CoreV1Api().list_service_for_all_namespaces().items
+        pods = kubernetes.client.CoreV1Api().list_pod_for_all_namespaces().items
+        nodeList = (kubernetes.client.CoreV1Api().list_node().items)
+        
+        resource=f"Services : {len(services)} Deployments : {len(deployments)} Pods: {len(pods)} Nodes: {len(nodeList)}"
+        
+        self.result = Result(status=checkStatus, resource_type="Size of the Cluster",resources=[resource],)
+                    
+
