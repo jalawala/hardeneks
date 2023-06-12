@@ -9,7 +9,7 @@ def harden(resources, config, _type):
     print("pillarsList={} in hardeneks".format(hardeneks.pillarsList))
     
     for pillar in config.keys():
-        #print("pillar={}".format(pillar))
+        print("pillar={} _type={}".format(pillar, _type))
         if pillar in hardeneks.pillarsList:
             for section in config[pillar]:
                 for rule in config[pillar][section]:

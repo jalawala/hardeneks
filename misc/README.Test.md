@@ -24,7 +24,11 @@ cd hardeneks
 pip install hardeneks
 hardeneks
 
+hardeneks
+hardeneks  --pillars cluster_data,security  --export-html report.html
+hardeneks  --pillars cluster_data,security  --export-html report.html
 
+hardeneks 
 
 git clone git@github.com:dorukozturk/hardeneks.git
 cd hardeneks
