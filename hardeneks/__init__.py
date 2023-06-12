@@ -111,6 +111,7 @@ def print_consolidated_results(rules: list):
 
     pillars = set([i.pillar for i in rules])
 
+
     for pillar in pillars:
         table = Table()
         table.add_column("Section")
@@ -120,11 +121,15 @@ def print_consolidated_results(rules: list):
         table.add_column("Resource Type")
         table.add_column("Resolution")
         filtered_rules = [i for i in rules if i.pillar == pillar]
+        total_no_of_rules = len (filtered_rules)
+        no_of_rules_passed = 0
         for rule in filtered_rules:
             color = "red"
             namespace = "Cluster Wide"
             if rule.result.status:
                 color = "green"
+                no_of_rules_passed += 1
+                
             if rule.result.namespace:
                 namespace = rule.result.namespace
             for resource in rule.result.resources:
@@ -137,7 +142,9 @@ def print_consolidated_results(rules: list):
                     f"[link={rule.url}]Link[/link]",
                     style=color,
                 )
-        console.print(Panel(table, title=f"[cyan][bold]{pillar} rules", title_align="left"))
+        
+        titleMessage=f"[cyan][bold] Report for {pillar} piller : {no_of_rules_passed}/{total_no_of_rules} rules passed"
+        console.print(Panel(table, title=titleMessage, title_align="left"))
         console.print()
 
 
