@@ -15,6 +15,7 @@ class Result(object):
 
 class Rule(ABC):
 
+    name = None
     message = None
     url = None
     _type = None

@@ -28,7 +28,9 @@ hardeneks
 hardeneks  --pillars cluster_data,security  --export-html report.html
 hardeneks  --pillars cluster_data,security  --export-html report.html
 
-hardeneks 
+hardeneks --only_cluster_level_rules
+
+only_namespace_level_rules
 
 git clone git@github.com:dorukozturk/hardeneks.git
 cd hardeneks

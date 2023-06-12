@@ -268,8 +268,7 @@ def run_hardeneks(
         console.rule("[b]Checking cluster wide rules", characters="- ")
         console.print()  
         cluster_wide_results = harden(resources, rules, "cluster_wide")
-
-    results = results + cluster_wide_results
+        results = results + cluster_wide_results
     #print("results={}".format(results))
 
     if not only_cluster_level_rules:
