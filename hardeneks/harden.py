@@ -20,9 +20,10 @@ def harden(resources, config, _type):
                     except AttributeError as exc:
                         print(f"[bold][red]{exc}")
                     try:
-                        rule = cls()
-                        rule.check(resources)
-                        results.append(rule)
+                        ruleObject = cls()
+                        ruleObject.name = rule
+                        ruleObject.check(resources)
+                        results.append(ruleObject)
                     except Exception as exc:
                         print(f"[bold][red]{exc}")
 

@@ -116,7 +116,8 @@ def print_consolidated_results(rules: list):
         table = Table()
         table.add_column("Section")
         table.add_column("Namespace")
-        table.add_column("Rule")
+        table.add_column("Rule Name")
+        table.add_column("Rule Description")
         table.add_column("Resource", no_wrap=False)
         table.add_column("Resource Type")
         table.add_column("Resolution")
@@ -139,6 +140,7 @@ def print_consolidated_results(rules: list):
                 table.add_row(
                     rule.section,
                     namespace,
+                    rule.name,
                     rule.message,
                     resource,
                     rule.result.resource_type,

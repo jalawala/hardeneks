@@ -90,6 +90,7 @@ class check_horizontal_pod_autoscaling_exists(Rule):
     message = "Deploy horizontal pod autoscaler for deployments."
     url = "https://aws.github.io/aws-eks-best-practices/reliability/docs/application/#horizontal-pod-autoscaler-hpa"
 
+    
     def check(self, namespaced_resources: NamespacedResources):
 
         offenders = []
