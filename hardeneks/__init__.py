@@ -247,17 +247,17 @@ def run_hardeneks(
     if not namespace:
         namespaces = _get_namespaces(config["ignore-namespaces"])
     else:
-        namespaces = [namespace]
+        #namespaces = [namespace]
+        namespaces = namespace.split(',')
     
     print("namespaces={}".format(namespaces))
         
     if not pillars:
         pillarsList = _get_default_pillars()
     else:
-        #namespaces = [namespace]
         pillarsList = pillars.split(',')
                 
-    print("pillarsList={}".format(pillarsList))
+    print("pillarsList={} namespaces={}".format(pillarsList, namespaces))
     
     rules = config["rules"]
 

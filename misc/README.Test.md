@@ -30,7 +30,11 @@ hardeneks  --pillars cluster_data,security  --export-html report.html
 
 hardeneks --only_cluster_level_rules
 
-only_namespace_level_rules
+hardeneks --only_namespace_level_rules
+
+hardeneks --namespace default,kubecost
+
+
 
 git clone git@github.com:dorukozturk/hardeneks.git
 cd hardeneks
