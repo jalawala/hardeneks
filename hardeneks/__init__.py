@@ -44,6 +44,60 @@ def _config_callback(value: str):
     return value
 
 
+def _get_cluster_name_from_context(clusterNameStr):
+    
+    if clusterNameStr.endswith('eksctl.io'):
+        clusterName = clusterNameStr.split('.')[0]
+    elif clusterNameStr.startswith('arn:'):
+        clusterName = clusterNameStr.split('/')[-1]    
+    else:
+        clusterName = clusterNameStr
+        
+    return clusterName
+    
+    
+    
+def _get_cluster_context_and_name(contextFromUser, clusterFromUser):
+    
+    contextName = None
+    clusterName = None
+    
+    #print("contextFromUser={} clusterFromUser={}".format(contextFromUser, clusterFromUser))    
+    
+    contextList, active_context = kubernetes.config.list_kube_config_contexts()
+    
+    if contextFromUser:
+        contextName = contextFromUser
+        if clusterFromUser:
+            clusterName = clusterFromUser
+        else:
+            for contextData in contextList:
+                #print("contextData={}".format(contextData))
+                if contextData['name'] == contextFromUser:
+                    clusterName = _get_cluster_name_from_context(contextData['context']['cluster'])
+    else:
+        if clusterFromUser:
+            clusterName = clusterFromUser
+            for contextData in contextList:
+                clusterNameFromContext = _get_cluster_name_from_context(contextData['context']['cluster'])
+                #print("clusterNameFromContext={} clusterFromUser={}".format(clusterNameFromContext, clusterFromUser))
+                if clusterNameFromContext ==  clusterFromUser:
+                    contextName = contextData['name']
+                    print("contextName={}".format(contextName))
+                    
+        else:
+            contextName = active_context['name']
+            clusterName = _get_cluster_name_from_context(active_context['context']['cluster'])
+    
+    
+    if  contextName and clusterName:
+        #print("contextName={} clusterName={}".format(contextName, clusterName))
+        return (contextName, clusterName)
+    else:
+        print("contextName={} and clusterName={} are not valid. Exiting the program".format(contextName, clusterName)) 
+        sys.exit()
+
+
 def _get_current_context(context):
     if context:
         return context
@@ -226,10 +280,12 @@ def run_hardeneks(
         # should pass in config file
         kubernetes.config.load_kube_config(context=context)
 
-    context = _get_current_context(context)
+    #context = _get_current_context(context)
 
-    if not cluster:
-        cluster = _get_cluster_name(context, region)
+    #if not cluster:
+        #cluster = _get_cluster_name(context, region)
+    
+    (context, cluster) = _get_cluster_context_and_name(context, cluster)
 
     if not region:
         region = _get_region()
