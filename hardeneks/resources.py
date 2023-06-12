@@ -42,6 +42,8 @@ class NamespacedResources:
             .list_namespaced_role(self.namespace)
             .items
         )
+        print("self.roles={}".format(self.roles))
+        
         self.pods = (
             client.CoreV1Api().list_namespaced_pod(self.namespace).items
         )
