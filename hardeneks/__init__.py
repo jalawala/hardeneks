@@ -178,6 +178,14 @@ def run_hardeneks(
     pillars: str = typer.Option(
         default=None,
         help="Specific pillars to harden. Default is all pillars.",
+    ),
+    only_cluster_level_rules: bool = typer.Option(
+        False,
+        "--only_cluster_level_rules",
+    ),
+    only_namespace_level_rules: bool = typer.Option(
+        False,
+        "--only_namespace_level_rules",
     ),     
 ):
     """
@@ -244,20 +252,27 @@ def run_hardeneks(
 
     results = []
 
-    print("calling harden for cluster_wide")
-    cluster_wide_results = harden(resources, rules, "cluster_wide")
+    if not only_namespace_level_rules:
+        console.rule("[b]Checking cluster wide rules", characters="- ")
+        console.print()  
+        cluster_wide_results = harden(resources, rules, "cluster_wide")
 
     results = results + cluster_wide_results
     #print("results={}".format(results))
 
-    print("calling harden for namespaces")
-    for ns in namespaces:
-        resources = NamespacedResources(region, context, cluster, ns)
-        resources.set_resources()
-        print("calling harden for ns={}".format(ns))
-        namespace_based_results = harden(resources, rules, "namespace_based")
-        results = results + namespace_based_results
+    if not only_cluster_level_rules:
+        console.rule("[b]Checking Namespace wide rules", characters="- ")
+        console.print()
+        for ns in namespaces:
+            resources = NamespacedResources(region, context, cluster, ns)
+            resources.set_resources()
+            #print("calling harden for ns={}".format(ns))
+            namespace_based_results = harden(resources, rules, "namespace_based")
+            results = results + namespace_based_results
 
+    console.rule("[b]Generating the Consolidated Report", characters="- ")
+    console.print()
+    
     print_consolidated_results(results)
 
     if export_txt:
