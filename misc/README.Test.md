@@ -52,7 +52,9 @@ hardeneks --config ./hardeneks/config.yaml --run_only_cluster_level_checks --pil
 
 hardeneks --config ./hardeneks/config.yaml --pillars networking
 hardeneks --config ./hardeneks/config.yaml --pillars cluster_data
-hardeneks  --pillars cluster_data -export-html report.html
+hardeneks  --pillars cluster_data  export-html report.html
+
+hardeneks  --pillars cluster_data,security  --export-html report.html
 
 cluster
 

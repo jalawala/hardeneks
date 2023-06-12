@@ -20,7 +20,7 @@ class get_EKS_version(Rule):
         version = client.get_code()
         minor = version.minor
         resources=f"{version.major}.{minor}"
-        print("version={} minor={} reg={} resources={}".format(version, minor, int(re.sub("[^0-9]", "", minor)), resources))
+        #print("version={} minor={} reg={} resources={}".format(version, minor, int(re.sub("[^0-9]", "", minor)), resources))
 
         if int(re.sub("[^0-9]", "", minor)) >= 25:
             checkStatus = True
@@ -99,23 +99,4 @@ class get_available_free_ips_in_vpc(Rule):
         resource=f"Availablle Free IPs {totalAvailableIpAddressCount}"
         self.result = Result(status=checkStatus, resource_type="Available Free IPs in EKS VPC",resources=[resource],)
                     
-
-class get_cluster_size_details(Rule):
-    _type = "cluster_wide"
-    pillar = "cluster_data"
-    section = "data_plane"
-    message = "Get Cluster Size Details"
-    url = "https://aws.github.io/aws-eks-best-practices/scalability/docs/control-plane/#use-eks-124-or-above"
-
-
-    def check(self, resources: Resources):
-        checkStatus = True
-        deployments = kubernetes.client.AppsV1Api().list_deployment_for_all_namespaces().items    
-        services = kubernetes.client.CoreV1Api().list_service_for_all_namespaces().items
-        pods = kubernetes.client.CoreV1Api().list_pod_for_all_namespaces().items
-        nodeList = (kubernetes.client.CoreV1Api().list_node().items)
-        resource=f"Deployments : {len(deployments)} Services : {len(services)} Pods : {len(pods)} Nodes # {len(nodeList)}"
-        self.result = Result(status=checkStatus, resource_type="Cluster Size Details",resources=[resource],)
-                    
-
 

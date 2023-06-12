@@ -101,9 +101,8 @@ def cluster_data(resources, config, _type):
     subnets = boto3.resource("ec2").subnets.filter(
         Filters=[{"Name": "vpc-id", "Values": [vpcId]}]
     )
-    subnet_ids = [sn.id for sn in subnets]
     
-
+    subnet_ids = [sn.id for sn in subnets]
     ec2client = boto3.client('ec2')
     subnetsList = ec2client.describe_subnets(SubnetIds=subnet_ids)
     

@@ -248,8 +248,9 @@ def run_hardeneks(
     cluster_wide_results = harden(resources, rules, "cluster_wide")
 
     results = results + cluster_wide_results
-    print("results={}".format(results))
+    #print("results={}".format(results))
 
+    print("calling harden for namespaces")
     for ns in namespaces:
         resources = NamespacedResources(region, context, cluster, ns)
         resources.set_resources()
