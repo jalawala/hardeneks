@@ -67,7 +67,7 @@ def _get_cluster_name(context, region):
         raise ValueError(f"{region} seems like a bad region name")
 
 def _get_default_pillars() -> list:
-    return ["security", "reliability", "cluster-autoscaling", "networking"]
+    return ["cluster_data", "security", "reliability", "cluster_autoscaling", "scalability"]
 
 def get_pillars_list() -> list:
     return pillarsList
@@ -250,7 +250,7 @@ def run_hardeneks(
         #namespaces = [namespace]
         pillarsList = pillars.split(',')
                 
-    #print("pillarsList={}".format(pillarsList))
+    print("pillarsList={}".format(pillarsList))
     
     rules = config["rules"]
 
