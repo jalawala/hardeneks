@@ -122,3 +122,33 @@ class get_cluster_size_details(Rule):
         self.result = Result(status=checkStatus, resource_type="Size of the Cluster",resources=[resource],)
                     
 
+class get_nodegroups_provisioners(Rule):
+    _type = "cluster_wide"
+    pillar = "cluster_data"
+    section = "data_plane"
+    message = "Get Node groups and Provisioners"
+    url = "https://aws.github.io/aws-eks-best-practices/scalability/docs/control-plane/#use-eks-124-or-above"
+
+
+    def check(self, resources: Resources):
+        checkStatus = True
+        
+        nodeList = (kubernetes.client.CoreV1Api().list_node().items)
+        
+        eksmnglist = set()
+        selfmnglist=set()
+        provisionerlist=set()
+        
+        for node in nodeList:
+            labels = node.metadata.labels
+            if 'eks.amazonaws.com/nodegroup' in labels.keys():
+                eksmnglist.add(labels['eks.amazonaws.com/nodegroup'])
+            elif 'alpha.eksctl.io/nodegroup-name' in labels.keys():
+                selfmnglist.add(labels['alpha.eksctl.io/nodegroup-name'])
+            elif 'karpenter.sh/provisioner-name' in labels.keys():          
+                provisionerlist.add(labels['alpha.eksctl.io/nodegroup-name'])
+        
+        resource=f"EKS MNG : {len(eksmnglist)} Self MNG : {len(selfmnglist)} Provisioners: {len(provisionerlist)}"
+        self.result = Result(status=checkStatus, resource_type="Node groups and Provisioners",resources=[resource],)
+                    
+
