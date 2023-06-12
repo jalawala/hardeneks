@@ -42,11 +42,13 @@ class NamespacedResources:
             .list_namespaced_role(self.namespace)
             .items
         )
-        print("self.roles={}".format(self.roles))
+        #print("self.roles={}".format(self.roles))
         
         self.pods = (
             client.CoreV1Api().list_namespaced_pod(self.namespace).items
         )
+        #print("self.pods={}".format(self.pods))
+        
         self.role_bindings = (
             client.RbacAuthorizationV1Api()
             .list_namespaced_role_binding(self.namespace)
@@ -55,6 +57,7 @@ class NamespacedResources:
         self.deployments = (
             client.AppsV1Api().list_namespaced_deployment(self.namespace).items
         )
+        #print("self.deployments={}".format(self.deployments))
         self.daemon_sets = (
             client.AppsV1Api().list_namespaced_daemon_set(self.namespace).items
         )

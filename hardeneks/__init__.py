@@ -105,6 +105,28 @@ def _get_current_context(context):
     return active_context["name"]
 
 
+
+
+def _get_filtered_namespaces(ignored_ns: list, selected_namespaces: str) -> list:
+    v1 = kubernetes.client.CoreV1Api()
+    all_namespaces_in_cluster = [i.metadata.name for i in v1.list_namespace().items]
+
+    if not selected_namespaces:
+        namespaces = list(set(all_namespaces_in_cluster) - set(ignored_ns))
+    else:
+        namespaces_not_available_in_cluster = []
+        selected_namespaces_list = selected_namespaces.split(',')
+        for ns in selected_namespaces_list:
+            if ns not in all_namespaces_in_cluster:
+                print("namespace {} does not exist in cluster. Removing it from the list".format(ns))
+                namespaces_not_available_in_cluster.append(ns)
+        
+        namespaces = list(set(selected_namespaces_list) - set(namespaces_not_available_in_cluster))        
+        
+    return namespaces
+
+
+
 def _get_namespaces(ignored_ns: list) -> list:
     v1 = kubernetes.client.CoreV1Api()
     namespaces = [i.metadata.name for i in v1.list_namespace().items]
@@ -294,7 +316,7 @@ def run_hardeneks(
 
     console.rule("[b]HARDENEKS", characters="*  ")
     console.print(f"You are operating at {region}")
-    console.print(f"You context used is {context}")
+    console.print(f"Your context used is {context}")
     console.print(f"Your cluster name is {cluster}")
     console.print(f"You are using {config} as your config file")
     console.print()
@@ -302,11 +324,15 @@ def run_hardeneks(
     with open(config, "r") as f:
         config = yaml.safe_load(f)
 
-    if not namespace:
-        namespaces = _get_namespaces(config["ignore-namespaces"])
-    else:
+    #if not namespace:
+        #namespaces = _get_namespaces(config["ignore-namespaces"])
+    #else:
         #namespaces = [namespace]
-        namespaces = namespace.split(',')
+        #namespaces = namespace.split(',')
+    
+    namespaces = _get_filtered_namespaces(config["ignore-namespaces"], namespace)
+    
+    
     
     
     print("namespaces={}".format(namespaces))
