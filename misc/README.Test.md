@@ -32,9 +32,9 @@ hardeneks --only_cluster_level_rules
 
 hardeneks --only_namespace_level_rules
 
-hardeneks --namespace default,kubecost --pillars security
+hardeneks --namespace default,kubecost --pillars reliability
 
-
+hardeneks --config ./hardeneks/config.yaml
 
 git clone git@github.com:dorukozturk/hardeneks.git
 cd hardeneks

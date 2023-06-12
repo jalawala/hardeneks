@@ -13,7 +13,7 @@ def harden(resources, config, _type):
         if pillar in hardeneks.pillarsList:
             for section in config[pillar]:
                 for rule in config[pillar][section]:
-                    print("_type={} pillar={} section={} rule={}".format(_type, pillar, section, rule))
+                    #print("_type={} pillar={} section={} rule={}".format(_type, pillar, section, rule))
                     module = import_module(f"hardeneks.{_type}.{pillar}.{section}")
                     try:
                         cls = getattr(module, rule)
