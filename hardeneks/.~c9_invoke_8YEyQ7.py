@@ -4,7 +4,7 @@ from pkg_resources import resource_filename
 import tempfile
 import yaml
 import json
-import sys
+impo
 from collections import defaultdict
 
 from botocore.exceptions import EndpointConnectionError

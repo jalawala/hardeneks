@@ -37,6 +37,7 @@ def _get_policy_documents_for_role(role_name, iam_client):
     return actions
 
 
+
 class check_any_cluster_autoscaler_exists(Rule):
     _type = "cluster_wide"
     pillar = "cluster_autoscaling"
@@ -59,6 +60,7 @@ class check_any_cluster_autoscaler_exists(Rule):
             self.result = Result(status=True, resource_type="Deployment")
 
         return self.result
+
 
 
 class ensure_cluster_autoscaler_and_cluster_versions_match(Rule):
@@ -91,6 +93,9 @@ class ensure_cluster_autoscaler_and_cluster_versions_match(Rule):
                     self.result = Result(
                         status=False, resource_type="Deployment"
                     )
+
+
+
 
 
 class ensure_cluster_autoscaler_has_autodiscovery_mode(Rule):
