@@ -255,3 +255,49 @@ class use_managed_nodegroups(Rule):
                 resource_type="Node",
                 resources=[i.metadata.name for i in offenders],
             )
+
+
+class ensure_cluster_autoscaler_has_three_replicas(Rule):
+    _type = "cluster_wide"
+    pillar = "cluster_autoscaling"
+    section = "cluster_autoscaler"
+    message = "Ensure Cluster Autoscaler has 3 replicas for HA"
+    url = "https://aws.github.io/aws-eks-best-practices/cluster-autoscaling/#configuring-your-node-groups"
+
+    def check(self, resources):
+        offenders = []
+        nodes = client.CoreV1Api().list_node().items
+        
+        deployments = (client.AppsV1Api().list_namespaced_deployment("kube-system").items)
+        
+        for deployment in deployments:
+            if deployment.metadata.name == "cluster-autoscaler":
+                ca_replicas = deployment.spec.replicas
+                if ca_replicas >= 3:
+                    message = "Kubernetes Cluster Autoscaler has {} replicas".format(ca_replicas)
+                else:
+                    message = "Kubernetes Cluster Autoscaler has only {} replicas".format(ca_replicas)
+                    status = False
+                break        
+
+        for node in nodes:
+            labels = node.metadata.labels
+            if "eks.amazonaws.com/nodegroup" in labels.keys():
+                pass
+            elif "alpha.eksctl.io/nodegroup-name" in labels.keys():
+                offenders.append(node)
+            elif "karpenter.sh/provisioner-name" in labels.keys():
+                pass
+            else:
+                offenders.append(node)
+
+        self.result = Result(status=True, resource_type="Node")
+
+        if offenders:
+            self.result = Result(
+                status=False,
+                resource_type="Node",
+                resources=[i.metadata.name for i in offenders],
+            )
+
+

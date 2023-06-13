@@ -5,12 +5,13 @@ from hardeneks import console
 
 class Result(object):
     def __init__(
-        self, status=True, resources=[""], resource_type=None, namespace=None
+        self, status=True, resources=[""], resource_type=None, namespace=None, info=None
     ):
         self.status = status
         self.resources = resources
         self.resource_type = resource_type
         self.namespace = namespace
+        self.info = info
 
 
 class Rule(ABC):

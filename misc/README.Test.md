@@ -34,7 +34,17 @@ hardeneks --only_namespace_level_rules
 
 hardeneks --namespace default,kubecost --pillars reliability
 
-hardeneks --config ./hardeneks/config.yaml
+hardeneks --pillars cluster_data 
+
+
+hardeneks --namespace default,kubecost --pillars reliability --context arn:aws:eks:us-east-1:000474600478:cluster/eksworkshop-eksctl
+
+hardeneks --namespace default,kubecost --pillars reliability --cluster eksworkshop-eksctl
+
+
+hardeneks --config ./hardeneks/config-orig.yaml
+
+hardeneks --config ./misc/config-orig.yaml
 
 git clone git@github.com:dorukozturk/hardeneks.git
 cd hardeneks

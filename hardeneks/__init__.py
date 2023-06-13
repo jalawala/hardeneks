@@ -211,9 +211,10 @@ def print_consolidated_results(rules: list):
             if rule.result.namespace:
                 namespace = rule.result.namespace
             
-            #print("rule.result.namespace={} namespace={}".format(rule.result.namespace, namespace))
+            #print("rule.result.namespace={} namespace={} rule.result.resources={}".format(rule.result.namespace, namespace, rule.result.resources))
             
             for resource in rule.result.resources:
+                #print("namespace={} rule.name={} adding a row in table for {}".format(namespace, rule.name, resource))
                 table.add_row(
                     rule.section,
                     namespace,
