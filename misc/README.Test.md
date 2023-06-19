@@ -36,10 +36,14 @@ hardeneks --namespace default,kubecost --pillars reliability
 
 hardeneks --pillars cluster_data 
 
+hardeneks --pillars cluster_autoscaling 
+
+
 
 hardeneks --namespace default,kubecost --pillars reliability --context arn:aws:eks:us-east-1:000474600478:cluster/eksworkshop-eksctl
 
 hardeneks --namespace default,kubecost --pillars reliability --cluster eksworkshop-eksctl
+
 
 
 hardeneks --config ./hardeneks/config-orig.yaml

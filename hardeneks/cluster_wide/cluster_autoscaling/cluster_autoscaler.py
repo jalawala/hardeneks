@@ -265,38 +265,58 @@ class ensure_cluster_autoscaler_has_three_replicas(Rule):
     url = "https://aws.github.io/aws-eks-best-practices/cluster-autoscaling/#configuring-your-node-groups"
 
     def check(self, resources):
-        offenders = []
-        
+        Status = False
         deployments = (client.AppsV1Api().list_namespaced_deployment("kube-system").items)
+        
+        is_cluster_autoscaler_deployed = False
         
         for deployment in deployments:
             if deployment.metadata.name == "cluster-autoscaler":
+                is_cluster_autoscaler_deployed = True
                 ca_replicas = deployment.spec.replicas
                 if ca_replicas >= 3:
-                    message = "Kubernetes Cluster Autoscaler has {} replicas".format(ca_replicas)
+                    Info = "K8s Cluster Autoscaler has {} replicas".format(ca_replicas)
+                    Status = True
                 else:
-                    message = "Kubernetes Cluster Autoscaler has only {} replicas".format(ca_replicas)
-                    status = False
+                    Info = "K8s Cluster Autoscaler has only {} replicas".format(ca_replicas)
+                    Status = False
                 break        
 
-        for node in nodes:
-            labels = node.metadata.labels
-            if "eks.amazonaws.com/nodegroup" in labels.keys():
-                pass
-            elif "alpha.eksctl.io/nodegroup-name" in labels.keys():
-                offenders.append(node)
-            elif "karpenter.sh/provisioner-name" in labels.keys():
-                pass
-            else:
-                offenders.append(node)
+        if not is_cluster_autoscaler_deployed:
+            Info = "Kubernetes Cluster Autoscaler is not deployed in the cluster"
+            Status = False
+            
+        
+        self.result = Result(status=Status, resource_type="K8s CA Replica Count", info=Info)
 
-        self.result = Result(status=True, resource_type="Node")
+class ensure_uniform_instance_types_in_nodegroups(Rule):
+    _type = "cluster_wide"
+    pillar = "cluster_autoscaling"
+    section = "cluster_autoscaler"
+    message = "Ensure Cluster Autoscaler has 3 replicas for HA"
+    url = "https://aws.github.io/aws-eks-best-practices/cluster-autoscaling/#configuring-your-node-groups"
 
-        if offenders:
-            self.result = Result(
-                status=False,
-                resource_type="Node",
-                resources=[i.metadata.name for i in offenders],
-            )
+    def check(self, resources):
+        Status = False
+        deployments = (client.AppsV1Api().list_namespaced_deployment("kube-system").items)
+        
+        is_cluster_autoscaler_deployed = False
+        
+        for deployment in deployments:
+            if deployment.metadata.name == "cluster-autoscaler":
+                is_cluster_autoscaler_deployed = True
+                ca_replicas = deployment.spec.replicas
+                if ca_replicas >= 3:
+                    Info = "K8s Cluster Autoscaler has {} replicas".format(ca_replicas)
+                    Status = True
+                else:
+                    Info = "K8s Cluster Autoscaler has only {} replicas".format(ca_replicas)
+                    Status = False
+                break        
 
-
+        if not is_cluster_autoscaler_deployed:
+            Info = "Kubernetes Cluster Autoscaler is not deployed in the cluster"
+            Status = False
+            
+        
+        self.result = Result(status=Status, resource_type="K8s CA Replica Count", info=Info)

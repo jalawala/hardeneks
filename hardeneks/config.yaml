@@ -59,6 +59,8 @@ rules:
         - use_separate_iam_role_for_cluster_autoscaler
         - employ_least_privileged_access_cluster_autoscaler_role
         - use_managed_nodegroups
+        - ensure_cluster_autoscaler_has_three_replicas
+        - ensure_uniform_instance_types_in_nodegroups
     scalability:
       control_plane:
         - check_EKS_version
