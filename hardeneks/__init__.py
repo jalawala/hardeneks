@@ -195,6 +195,7 @@ def print_consolidated_results(rules: list):
         table.add_column("Namespace")
         table.add_column("Rule Name")
         table.add_column("Rule Description")
+        table.add_column("Info")
         table.add_column("Resource", no_wrap=False)
         table.add_column("Resource Type")
         table.add_column("Resolution")
@@ -220,6 +221,7 @@ def print_consolidated_results(rules: list):
                     namespace,
                     rule.name,
                     rule.message,
+                    rule.result.info,
                     resource,
                     rule.result.resource_type,
                     f"[link={rule.url}]Link[/link]",

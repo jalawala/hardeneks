@@ -266,7 +266,6 @@ class ensure_cluster_autoscaler_has_three_replicas(Rule):
 
     def check(self, resources):
         offenders = []
-        nodes = client.CoreV1Api().list_node().items
         
         deployments = (client.AppsV1Api().list_namespaced_deployment("kube-system").items)
         
