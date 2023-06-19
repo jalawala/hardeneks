@@ -294,9 +294,10 @@ class ensure_uniform_instance_types_in_nodegroups(Rule):
     pillar = "cluster_autoscaling"
     section = "cluster_autoscaler"
     message = "Ensure Cluster Autoscaler has 3 replicas for HA"
-    url = "https://aws.github.io/aws-eks-best-practices/cluster-autoscaling/#configuring-your-node-groups"
+    url = "https://aws.github.io/aws-eks-best-practices/cluster-autoscaling/"
 
     def check(self, resources):
+        
         Status = False
         deployments = (client.AppsV1Api().list_namespaced_deployment("kube-system").items)
         
@@ -320,3 +321,80 @@ class ensure_uniform_instance_types_in_nodegroups(Rule):
             
         
         self.result = Result(status=Status, resource_type="K8s CA Replica Count", info=Info)
+
+        status = True
+        objectsList = None
+        objectType = None
+        message = ""
+            
+        eksclient = boto3.client("eks", region_name=resources.region)
+        cluster_metadata = eksclient.describe_cluster(name=resources.cluster)
+        
+        nodegroupList = {}
+        nodegroupInstanceSizesList={}
+        
+        nodeList = (client.CoreV1Api().list_node().items)
+        for node in nodeList:
+            labels = node.metadata.labels
+            #print("nodeName={} nodegroup={}".format(node.metadata.name, labels ))
+            if 'eks.amazonaws.com/nodegroup' in labels.keys():
+                #print("nodeName={} managed nodegroup={}".format(node.metadata.name, labels['eks.amazonaws.com/nodegroup'] ))
+                nodegroupName = labels['eks.amazonaws.com/nodegroup']
+                if nodegroupName not in nodegroupList.keys():
+                    nodegroupList[nodegroupName] = []
+                
+                nodegroupList[nodegroupName].append(labels['beta.kubernetes.io/instance-type'])
+                #eksmnglist.add(labels['eks.amazonaws.com/nodegroup'])
+            elif 'alpha.eksctl.io/nodegroup-name' in labels.keys():
+                nodegroupName = labels['alpha.eksctl.io/nodegroup-name']
+                if nodegroupName not in nodegroupList.keys():
+                    nodegroupList[nodegroupName] = []
+                nodegroupList[nodegroupName].append(labels['beta.kubernetes.io/instance-type'])            
+                #print("nodeName={} self managed nodegroup={}".format(node.metadata.name, labels['alpha.eksctl.io/nodegroup-name'] ))
+                #selfmnglist.add(labels['alpha.eksctl.io/nodegroup-name'])
+            elif 'karpenter.sh/provisioner-name' in labels.keys():          
+                #print("nodeName={} Karpeneter managed provisioner={}".format(node.metadata.name, labels['karpenter.sh/provisioner-name'] ))
+                pass
+            else:
+                pass
+                
+                #print("nodeName={} self managed with node labels={}".format(node.metadata.name, labels ))
+                
+        
+        #nodegroupList['ng-3f4edeea'].append('m5.xlarge')
+        #nodegroupList['mng2'].append('m5.2xlarge')
+        #print("nodegroupList={}".format(nodegroupList))
+        
+        descriptionMessage = "These nodegroups contain non uniform instance types :"
+        
+        ec2client = boto3.client('ec2')
+        isNonUniformNodegroupsExists = None
+        for nodegroupName, instanceTypesList in nodegroupList.items():
+            instanceTypesData = ec2client.describe_instance_types(InstanceTypes=instanceTypesList)
+            #print("instanceTypesData={}".format(instanceTypesData))
+            nodegroupInstanceSizesList[nodegroupName] = set()      
+            for instanceData in instanceTypesData['InstanceTypes']:
+                #print("InstanceType={} DefaultVCpus={} SizeInMiB={}".format(instanceData['InstanceType'], instanceData['VCpuInfo']['DefaultVCpus'], instanceData['MemoryInfo']['SizeInMiB']))
+                DefaultVCpus=instanceData['VCpuInfo']['DefaultVCpus']
+                SizeInMiB=instanceData['MemoryInfo']['SizeInMiB']
+                nodegroupInstanceSizesList[nodegroupName].add((DefaultVCpus, int(SizeInMiB/1024)))
+            
+            if len(nodegroupInstanceSizesList[nodegroupName]) > 1:
+                descriptionMessage += " " + nodegroupName
+                isNonUniformNodegroupsExists = True
+                
+        #print("nodegroupInstanceSizesList={}".format(nodegroupInstanceSizesList))
+        #print("descriptionMessage={}".format(descriptionMessage))
+    
+        
+        if not isNonUniformNodegroupsExists:
+            message = "cluster has only unfirm instance types in the node groups"
+        else:
+            message = descriptionMessage
+            status =  False
+            #print("keys={}".format(labels.keys()))
+            #print("nodes={}".format(node.metadata.labels))
+            #print("nodes={}".format(node['metadata']['labels']))
+                        
+        return (status, message, objectsList, objectType)
+    
