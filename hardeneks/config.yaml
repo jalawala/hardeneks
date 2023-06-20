@@ -75,8 +75,8 @@ rules:
         - use_small_dedicated_cluster_subnets
       prefix_mode:
         - use_prefix_mode
-      #load-balancing:
-        #- use_aws_lb_controller         
+      load-balancing:
+        - deploy_aws_lb_controller         
   namespace_based:
     security: 
       iam:

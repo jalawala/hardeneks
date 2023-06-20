@@ -9,8 +9,8 @@ import boto3
 class use_prefix_mode(Rule):
     _type = "cluster_wide"
     pillar = "networking"
-    section = "vpc-cni"
-    message = "Deploy VPC CNI Managed Add-On"
+    section = "prefix_mode"
+    message = "Use VPC CNI Prefix Mode"
     url = "https://aws.github.io/aws-eks-best-practices/scalability/docs/control-plane/#use-eks-124-or-above"
 
 

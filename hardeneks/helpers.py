@@ -1,7 +1,7 @@
 from pathlib import Path
 import urllib3
 import yaml
-
+import kubernetes
 #
 # get_kube_config
 # returns kube config in json
@@ -15,3 +15,27 @@ def get_kube_config():
     with open(kube_config_orig, "r") as fd:
         kubeconfig = yaml.safe_load(fd)
     return kubeconfig
+    
+
+def is_deployment_exists_in_namespace(deploymentName, namespace):
+    
+    deployments = (kubernetes.client.AppsV1Api().list_namespaced_deployment(namespace).items)
+    
+    for deployment in deployments:
+        if deployment.metadata.name == deploymentName:
+            return (True, deployment)
+    
+    return (False, None)
+    
+
+def is_daemonset_exists_in_cluster(dsName):
+    
+    dsList = (kubernetes.client.AppsV1Api().list_daemon_set_for_all_namespaces().items)
+    
+    for ds in dsList:
+        if ds.metadata.name == dsName:
+            return (True, ds)
+    
+    return (False, None)    
+
+    
