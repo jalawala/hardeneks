@@ -299,8 +299,8 @@ class ensure_uniform_instance_types_in_nodegroups(Rule):
     def check(self, resources):
         
         resourceType = "Uniform Instance Types in Node group"
-        Info = "All node groups have uniform Instance Types"
         offenders = []
+        uniformNodeGroups = []
         
         eksclient = boto3.client("eks", region_name=resources.region)
         cluster_metadata = eksclient.describe_cluster(name=resources.cluster)
@@ -356,9 +356,10 @@ class ensure_uniform_instance_types_in_nodegroups(Rule):
             
             if len(nodegroupInstanceSizesList[nodegroupName]) > 1:
                 offenders.append(nodegroupName)
-                
+            else:
+                uniformNodeGroups.append(nodegroupName)
         #print("nodegroupInstanceSizesList={}".format(nodegroupInstanceSizesList))
-        #print("descriptionMessage={}".format(descriptionMessage))
+        #print("offenders={} uniformNodeGroups={}".format(offenders, uniformNodeGroups))
     
         if offenders:
             Info = "Node group does not have uniform Instance Types"
@@ -369,6 +370,12 @@ class ensure_uniform_instance_types_in_nodegroups(Rule):
                 info = Info
             )
         else:
-            self.result = Result(status=True, resource_type=resourceType, info=Info)
+            Info = "Node group has uniform Instance Types"
+            self.result = Result(
+                status=True,
+                resource_type=resourceType,
+                resources=[i for i in uniformNodeGroups],
+                info = Info
+            )
             
     
