@@ -3,6 +3,7 @@ from kubernetes import client
 
 from hardeneks.rules import Rule, Result
 from ...resources import Resources
+from hardeneks import helpers
 
 
 def _get_policy_documents_for_role(role_name, iam_client):
@@ -42,27 +43,24 @@ class check_any_cluster_autoscaler_exists(Rule):
     _type = "cluster_wide"
     pillar = "cluster_autoscaling"
     section = "cluster_autoscaler"
-    message = "Cluster Autoscaler or Karpenter is not deployed."
+    message = "Deploy either K8s Cluster Autoscaler or Karpenter"
     url = "https://aws.github.io/aws-eks-best-practices/cluster-autoscaling/"
 
     def check(self, resources: Resources):
-        deployments = [
-            i.metadata.name
-            for i in client.AppsV1Api()
-            .list_deployment_for_all_namespaces()
-            .items
-        ]
-        if not (
-            "cluster-autoscaler" in deployments or "karpenter" in deployments
-        ):
-            self.result = Result(status=False, resource_type="Deployment")
-        else:
-            self.result = Result(status=True, resource_type="Deployment")
-
-        return self.result
-
-
-
+        
+        Status = False
+        
+        (isCADeployed, deploymentData) = helpers.is_deployment_exists_in_namespace("cluster-autoscaler", "kube-system")
+        (isKarpenterDeployed, deploymentData) = helpers.is_deployment_exists_in_namespace("karpenter", "karpenter")
+        
+        Info = "Deployment Status for CA : {} and Karpenter : {}".format(isCADeployed, isKarpenterDeployed)
+        
+        if isCADeployed or isKarpenterDeployed:          
+            Status = True            
+        
+        self.result = Result(status=Status, resource_type="Deployment", info=Info)
+        
+        
 class ensure_cluster_autoscaler_and_cluster_versions_match(Rule):
     _type = "cluster_wide"
     pillar = "cluster_autoscaling"
