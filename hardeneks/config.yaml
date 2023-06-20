@@ -72,7 +72,7 @@ rules:
         - deploy_vpc_cni_managed_add_on
         - use_separate_iam_role_for_cni
         #- monitor_IP_adress_inventory
-        #- use_dedicated_and_small_subnets_for_cluster_creation
+        - use_small_dedicated_cluster_subnets
       #prefix_mode:
         #- use_prefix_mode
       #load-balancing:
