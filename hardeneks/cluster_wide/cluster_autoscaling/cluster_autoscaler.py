@@ -65,32 +65,32 @@ class ensure_cluster_autoscaler_and_cluster_versions_match(Rule):
     _type = "cluster_wide"
     pillar = "cluster_autoscaling"
     section = "cluster_autoscaler"
-    message = (
-        "Cross version compatibility between CA and k8s is not recommended."
-    )
+    message = "Ensure K8s and CA Versions match0"
     url = "https://aws.github.io/aws-eks-best-practices/cluster-autoscaling/#operating-the-cluster-autoscaler"
 
     def check(self, resources):
+        
+        Status = True
+        
         eks_client = boto3.client("eks", region_name=resources.region)
         cluster_metadata = eks_client.describe_cluster(name=resources.cluster)
-
         cluster_version = cluster_metadata["cluster"]["version"]
 
-        deployments = (
-            client.AppsV1Api().list_deployment_for_all_namespaces().items
-        )
+        (isCADeployed, deploymentData) = helpers.is_deployment_exists_in_namespace("cluster-autoscaler", "kube-system")
+        
+        if isCADeployed:
+            ca_containers = deploymentData.spec.template.spec.containers
+            ca_image = ca_containers[0].image
+            ca_image_version = ca_image.split(":")[-1]
+            Info = "K8s Version : {} CA Version : {}".format(cluster_version,ca_image_version)
+            if cluster_version not in ca_image_version:
+                Status = False
+        else:    
+            Info = "Kubernetes Cluster Autoscaler is not deployed in the cluster"
+            Status = False
+            
 
-        self.result = Result(status=True, resource_type="Deployment")
-
-        for deployment in deployments:
-            if deployment.metadata.name == "cluster-autoscaler":
-                ca_containers = deployment.spec.template.spec.containers
-                ca_image = ca_containers[0].image
-                ca_image_version = ca_image.split(":")[-1]
-                if cluster_version not in ca_image_version:
-                    self.result = Result(
-                        status=False, resource_type="Deployment"
-                    )
+        self.result = Result(status=Status, resource_type="Deployment", info=Info)
 
 
 
