@@ -1,5 +1,5 @@
 import boto3
-from kubernetes import client
+import kubernetes
 
 from hardeneks.rules import Rule, Result
 from ...resources import Resources
@@ -123,34 +123,25 @@ class use_separate_iam_role_for_cluster_autoscaler(Rule):
     _type = "cluster_wide"
     pillar = "cluster_autoscaling"
     section = "cluster_autoscaler"
-    message = "Cluster-autoscaler deployment does not use a dedicated IAM Role (IRSA)."
+    message = "Ensure K8s CA Uses dedicated IAM Role (IRSA)."
     url = "https://aws.github.io/aws-eks-best-practices/cluster-autoscaling/#employ-least-privileged-access-to-the-iam-role"
 
     def check(self, resources):
-        deployments = (
-            client.AppsV1Api().list_deployment_for_all_namespaces().items
-        )
+        Status = False
+        (isCADeployed, deploymentData) = helpers.is_deployment_exists_in_namespace("cluster-autoscaler", "kube-system")
+        
+        if isCADeployed:
+            sa = deploymentData.spec.template.spec.service_account_name
+            sa_data = kubernetes.client.CoreV1Api().read_namespaced_service_account(sa, 'kube-system', pretty="true")
+            if 'eks.amazonaws.com/role-arn' in sa_data.metadata.annotations.keys():
+                Status = True
+                Info = "K8s CA uses separate IAM Role (IRSA)"
+            else:
+                Info = "K8s CA doesn't use separate IAM Role (IRSA)" 
+        else:
+            Info = "Kubernetes Cluster Autoscaler is not deployed in the cluster"
 
-        self.result = Result(status=True, resource_type="Deployment")
-
-        for deployment in deployments:
-            if deployment.metadata.name == "cluster-autoscaler":
-                service_account = (
-                    deployment.spec.template.spec.service_account_name
-                )
-                sa_data = client.CoreV1Api().read_namespaced_service_account(
-                    service_account, "kube-system", pretty="true"
-                )
-                if (
-                    "eks.amazonaws.com/role-arn"
-                    not in sa_data.metadata.annotations.keys()
-                ):
-                    self.result = Result(
-                        status=False, resource_type="Deployment"
-                    )
-                else:
-                    break
-
+        self.result = Result(status=Status, resource_type="IRSA for K8s CA",info=Info) 
 
 class employ_least_privileged_access_cluster_autoscaler_role(Rule):
     _type = "cluster_wide"
@@ -161,12 +152,7 @@ class employ_least_privileged_access_cluster_autoscaler_role(Rule):
 
     def check(self, resources):
 
-        deployments = (
-            client.AppsV1Api().list_deployment_for_all_namespaces().items
-        )
-
         iam_client = boto3.client("iam", region_name=resources.region)
-
         ACTIONS = {
             "autoscaling:DescribeAutoScalingGroups",
             "autoscaling:DescribeAutoScalingInstances",
@@ -181,41 +167,36 @@ class employ_least_privileged_access_cluster_autoscaler_role(Rule):
             "autoscaling:SetDesiredCapacity",
             "autoscaling:TerminateInstanceInAutoScalingGroup",
         }
-        self.result = Result(status=True, resource_type="IAM Role Action")
+        
+        Status = False
+        (isCADeployed, deploymentData) = helpers.is_deployment_exists_in_namespace("cluster-autoscaler", "kube-system")
+        
+        if isCADeployed:
+            sa = deploymentData.spec.template.spec.service_account_name
+            sa_data = kubernetes.client.CoreV1Api().read_namespaced_service_account(sa, 'kube-system', pretty="true")
+            if 'eks.amazonaws.com/role-arn' in sa_data.metadata.annotations.keys():
+                sa_iam_role_arn = sa_data.metadata.annotations["eks.amazonaws.com/role-arn"]
+                sa_iam_role = sa_iam_role_arn.split("/")[-1]
+                print("sa_iam_role={}".format(sa_iam_role))
+                
+                actions = _get_policy_documents_for_role(sa_iam_role, iam_client)
 
-        for deployment in deployments:
-            if deployment.metadata.name == "cluster-autoscaler":
-                service_account = (
-                    deployment.spec.template.spec.service_account_name
-                )
-                sa_data = client.CoreV1Api().read_namespaced_service_account(
-                    service_account, "kube-system", pretty="true"
-                )
-                if (
-                    "eks.amazonaws.com/role-arn"
-                    not in sa_data.metadata.annotations.keys()
-                ):
-                    break
+                if len(set(actions) - ACTIONS) > 0:
+                    Info = "K8s CA IAM Role has more IAM permissions than needed"
+                    self.result = Result(
+                        status=False,
+                        resource_type="IAM Role Action",
+                        resources=(set(actions) - ACTIONS),
+                    )           
                 else:
+                    Status = True
+                    Info = "K8s CA IAM Role has least privileged access"
+            else:
+                Info = "K8s CA doesn't use separate IAM Role (IRSA)" 
+        else:
+            Info = "Kubernetes Cluster Autoscaler is not deployed in the cluster"
 
-                    sa_iam_role_arn = sa_data.metadata.annotations[
-                        "eks.amazonaws.com/role-arn"
-                    ]
-                    sa_iam_role = sa_iam_role_arn.split("/")[-1]
-                    actions = _get_policy_documents_for_role(
-                        sa_iam_role, iam_client
-                    )
-
-                    if len(set(actions) - ACTIONS) > 0:
-                        self.result = Result(
-                            status=False,
-                            resource_type="IAM Role Action",
-                            resources=(set(actions) - ACTIONS),
-                        )
-                    else:
-                        self.result = Result(
-                            status=True, resource_type="IAM Role Action"
-                        )
+        self.result = Result(status=Status, resource_type="K8s CA IAM Role least privileged access",info=Info) 
 
 
 class use_managed_nodegroups(Rule):
@@ -227,7 +208,7 @@ class use_managed_nodegroups(Rule):
 
     def check(self, resources):
         offenders = []
-        nodes = client.CoreV1Api().list_node().items
+        nodes = kubernetes.client.CoreV1Api().list_node().items
 
         for node in nodes:
             labels = node.metadata.labels
@@ -259,7 +240,7 @@ class ensure_cluster_autoscaler_has_three_replicas(Rule):
 
     def check(self, resources):
         Status = False
-        deployments = (client.AppsV1Api().list_namespaced_deployment("kube-system").items)
+        deployments = (kubernetes.client.AppsV1Api().list_namespaced_deployment("kube-system").items)
         
         is_cluster_autoscaler_deployed = False
         
