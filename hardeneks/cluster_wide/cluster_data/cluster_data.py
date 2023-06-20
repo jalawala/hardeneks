@@ -44,13 +44,12 @@ class get_EKS_cluster_endpoint_url(Rule):
         cluster_endpoint = cluster_metadata["cluster"]["endpoint"]
         endpoint_public_access  = cluster_metadata["cluster"]["resourcesVpcConfig"]["endpointPublicAccess"]
         endpoint_private_access = cluster_metadata["cluster"]["resourcesVpcConfig"]["endpointPrivateAccess"]
-        endpoibtAccessString = "public: " + str(endpoint_public_access) + ", " + "private: " + str(endpoint_private_access)
-        resource = endpoibtAccessString + " " + cluster_endpoint
+        endpointAccessString = "public: " + str(endpoint_public_access) + ", " + "private: " + str(endpoint_private_access)
+        resource = endpointAccessString + " " + cluster_endpoint
         self.result = Result(status=checkStatus, resource_type="EKS Cluster Endpoint URL",resources=[resource],)
-                    
-
-
         
+
+                
 class get_cluster_vpc_subnets(Rule):
     _type = "cluster_wide"
     pillar = "cluster_data"

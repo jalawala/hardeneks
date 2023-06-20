@@ -51,6 +51,10 @@ rules:
       applications:
         - check_metrics_server_is_running
         - check_vertical_pod_autoscaler_exists
+    scalability:
+      control_plane:
+        - check_EKS_version
+        - check_kubectl_compression
     cluster_autoscaling:
       cluster_autoscaler:
         - check_any_cluster_autoscaler_exists
@@ -61,10 +65,20 @@ rules:
         - use_managed_nodegroups
         - ensure_cluster_autoscaler_has_three_replicas
         - ensure_uniform_instance_types_in_nodegroups
-    scalability:
-      control_plane:
-        - check_EKS_version
-        - check_kubectl_compression
+    networking:
+      vpc_subnets:
+        #- deploy_nodes_to_private_subnets
+        - cluster_endpoint_public_and_private_mode
+      #vpc-cni:
+        #- deploy_nodes_to_private_subnets
+        #- deploy_vpc_cni_managed_add_on
+        #- use_separate_iam_role_for_cni
+        #- monitor_IP_adress_inventory
+        #- use_dedicated_and_small_subnets_for_cluster_creation
+      #prefix_mode:
+        #- use_prefix_mode
+      #load-balancing:
+        #- use_aws_lb_controller         
   namespace_based:
     security: 
       iam:

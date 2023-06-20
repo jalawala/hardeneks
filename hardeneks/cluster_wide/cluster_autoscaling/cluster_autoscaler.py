@@ -378,4 +378,3 @@ class ensure_uniform_instance_types_in_nodegroups(Rule):
                 info = Info
             )
             
-    
