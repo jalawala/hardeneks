@@ -293,40 +293,15 @@ class ensure_uniform_instance_types_in_nodegroups(Rule):
     _type = "cluster_wide"
     pillar = "cluster_autoscaling"
     section = "cluster_autoscaler"
-    message = "Ensure Cluster Autoscaler has 3 replicas for HA"
+    message = "Ensure Uniform Instance Types in Node groups"
     url = "https://aws.github.io/aws-eks-best-practices/cluster-autoscaling/"
 
     def check(self, resources):
         
-        Status = False
-        deployments = (client.AppsV1Api().list_namespaced_deployment("kube-system").items)
+        resourceType = "Uniform Instance Types in Node group"
+        Info = "All node groups have uniform Instance Types"
+        offenders = []
         
-        is_cluster_autoscaler_deployed = False
-        
-        for deployment in deployments:
-            if deployment.metadata.name == "cluster-autoscaler":
-                is_cluster_autoscaler_deployed = True
-                ca_replicas = deployment.spec.replicas
-                if ca_replicas >= 3:
-                    Info = "K8s Cluster Autoscaler has {} replicas".format(ca_replicas)
-                    Status = True
-                else:
-                    Info = "K8s Cluster Autoscaler has only {} replicas".format(ca_replicas)
-                    Status = False
-                break        
-
-        if not is_cluster_autoscaler_deployed:
-            Info = "Kubernetes Cluster Autoscaler is not deployed in the cluster"
-            Status = False
-            
-        
-        self.result = Result(status=Status, resource_type="K8s CA Replica Count", info=Info)
-
-        status = True
-        objectsList = None
-        objectType = None
-        message = ""
-            
         eksclient = boto3.client("eks", region_name=resources.region)
         cluster_metadata = eksclient.describe_cluster(name=resources.cluster)
         
@@ -380,21 +355,20 @@ class ensure_uniform_instance_types_in_nodegroups(Rule):
                 nodegroupInstanceSizesList[nodegroupName].add((DefaultVCpus, int(SizeInMiB/1024)))
             
             if len(nodegroupInstanceSizesList[nodegroupName]) > 1:
-                descriptionMessage += " " + nodegroupName
-                isNonUniformNodegroupsExists = True
+                offenders.append(nodegroupName)
                 
         #print("nodegroupInstanceSizesList={}".format(nodegroupInstanceSizesList))
         #print("descriptionMessage={}".format(descriptionMessage))
     
-        
-        if not isNonUniformNodegroupsExists:
-            message = "cluster has only unfirm instance types in the node groups"
+        if offenders:
+            Info = "Node group does not have uniform Instance Types"
+            self.result = Result(
+                status=False,
+                resource_type=resourceType,
+                resources=[i for i in offenders],
+                info = Info
+            )
         else:
-            message = descriptionMessage
-            status =  False
-            #print("keys={}".format(labels.keys()))
-            #print("nodes={}".format(node.metadata.labels))
-            #print("nodes={}".format(node['metadata']['labels']))
-                        
-        return (status, message, objectsList, objectType)
+            self.result = Result(status=True, resource_type=resourceType, info=Info)
+            
     
