@@ -73,8 +73,8 @@ rules:
         - use_separate_iam_role_for_cni
         #- monitor_IP_adress_inventory
         - use_small_dedicated_cluster_subnets
-      #prefix_mode:
-        #- use_prefix_mode
+      prefix_mode:
+        - use_prefix_mode
       #load-balancing:
         #- use_aws_lb_controller         
   namespace_based:
