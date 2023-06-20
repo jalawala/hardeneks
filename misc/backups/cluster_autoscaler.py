@@ -65,7 +65,7 @@ class ensure_cluster_autoscaler_and_cluster_versions_match(Rule):
     _type = "cluster_wide"
     pillar = "cluster_autoscaling"
     section = "cluster_autoscaler"
-    message = "Ensure K8s and CA Versions match"
+    message = "Ensure K8s and CA Versions match0"
     url = "https://aws.github.io/aws-eks-best-practices/cluster-autoscaling/#operating-the-cluster-autoscaler"
 
     def check(self, resources):
@@ -94,30 +94,35 @@ class ensure_cluster_autoscaler_and_cluster_versions_match(Rule):
 
 
 
+
+
 class ensure_cluster_autoscaler_has_autodiscovery_mode(Rule):
     _type = "cluster_wide"
     pillar = "cluster_autoscaling"
     section = "cluster_autoscaler"
-    message = "Ensure Auto discovery of Node groups enabled for K8s CA"
+    message = "Auto discovery is not enabled for Cluster Autoscaler."
     url = "https://aws.github.io/aws-eks-best-practices/cluster-autoscaling/#operating-the-cluster-autoscaler"
 
     def check(self, resources):
-        
-        Status = False
-        Info = "K8s CA is not configured with Auto Discovery of Node groups"
-        (isCADeployed, deploymentData) = helpers.is_deployment_exists_in_namespace("cluster-autoscaler", "kube-system")
-        
-        if isCADeployed:
-            ca_containers = deploymentData.spec.template.spec.containers
-            ca_command = ca_containers[0].command
-            #print("ca_command={}".format(ca_command))
-            if any("node-group-auto-discovery" in item for item in ca_command):
-                Status = True
-                Info = "K8s CA is configured with Auto Discovery of Node groups"
-        else:
-            Info = "Kubernetes Cluster Autoscaler is not deployed in the cluster"
-            
-        self.result = Result(status=Status, resource_type="Deployment", info=Info)
+        deployments = (
+            client.AppsV1Api().list_deployment_for_all_namespaces().items
+        )
+
+        self.result = Result(status=True, resource_type="Deployment")
+
+        for deployment in deployments:
+            if deployment.metadata.name == "cluster-autoscaler":
+                ca_containers = deployment.spec.template.spec.containers
+                ca_command = ca_containers[0].command
+                if not any(
+                    "node-group-auto-discover" in item for item in ca_command
+                ):
+                    self.result = Result(
+                        status=False, resource_type="Deployment"
+                    )
+                else:
+                    break
+
 
 class use_separate_iam_role_for_cluster_autoscaler(Rule):
     _type = "cluster_wide"
