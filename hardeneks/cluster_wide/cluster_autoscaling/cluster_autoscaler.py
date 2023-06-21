@@ -6,36 +6,88 @@ from ...resources import Resources
 from hardeneks import helpers
 
 
-def _get_policy_documents_for_role(role_name, iam_client):
+def _check_condition_strings_in_policy_statement(statement, clusterName):
+    
+    Status = False
+    Info = None
+    actionlist = statement["Action"]
+    
+    if 'autoscaling:SetDesiredCapacity' in actionlist or 'autoscaling:TerminateInstanceInAutoScalingGroup' in actionlist:
+        if 'Condition' in statement.keys():
+            if 'StringEquals' in statement['Condition']:
+                enabledTagValue = statement['Condition']['StringEquals']['aws:ResourceTag/k8s.io/cluster-autoscaler/enabled']
+                clusterNameTagKey = 'aws:ResourceTag/k8s.io/cluster-autoscaler/' + clusterName
+                clusterNameTagValue = statement['Condition']['StringEquals'][clusterNameTagKey]
+                if enabledTagValue == 'true' and clusterNameTagValue == 'owned':
+                    Status = True
+                else:
+                    Info = "IAM policy statement String Condition failed. enabledTagValue={} clusterNameTagValue={}".format(enabledTagValue, clusterNameTagValue)
+            else:
+                Info = "IAM policy statement does not have StringEquals field in Condition"
+        else:
+            Info = "IAM policy statement does not have Condition field"        
+    
+    return (Status, Info)                
+
+def _get_policy_documents_for_role(role_name, iam_client, clusterName):
+    
+    
     attached_policies = iam_client.list_attached_role_policies(
-        RoleName=role_name
-    )["AttachedPolicies"]
-    inline_policies = iam_client.list_role_policies(RoleName=role_name)[
-        "PolicyNames"
-    ]
+        RoleName=role_name)["AttachedPolicies"]
+        
+    inline_policies = iam_client.list_role_policies(RoleName=role_name)["PolicyNames" ]
+    
+    #print("attached_policies={} inline_policies={}".format(attached_policies, inline_policies))
+    
     actions = []
+    
     for policy_arn in [x["PolicyArn"] for x in attached_policies]:
+        
         version_id = iam_client.get_policy(PolicyArn=policy_arn)["Policy"][
             "DefaultVersionId"
         ]
+        
         response = iam_client.get_policy_version(
             PolicyArn=policy_arn, VersionId=version_id
         )["PolicyVersion"]["Document"]["Statement"]
+        
+        #print("version_id={} response={}".format(version_id, response))
+        
+        
         for statement in response:
+            actionlist = statement["Action"]
+            print("actionlist={}".format(actionlist))
             if type(statement["Action"]) == str:
-                actions.append(statement["Action"])
+                actions.append(actionlist)
             elif type(statement["Action"]) == list:
-                actions.extend(statement["Action"])
+                actions.extend(actionlist)
+            
+            (retStatus, Info) = _check_condition_strings_in_policy_statement(statement, clusterName)
+            if not retStatus:
+                Info += " for policy {}".format(policy_arn)
+                return (False, actions, Info)
+            
+
     for policy_name in inline_policies:
         response = iam_client.get_role_policy(
             RoleName=role_name, PolicyName=policy_name
         )["PolicyDocument"]["Statement"]
+        
+        print("response={}".format(response))
+        
         for statement in response:
+            actionlist = statement["Action"]
             if type(statement["Action"]) == str:
-                actions.append(statement["Action"])
+                actions.append(actionlist)
             elif type(statement["Action"]) == list:
-                actions.extend(statement["Action"])
-    return actions
+                actions.extend(actionlist)
+            
+            (retStatus, Info) = _check_condition_strings_in_policy_statement(statement, clusterName)
+            if not retStatus:
+                return (False, actions, Info)            
+                
+                
+    return (True, actions, Info)   
 
 
 
@@ -154,14 +206,15 @@ class employ_least_privileged_access_cluster_autoscaler_role(Rule):
 
         iam_client = boto3.client("iam", region_name=resources.region)
         ACTIONS = {
-            "autoscaling:DescribeAutoScalingGroups",
             "autoscaling:DescribeAutoScalingInstances",
-            "autoscaling:DescribeLaunchConfigurations",
+            "autoscaling:DescribeAutoScalingGroups",
             "autoscaling:DescribeScalingActivities",
-            "autoscaling:DescribeTags",
-            "ec2:DescribeImages",
-            "ec2:DescribeInstanceTypes",
             "ec2:DescribeLaunchTemplateVersions",
+            "autoscaling:DescribeTags",
+            "autoscaling:DescribeLaunchConfigurations",
+            "ec2:DescribeInstanceTypes",
+            
+            "ec2:DescribeImages",
             "ec2:GetInstanceTypesFromInstanceRequirements",
             "eks:DescribeNodegroup",
             "autoscaling:SetDesiredCapacity",
@@ -169,6 +222,7 @@ class employ_least_privileged_access_cluster_autoscaler_role(Rule):
         }
         
         Status = False
+        resourceList = ['']
         (isCADeployed, deploymentData) = helpers.is_deployment_exists_in_namespace("cluster-autoscaler", "kube-system")
         
         if isCADeployed:
@@ -179,24 +233,33 @@ class employ_least_privileged_access_cluster_autoscaler_role(Rule):
                 sa_iam_role = sa_iam_role_arn.split("/")[-1]
                 print("sa_iam_role={}".format(sa_iam_role))
                 
-                actions = _get_policy_documents_for_role(sa_iam_role, iam_client)
+                (retStatus, actions, Info) = _get_policy_documents_for_role(sa_iam_role, iam_client, resources.cluster)
 
-                if len(set(actions) - ACTIONS) > 0:
-                    Info = "K8s CA IAM Role has more IAM permissions than needed"
-                    self.result = Result(
-                        status=False,
-                        resource_type="IAM Role Action",
-                        resources=(set(actions) - ACTIONS),
-                    )           
+                #print("len of actions={}".format(len(set(actions))))
+                #print("actions={}".format(set(actions)))
+                #print("len of ACTIONS={}".format(len(ACTIONS)))
+                #print("ACTIONS={}".format(ACTIONS))
+                #print("len={}".format(len(set(actions) - ACTIONS)))
+                
+                #diff1 = set(actions) - ACTIONS
+                #print("diff={} diff1={}".format(set(actions) - ACTIONS, diff1))
+                
+                if retStatus:
+                    if len(set(actions) - ACTIONS) > 0:
+                        Info = "K8s CA IAM Role has more IAM permissions than needed"
+                        Status = False
+                        resourceList = (set(actions) - ACTIONS)          
+                    else:
+                        Status = True
+                        Info = "K8s CA IAM Role has least privileged access"                    
                 else:
-                    Status = True
-                    Info = "K8s CA IAM Role has least privileged access"
+                    Status = False
             else:
                 Info = "K8s CA doesn't use separate IAM Role (IRSA)" 
         else:
             Info = "Kubernetes Cluster Autoscaler is not deployed in the cluster"
 
-        self.result = Result(status=Status, resource_type="K8s CA IAM Role least privileged access",info=Info) 
+        self.result = Result(status=Status, resource_type="K8s CA IAM Role least privileged access", resources=resourceList, info=Info) 
 
 
 class use_managed_nodegroups(Rule):
@@ -282,7 +345,7 @@ class ensure_uniform_instance_types_in_nodegroups(Rule):
         nodegroupList = {}
         nodegroupInstanceSizesList={}
         
-        nodeList = (client.CoreV1Api().list_node().items)
+        nodeList = (kubernetes.client.CoreV1Api().list_node().items)
         for node in nodeList:
             labels = node.metadata.labels
             #print("nodeName={} nodegroup={}".format(node.metadata.name, labels ))
