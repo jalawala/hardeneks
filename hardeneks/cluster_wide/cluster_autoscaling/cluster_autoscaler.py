@@ -56,7 +56,7 @@ def _get_policy_documents_for_role(role_name, iam_client, clusterName):
         
         for statement in response:
             actionlist = statement["Action"]
-            print("actionlist={}".format(actionlist))
+            #print("actionlist={}".format(actionlist))
             if type(statement["Action"]) == str:
                 actions.append(actionlist)
             elif type(statement["Action"]) == list:
@@ -73,7 +73,7 @@ def _get_policy_documents_for_role(role_name, iam_client, clusterName):
             RoleName=role_name, PolicyName=policy_name
         )["PolicyDocument"]["Statement"]
         
-        print("response={}".format(response))
+        #print("response={}".format(response))
         
         for statement in response:
             actionlist = statement["Action"]
@@ -231,7 +231,7 @@ class employ_least_privileged_access_cluster_autoscaler_role(Rule):
             if 'eks.amazonaws.com/role-arn' in sa_data.metadata.annotations.keys():
                 sa_iam_role_arn = sa_data.metadata.annotations["eks.amazonaws.com/role-arn"]
                 sa_iam_role = sa_iam_role_arn.split("/")[-1]
-                print("sa_iam_role={}".format(sa_iam_role))
+                #print("sa_iam_role={}".format(sa_iam_role))
                 
                 (retStatus, actions, Info) = _get_policy_documents_for_role(sa_iam_role, iam_client, resources.cluster)
 
@@ -271,29 +271,38 @@ class use_managed_nodegroups(Rule):
 
     def check(self, resources):
         offenders = []
+        selfMNGList = set()
         nodes = kubernetes.client.CoreV1Api().list_node().items
 
         for node in nodes:
             labels = node.metadata.labels
-            if "eks.amazonaws.com/nodegroup" in labels.keys():
+            if "fargate-" in node.metadata.name:
+                pass            
+            elif "eks.amazonaws.com/nodegroup" in labels.keys():
                 pass
-            elif "alpha.eksctl.io/nodegroup-name" in labels.keys():
-                offenders.append(node)
             elif "karpenter.sh/provisioner-name" in labels.keys():
-                pass
+                pass            
+            elif "alpha.eksctl.io/nodegroup-name" in labels.keys():
+                nodegroupName = labels['alpha.eksctl.io/nodegroup-name']
+                selfMNGList.add(nodegroupName)
             else:
-                offenders.append(node)
-
-        self.result = Result(status=True, resource_type="Node")
+                print("node {} is not part of any Node group. Ignoring it...".format(node.metadata.name))
 
         if offenders:
+            Info = "These are Self Managed Node groups"
             self.result = Result(
                 status=False,
                 resource_type="Node",
-                resources=[i.metadata.name for i in offenders],
+                resources=list(selfMNGList),
+                info = Info
             )
-
-
+        else:
+            Info = "All are EKS Managed Node groups"
+            self.result = Result(
+                status=True,
+                resource_type="Node",
+                info = Info
+            )
 class ensure_cluster_autoscaler_has_three_replicas(Rule):
     _type = "cluster_wide"
     pillar = "cluster_autoscaling"
@@ -403,7 +412,7 @@ class ensure_uniform_instance_types_in_nodegroups(Rule):
             self.result = Result(
                 status=False,
                 resource_type=resourceType,
-                resources=[i for i in offenders],
+                resources=offenders,
                 info = Info
             )
         else:
@@ -411,7 +420,7 @@ class ensure_uniform_instance_types_in_nodegroups(Rule):
             self.result = Result(
                 status=True,
                 resource_type=resourceType,
-                resources=[i for i in uniformNodeGroups],
+                resources=uniformNodeGroups,
                 info = Info
             )
             

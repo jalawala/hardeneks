@@ -346,7 +346,7 @@ def run_hardeneks(
     else:
         pillarsList = pillars.split(',')
                 
-    print("pillarsList={} namespaces={}".format(pillarsList, namespaces))
+    print("Running hardeneks for selected pillars list={} and namespaces={}".format(pillarsList, namespaces))
     
     rules = config["rules"]
 
