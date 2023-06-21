@@ -312,27 +312,20 @@ class ensure_cluster_autoscaler_has_three_replicas(Rule):
 
     def check(self, resources):
         Status = False
-        deployments = (kubernetes.client.AppsV1Api().list_namespaced_deployment("kube-system").items)
         
-        is_cluster_autoscaler_deployed = False
+        (isCADeployed, deploymentData) = helpers.is_deployment_exists_in_namespace("cluster-autoscaler", "kube-system")
         
-        for deployment in deployments:
-            if deployment.metadata.name == "cluster-autoscaler":
-                is_cluster_autoscaler_deployed = True
-                ca_replicas = deployment.spec.replicas
-                if ca_replicas >= 3:
-                    Info = "K8s Cluster Autoscaler has {} replicas".format(ca_replicas)
-                    Status = True
-                else:
-                    Info = "K8s Cluster Autoscaler has only {} replicas".format(ca_replicas)
-                    Status = False
-                break        
-
-        if not is_cluster_autoscaler_deployed:
+        if isCADeployed:
+            ca_replicas = deploymentData.spec.replicas
+            if ca_replicas >= 3:
+                Info = "K8s Cluster Autoscaler has {} replicas".format(ca_replicas)
+                Status = True
+            else:
+                Info = "K8s Cluster Autoscaler has only {} replicas".format(ca_replicas)
+                Status = False
+        else:
             Info = "Kubernetes Cluster Autoscaler is not deployed in the cluster"
-            Status = False
-            
-        
+
         self.result = Result(status=Status, resource_type="K8s CA Replica Count", info=Info)
 
 class ensure_uniform_instance_types_in_nodegroups(Rule):
