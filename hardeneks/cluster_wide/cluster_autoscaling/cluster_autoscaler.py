@@ -231,7 +231,7 @@ class employ_least_privileged_access_cluster_autoscaler_role(Rule):
             if 'eks.amazonaws.com/role-arn' in sa_data.metadata.annotations.keys():
                 sa_iam_role_arn = sa_data.metadata.annotations["eks.amazonaws.com/role-arn"]
                 sa_iam_role = sa_iam_role_arn.split("/")[-1]
-                #print("sa_iam_role={}".format(sa_iam_role))
+                print("sa_iam_role={}".format(sa_iam_role))
                 
                 (retStatus, actions, Info) = _get_policy_documents_for_role(sa_iam_role, iam_client, resources.cluster)
 

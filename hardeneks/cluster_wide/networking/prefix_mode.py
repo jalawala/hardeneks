@@ -31,7 +31,7 @@ class use_prefix_mode(Rule):
         #print("envList={} type={}".format(envList, type(envList)))
         #for env in envList:
         for env in vpccni_containers[0].env:        
-            print("name={} value={}".format(env.name, env.value))
+            #print("name={} value={}".format(env.name, env.value))
             if env.name == 'ENABLE_PREFIX_DELEGATION':
                 isPrefixModeEabled = env.value
             
