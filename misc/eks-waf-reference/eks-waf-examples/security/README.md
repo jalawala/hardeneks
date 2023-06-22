@@ -266,10 +266,29 @@ Events:              <none>
 
 
 ```
-text for the bash command
+### check_access_to_instance_profile
 
 ```bash
-
+jp:~/environment/jalawala/hardeneks/misc/eks-waf-reference/eks-waf-examples/security (main) $ eksctl create nodegroup -f imdsv2.yml 
+2023-06-22 19:05:51 [ℹ]  nodegroup "imdsv2" will use "" [AmazonLinux2/1.26]
+2023-06-22 19:05:52 [ℹ]  3 existing nodegroup(s) (linux-ng,mng,windows-managed-ng-2022) will be excluded
+2023-06-22 19:05:52 [ℹ]  1 nodegroup (imdsv2) was included (based on the include/exclude rules)
+2023-06-22 19:05:52 [ℹ]  will create a CloudFormation stack for each of 1 managed nodegroups in cluster "eks126"
+2023-06-22 19:05:52 [ℹ]  
+2 sequential tasks: { fix cluster compatibility, 1 task: { 1 task: { create managed nodegroup "imdsv2" } } 
+}
+2023-06-22 19:05:52 [ℹ]  checking cluster stack for missing resources
+2023-06-22 19:05:53 [ℹ]  cluster stack has all required resources
+2023-06-22 19:05:54 [ℹ]  building managed nodegroup stack "eksctl-eks126-nodegroup-imdsv2"
+2023-06-22 19:05:54 [ℹ]  deploying stack "eksctl-eks126-nodegroup-imdsv2"
+2023-06-22 19:05:54 [ℹ]  waiting for CloudFormation stack "eksctl-eks126-nodegroup-imdsv2"
+2023-06-22 19:06:24 [ℹ]  waiting for CloudFormation stack "eksctl-eks126-nodegroup-imdsv2"
+2023-06-22 19:07:12 [ℹ]  waiting for CloudFormation stack "eksctl-eks126-nodegroup-imdsv2"
+2023-06-22 19:08:47 [ℹ]  waiting for CloudFormation stack "eksctl-eks126-nodegroup-imdsv2"
+2023-06-22 19:08:47 [ℹ]  no tasks
+2023-06-22 19:08:47 [✔]  created 0 nodegroup(s) in cluster "eks126"
+2023-06-22 19:08:47 [✔]  created 1 managed nodegroup(s) in cluster "eks126"
+2023-06-22 19:08:48 [ℹ]  checking security group configuration for all nodegroups
 ```
 text for the bash command
 

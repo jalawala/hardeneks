@@ -137,6 +137,7 @@ class check_access_to_instance_profile(Rule):
     def check(self, resources: Resources):
         client = boto3.client("ec2", region_name=resources.region)
         offenders = []
+        Status = False
 
         instance_metadata = client.describe_instances(
             Filters=[
@@ -150,21 +151,25 @@ class check_access_to_instance_profile(Rule):
         )
 
         for instance in instance_metadata["Reservations"]:
-            if (
-                instance["Instances"][0]["MetadataOptions"][
-                    "HttpPutResponseHopLimit"
-                ]
-                == 2
-            ):
-                offenders.append(instance)
-
-        self.result = Result(status=True, resource_type="Node")
+            
+            #print("MetadataOptions={}".format(instance["Instances"][0]["MetadataOptions"]))
+            HttpPutResponseHopLimit =  instance["Instances"][0]["MetadataOptions"]["HttpPutResponseHopLimit"]
+            HttpEndpoint = instance["Instances"][0]["MetadataOptions"]["HttpEndpoint"]
+            HttpTokens = instance["Instances"][0]["MetadataOptions"]["HttpTokens"]
+            Info = "HttpPutResponseHopLimit={} HttpEndpoint={} HttpTokens={}".format(HttpPutResponseHopLimit, HttpEndpoint, HttpTokens)
+            
+            if HttpPutResponseHopLimit != 2 or HttpEndpoint != 'enabled' or HttpTokens != 'required':
+                offenders.append(instance["Instances"][0]["InstanceId"])
+                
 
         if offenders:
             self.result = Result(
                 status=False,
                 resource_type="Node",
-                resources=[i["Instances"][0]["InstanceId"] for i in offenders],
+                resources=offenders,
+                info=Info
             )
-
+        else:
+            self.result = Result(status=True, resource_type="Node",info=Info)
+            
 
