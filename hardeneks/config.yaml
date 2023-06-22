@@ -24,7 +24,7 @@ rules:
     security:
       iam:
         - disable_anonymous_access_for_cluster_roles
-        - check_endpoint_public_access
+        - cluster_endpoint_public_and_private_mode
         - check_aws_node_daemonset_service_account
         - check_access_to_instance_profile
         - restrict_wildcard_for_cluster_roles

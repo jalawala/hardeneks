@@ -37,7 +37,7 @@ hardeneks --namespace default,kubecost --pillars reliability
 hardeneks --pillars cluster_data 
 
 hardeneks --pillars cluster_data,networking --only_cluster_level_rules
-hardeneks --pillars cluster_autoscaling --only_cluster_level_rules
+hardeneks --pillars security --only_cluster_level_rules
 
 
 

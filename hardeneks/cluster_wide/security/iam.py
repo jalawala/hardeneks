@@ -5,6 +5,67 @@ from hardeneks.rules import Rule, Result
 from ...resources import Resources
 
 
+class disable_anonymous_access_for_cluster_roles(Rule):
+    _type = "cluster_wide"
+    pillar = "security"
+    section = "iam"
+    message = "Review and revoke unnecessary anonymous access"
+    url = "https://aws.github.io/aws-eks-best-practices/security/docs/iam/#review-and-revoke-unnecessary-anonymous-access"
+
+    def check(self, resources: Resources):
+        offenders = []
+
+        ignored = ["system:public-info-viewer"]
+
+        for cluster_role_binding in resources.cluster_role_bindings:
+            if (
+                cluster_role_binding.subjects
+                and cluster_role_binding.metadata.name not in ignored
+            ):
+                for subject in cluster_role_binding.subjects:
+                    if (
+                        subject.name == "system:unauthenticated"
+                        or subject.name == "system:anonymous"
+                    ):
+                        offenders.append(cluster_role_binding)
+
+        if offenders:
+            self.result = Result(
+                status=False,
+                resource_type="ClusterRoleBinding",
+                resources=[i.metadata.name for i in offenders],
+            )
+        else:
+            self.result = Result(status=True, resource_type="ClusterRoleBinding")
+            
+
+class cluster_endpoint_public_and_private_mode(Rule):
+    _type = "cluster_wide"
+    pillar = "security"
+    section = "iam"
+    message = "Make the EKS Cluster Endpoint private"
+    url = "https://aws.github.io/aws-eks-best-practices/security/docs/iam/#make-the-eks-cluster-endpoint-private"
+
+    def check(self, resources: Resources):
+        Status = True
+        
+        eksclient = boto3.client("eks", region_name=resources.region)
+        cluster_metadata = eksclient.describe_cluster(name=resources.cluster)
+        cluster_endpoint = cluster_metadata["cluster"]["endpoint"]
+        endpoint_public_access  = cluster_metadata["cluster"]["resourcesVpcConfig"]["endpointPublicAccess"]
+        endpoint_private_access = cluster_metadata["cluster"]["resourcesVpcConfig"]["endpointPrivateAccess"]
+        Info = "public: " + str(endpoint_public_access) + ", " + "private: " + str(endpoint_private_access)
+        
+        if endpoint_public_access == True and endpoint_private_access == True:
+            public_access_cidr_list  = cluster_metadata["cluster"]["resourcesVpcConfig"]["publicAccessCidrs"]
+            if '0.0.0.0/0' in public_access_cidr_list :
+                Info = "EKS Cluster Endpoint is Public and Open to Internet Access ['0.0.0.0/0']"
+                Status = False
+        else:
+            Status = False
+        
+        self.result = Result(status=Status, resource_type="EKS Cluster Endpoint Mode",info=Info)    
+
 class restrict_wildcard_for_cluster_roles(Rule):
     _type = "cluster_wide"
     pillar = "security"
@@ -41,25 +102,6 @@ class restrict_wildcard_for_cluster_roles(Rule):
             )
 
 
-class check_endpoint_public_access(Rule):
-    _type = "cluster_wide"
-    pillar = "security"
-    section = "iam"
-    message = "EKS Cluster Endpoint is not Private."
-    url = "https://aws.github.io/aws-eks-best-practices/security/docs/iam/#make-the-eks-cluster-endpoint-private"
-
-    def check(self, resources: Resources):
-        client = boto3.client("eks", region_name=resources.region)
-        cluster_metadata = client.describe_cluster(name=resources.cluster)
-        endpoint_access = cluster_metadata["cluster"]["resourcesVpcConfig"][
-            "endpointPublicAccess"
-        ]
-        self.result = Result(status=True, resource_type="Cluster Endpoint")
-
-        if endpoint_access:
-            self.result = Result(
-                status=False, resource_type="Cluster Endpoint"
-            )
 
 
 class check_aws_node_daemonset_service_account(Rule):
@@ -129,34 +171,3 @@ class check_access_to_instance_profile(Rule):
             )
 
 
-class disable_anonymous_access_for_cluster_roles(Rule):
-    _type = "cluster_wide"
-    pillar = "security"
-    section = "iam"
-    message = "Don't bind clusterroles to anonymous/unauthenticated groups."
-    url = "https://aws.github.io/aws-eks-best-practices/security/docs/iam/#review-and-revoke-unnecessary-anonymous-access"
-
-    def check(self, resources: Resources):
-        offenders = []
-
-        ignored = ["system:public-info-viewer"]
-
-        for cluster_role_binding in resources.cluster_role_bindings:
-            if (
-                cluster_role_binding.subjects
-                and cluster_role_binding.metadata.name not in ignored
-            ):
-                for subject in cluster_role_binding.subjects:
-                    if (
-                        subject.name == "system:unauthenticated"
-                        or subject.name == "system:anonymous"
-                    ):
-                        offenders.append(cluster_role_binding)
-
-        self.result = Result(status=True, resource_type="ClusterRoleBinding")
-        if offenders:
-            self.result = Result(
-                status=False,
-                resource_type="ClusterRoleBinding",
-                resources=[i.metadata.name for i in offenders],
-            )
