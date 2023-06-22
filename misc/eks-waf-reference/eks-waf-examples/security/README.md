@@ -196,9 +196,74 @@ aws eks update-cluster-config --name $EKS_CLUSTER_NAME --resources-vpc-config en
 }
 
 ```
-text for the bash command
+### check_aws_node_daemonset_service_account
+
 
 ```bash
+cd /home/ec2-user/environment
+git clone https://github.com/aws/aws-eks-best-practices.git
+cd aws-eks-best-practices/projects/enable-irsa/src
+
+
+source /tmp/.venv/bin/activate
+
+
+mkdir -p /tmp/irsa/
+
+
+python3 -m venv /tmp/irsa/.venv
+
+source /tmp/irsa/.venv/bin/activate
+
+pip install --trusted-host pypi.python.org -r requirements.txt
+pip install pip --upgrade
+pip install pyopenssl --upgrade
+
+export EKS_CLUSTER_NAME="eks126"
+python main.py --cluster-name $EKS_CLUSTER_NAME --role-name eks_cni_irsa_role  --region us-east-1 --account 000474600478
+
+Obtaining OIDC URL and thumbprint.
+Creating a OIDC provider. This is privileged operation. Do you want to proceed (yes/no)? yes
+The OIDC provider already exists
+Creating IAM role.
+Attaching CNI policy to role.
+Patching aws-node ServiceAccount
+Do you want to patch the aws-node Daemonset(Yes/No)? This will trigger a rolling restart of the networking plugin: Yes
+Patching aws-node daemonset
+
+
+(.venv) jp:~/environment/aws-eks-best-practices/projects/enable-irsa/src (master) $ kubectl get pod -n kube-system
+NAME                                            READY   STATUS    RESTARTS     AGE
+aws-load-balancer-controller-65d588d98b-bp5rf   1/1     Running   3 (9d ago)   22d
+aws-load-balancer-controller-65d588d98b-fd4hb   1/1     Running   3 (9d ago)   22d
+aws-node-m2qx2                                  1/1     Running   0            11s
+aws-node-q89bd                                  1/1     Running   0            8s
+aws-node-vkcz7                                  1/1     Running   0            15s
+coredns-55fb5d545d-h6qjf                        1/1     Running   4 (9d ago)   38d
+coredns-55fb5d545d-lj5zd                        1/1     Running   4 (9d ago)   38d
+kube-proxy-8k29j                                1/1     Running   4 (9d ago)   30d
+kube-proxy-gzc9k                                1/1     Running   4 (9d ago)   23d
+kube-proxy-prh6c                                1/1     Running   4 (9d ago)   30d
+(.venv) jp:~/environment/aws-eks-best-practices/projects/enable-irsa/src (master) $ kubectl -n kube-system describe sa aws-node
+Name:                aws-node
+Namespace:           kube-system
+Labels:              app.kubernetes.io/instance=aws-vpc-cni
+                     app.kubernetes.io/name=aws-node
+                     app.kubernetes.io/version=v1.12.5
+                     k8s-app=aws-node
+Annotations:         eks.amazonaws.com/role-arn: arn:aws:iam::000474600478:role/eks_cni_irsa_role
+Image pull secrets:  <none>
+Mountable secrets:   <none>
+Tokens:              <none>
+Events:              <none>
+
+
+
+
+
+
+
+
 
 ```
 text for the bash command

@@ -1,6 +1,6 @@
 import boto3
 from kubernetes import client
-
+import kubernetes
 from hardeneks.rules import Rule, Result
 from ...resources import Resources
 
@@ -102,8 +102,6 @@ class restrict_wildcard_for_cluster_roles(Rule):
             )
 
 
-
-
 class check_aws_node_daemonset_service_account(Rule):
     _type = "cluster_wide"
     pillar = "security"
@@ -111,24 +109,23 @@ class check_aws_node_daemonset_service_account(Rule):
     message = "Update the aws-node daemonset to use IRSA."
     url = "https://aws.github.io/aws-eks-best-practices/security/docs/iam/#update-the-aws-node-daemonset-to-use-irsa"
 
-    def check(self, resources: Resources):
-        daemonset = client.AppsV1Api().read_namespaced_daemon_set(
-            name="aws-node", namespace="kube-system"
-        )
-        self.result = Result(status=True, resource_type="Daemonset")
-        v1 = client.CoreV1Api()
-        service_account = v1.read_namespaced_service_account(
-            name=daemonset.spec.template.spec.service_account_name,
-            namespace="kube-system",
-        )
-        if (
-            "eks.amazonaws.com/role-arn"
-            not in service_account.metadata.annotations
-        ):
-            self.result = Result(
-                status=False, resources=["aws-node"], resource_type="Daemonset"
-            )
 
+    def check(self, resources: Resources):
+
+        daemonset = kubernetes.client.AppsV1Api().read_namespaced_daemon_set(name="aws-node", namespace="kube-system")
+        sa = daemonset.spec.template.spec.service_account_name
+        sa_data = kubernetes.client.CoreV1Api().read_namespaced_service_account(sa, 'kube-system', pretty="true")
+        #print(sa_data.metadata.annotations.keys())
+        
+        if 'eks.amazonaws.com/role-arn' in sa_data.metadata.annotations.keys():
+            Status = True
+            Info = "VPC CNI uses separate IAM Role (IRSA)"
+        else:
+            Status = False
+            Info = "VPC CNI doesn't use separate IAM Role (IRSA)"            
+        
+        self.result = Result(status=Status, resource_type="IRSA for VPC CNI",info=Info)    
+    
 
 class check_access_to_instance_profile(Rule):
     _type = "cluster_wide"
