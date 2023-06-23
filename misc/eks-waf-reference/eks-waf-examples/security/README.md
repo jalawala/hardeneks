@@ -378,10 +378,233 @@ aws ec2 create-flow-logs \
 }    
 ```
 
-
-text for the bash command
+### check_awspca_exists
 
 ```bash
+export ACM_PCA_ARN="arn:aws:acm-pca:us-east-1:000474600478:certificate-authority/730a7d12-c910-4e9b-83b7-c61d0b4f7ce7"
+
+aws acm-pca get-certificate-authority-certificate --certificate-authority-arn $ACM_PCA_ARN --region us-east-1 --output text > cacert.pem
+
+
+https://github.com/awslabs/eksdemo/blob/main/docs/install-cert-manager.md
+
+eksdemo install cert-manager -c eks126 --dry-run
+
+Creating 1 dependencies for cert-manager
+Creating dependency: cert-manager-irsa
+
+Eksctl Resource Manager Dry Run:
+eksctl create iamserviceaccount -f - --approve
+---
+apiVersion: eksctl.io/v1alpha5
+kind: ClusterConfig
+
+metadata:
+  name: eks126
+  region: us-east-1
+
+iam:
+  withOIDC: true
+  serviceAccounts:
+  - metadata:
+      name: cert-manager
+      namespace: cert-manager
+    roleName: eksdemo.eks126.cert-manager.cert-manager
+    roleOnly: true
+    attachPolicy:      
+      Version: '2012-10-17'
+      Statement:
+      - Effect: Allow
+        Action:
+        - route53:GetChange
+        Resource: arn:aws:route53:::change/*
+      - Effect: Allow
+        Action:
+        - route53:ChangeResourceRecordSets
+        - route53:ListResourceRecordSets
+        Resource: arn:aws:route53:::hostedzone/*
+      - Effect: Allow
+        Action: route53:ListHostedZonesByName
+        Resource: "*"
+      
+
+Helm Installer Dry Run:
++---------------------+----------------------------+
+| Application Version | v1.12.1                    |
+| Chart Version       | 1.12.1                     |
+| Chart Repository    | https://charts.jetstack.io |
+| Chart Name          | cert-manager               |
+| Release Name        | cert-manager               |
+| Namespace           | cert-manager               |
+| Wait                | false                      |
++---------------------+----------------------------+
+Set Values: []
+Values File:
+---
+installCRDs: true
+replicaCount: 1
+serviceAccount:
+  name: cert-manager
+  annotations:
+    eks.amazonaws.com/role-arn: arn:aws:iam::000474600478:role/eksdemo.eks126.cert-manager.cert-manager
+image:
+  tag: v1.12.1
+
+Creating 1 post-install resources for cert-manager
+Creating post-install resource: cert-manager-cluster-issuer
+
+Kubernetes Resource Manager Dry Run:
+---
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+metadata:
+  name: letsencrypt-prod
+spec:
+  acme:
+    server: https://acme-v02.api.letsencrypt.org/directory
+    privateKeySecretRef:
+      name: letsencrypt-prod
+    solvers:
+    - dns01:
+        route53:
+          region: us-east-1
+
+
+eksdemo install cert-manager -c eks126
+jp:~/environment/jalawala/hardeneks/misc/eks-waf-reference/eks-waf-examples/security/network_security (main) $ eksdemo install cert-manager -c eks126
+Creating 1 dependencies for cert-manager
+Creating dependency: cert-manager-irsa
+2023-06-23 12:07:48 [ℹ]  5 existing iamserviceaccount(s) (cert-manager/cert-manager,karpenter/karpenter,kube-system/aws-load-balancer-controller,prometheus/amp-irsa-role,sample/external-dns) will be excluded
+2023-06-23 12:07:48 [ℹ]  1 iamserviceaccount (cert-manager/cert-manager) was excluded (based on the include/exclude rules)
+2023-06-23 12:07:48 [!]  serviceaccounts that exist in Kubernetes will be excluded, use --override-existing-serviceaccounts to override
+2023-06-23 12:07:48 [ℹ]  no tasks
+Downloading Chart: https://charts.jetstack.io/charts/cert-manager-v1.12.1.tgz
+Helm installing...
+Error: helm install failed: Kubernetes cluster unreachable: Get "https://BF03E35320602DCC0874D4B837FB9FE4.gr7.us-east-1.eks.amazonaws.com/version": getting credentials: decoding stdout: no kind "ExecCredential" is registered for version "client.authentication.k8s.io/v1alpha1" in scheme "pkg/runtime/scheme.go:100"
+jp:~/environment/jalawala/hardeneks/misc/eks-waf-reference/eks-waf-examples/security/network_security (main) $ kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.12.0/cert-manager.yaml
+namespace/cert-manager unchanged
+customresourcedefinition.apiextensions.k8s.io/certificaterequests.cert-manager.io configured
+customresourcedefinition.apiextensions.k8s.io/certificates.cert-manager.io configured
+customresourcedefinition.apiextensions.k8s.io/challenges.acme.cert-manager.io configured
+customresourcedefinition.apiextensions.k8s.io/clusterissuers.cert-manager.io configured
+customresourcedefinition.apiextensions.k8s.io/issuers.cert-manager.io configured
+customresourcedefinition.apiextensions.k8s.io/orders.acme.cert-manager.io configured
+serviceaccount/cert-manager-cainjector configured
+serviceaccount/cert-manager configured
+serviceaccount/cert-manager-webhook configured
+configmap/cert-manager-webhook configured
+clusterrole.rbac.authorization.k8s.io/cert-manager-cainjector configured
+clusterrole.rbac.authorization.k8s.io/cert-manager-controller-issuers configured
+clusterrole.rbac.authorization.k8s.io/cert-manager-controller-clusterissuers configured
+clusterrole.rbac.authorization.k8s.io/cert-manager-controller-certificates configured
+clusterrole.rbac.authorization.k8s.io/cert-manager-controller-orders configured
+clusterrole.rbac.authorization.k8s.io/cert-manager-controller-challenges configured
+clusterrole.rbac.authorization.k8s.io/cert-manager-controller-ingress-shim configured
+clusterrole.rbac.authorization.k8s.io/cert-manager-view configured
+clusterrole.rbac.authorization.k8s.io/cert-manager-edit configured
+clusterrole.rbac.authorization.k8s.io/cert-manager-controller-approve:cert-manager-io configured
+clusterrole.rbac.authorization.k8s.io/cert-manager-controller-certificatesigningrequests configured
+clusterrole.rbac.authorization.k8s.io/cert-manager-webhook:subjectaccessreviews configured
+clusterrolebinding.rbac.authorization.k8s.io/cert-manager-cainjector configured
+clusterrolebinding.rbac.authorization.k8s.io/cert-manager-controller-issuers configured
+clusterrolebinding.rbac.authorization.k8s.io/cert-manager-controller-clusterissuers configured
+clusterrolebinding.rbac.authorization.k8s.io/cert-manager-controller-certificates configured
+clusterrolebinding.rbac.authorization.k8s.io/cert-manager-controller-orders configured
+clusterrolebinding.rbac.authorization.k8s.io/cert-manager-controller-challenges configured
+clusterrolebinding.rbac.authorization.k8s.io/cert-manager-controller-ingress-shim configured
+clusterrolebinding.rbac.authorization.k8s.io/cert-manager-controller-approve:cert-manager-io configured
+clusterrolebinding.rbac.authorization.k8s.io/cert-manager-controller-certificatesigningrequests configured
+clusterrolebinding.rbac.authorization.k8s.io/cert-manager-webhook:subjectaccessreviews configured
+role.rbac.authorization.k8s.io/cert-manager-cainjector:leaderelection configured
+role.rbac.authorization.k8s.io/cert-manager:leaderelection configured
+role.rbac.authorization.k8s.io/cert-manager-webhook:dynamic-serving configured
+rolebinding.rbac.authorization.k8s.io/cert-manager-cainjector:leaderelection configured
+rolebinding.rbac.authorization.k8s.io/cert-manager:leaderelection configured
+rolebinding.rbac.authorization.k8s.io/cert-manager-webhook:dynamic-serving configured
+service/cert-manager configured
+service/cert-manager-webhook configured
+deployment.apps/cert-manager-cainjector configured
+deployment.apps/cert-manager configured
+deployment.apps/cert-manager-webhook configured
+mutatingwebhookconfiguration.admissionregistration.k8s.io/cert-manager-webhook configured
+validatingwebhookconfiguration.admissionregistration.k8s.io/cert-manager-webhook configured
+jp:~/environment/jalawala/hardeneks/misc/eks-waf-reference/eks-waf-examples/security/network_security (main) $ 
+
+
+helm repo add awspca https://cert-manager.github.io/aws-privateca-issuer
+helm repo update
+helm install awspca/aws-privateca-issuer  --generate-name --namespace aws-pca-issuer
+
+jp:~/environment/jalawala/hardeneks/misc/eks-waf-reference/eks-waf-examples/security/network_security (main) $ kubectl create ns aws-pca-issuer
+namespace/aws-pca-issuer created
+jp:~/environment/jalawala/hardeneks/misc/eks-waf-reference/eks-waf-examples/security/network_security (main) $ helm install awspca/aws-privateca-issuer  --generate-name --namespace aws-pca-issuer
+NAME: aws-privateca-issuer-1687522474
+LAST DEPLOYED: Fri Jun 23 12:14:35 2023
+NAMESPACE: aws-pca-issuer
+STATUS: deployed
+REVISION: 1
+TEST SUITE: None
+
+
+
+
+export TEST_DOMAIN='test.cloudtechconsulting.in'
+
+cat > test-cert.yaml <<EOF
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: test
+spec:
+  secretName: test-cert-tls
+  dnsNames:
+    - $TEST_DOMAIN
+  issuerRef:
+    name: letsencrypt-prod
+    kind: ClusterIssuer
+EOF
+
+kubectl apply -f test-cert.yaml
+
+jp:~/environment/jalawala/hardeneks/misc/eks-waf-reference/eks-waf-examples/security/network_security (main) $ kubectl apply -f test-cert.yaml
+certificate.cert-manager.io/test created
+jp:~/environment/jalawala/hardeneks/misc/eks-waf-reference/eks-waf-examples/security/network_security (main) $ kubectl get cert
+NAME   READY   SECRET          AGE
+test   False   test-cert-tls   10s
+jp:~/environment/jalawala/hardeneks/misc/eks-waf-reference/eks-waf-examples/security/network_security (main) $ kubectl get cert
+NAME   READY   SECRET          AGE
+test   False   test-cert-tls   50s
+jp:~/environment/jalawala/hardeneks/misc/eks-waf-reference/eks-waf-examples/security/network_security (main) $ kubectl get cert
+NAME   READY   SECRET          AGE
+test   False   test-cert-tls   54s
+
+eksdemo get records -z cloudtechconsulting.in
+
+jp:~/environment/eksdemo (main) $ eksdemo get records -z cloudtechconsulting.in
++---------------------------------------------------------------+-------+------------------------------+
+|                             Name                              | Type  |            Value             |
++---------------------------------------------------------------+-------+------------------------------+
+| cloudtechconsulting.in                                        | NS    | ns-443.awsdns-55.com.        |
+|                                                               |       | ns-1108.awsdns-10.org.       |
+|                                                               |       | ns-1985.awsdns-56.co.uk.     |
+|                                                               |       | ns-987.awsdns-59.net.        |
+| cloudtechconsulting.in                                        | SOA   | ns-443.awsdns-55.com.        |
+|                                                               |       | awsdns-hostmaster.amazon.... |
+|                                                               |       | 1 7200 900 1209600 86400     |
+| _ef39da5327da1c992aed72996ef71504.cloudtechconsulting.in      | CNAME | _539e5e631fbf76f217deca34... |
+| cname-yelb.cloudtechconsulting.in                             | TXT   | "heritage=external-dns,ex... |
+| sample.cloudtechconsulting.in                                 | NS    | ns-1147.awsdns-15.org.       |
+|                                                               |       | ns-267.awsdns-33.com.        |
+|                                                               |       | ns-1923.awsdns-48.co.uk.     |
+|                                                               |       | ns-554.awsdns-05.net.        |
+| www.cloudtechconsulting.in                                    | A     | dualstack.k8s-yelb-yelbmy... |
+| yelb.cloudtechconsulting.in                                   | A     | k8s-kubecost-kirkingr-1e3... |
+| yelb.cloudtechconsulting.in                                   | TXT   | "heritage=external-dns,ex... |
+| _6f9d35a05c750796b9fbaea157ce22cf.yelb.cloudtechconsulting.in | CNAME | _5be4dc8e6cb13633039a795c... |
++---------------------------------------------------------------+-------+------------------------------+
+jp:~/environment/eksdemo (main) $ 
+
 
 ```
 text for the bash command

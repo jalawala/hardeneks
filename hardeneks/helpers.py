@@ -38,4 +38,14 @@ def is_daemonset_exists_in_cluster(dsName):
     
     return (False, None)    
 
+def is_service_exists_in_cluster(serviceName):
     
+    servicesList = kubernetes.client.CoreV1Api().list_service_for_all_namespaces().items
+
+    for service in servicesList:
+        if service.metadata.name.startswith(serviceName):
+            return (True, service)
+    
+    return (False, None)
+
+        

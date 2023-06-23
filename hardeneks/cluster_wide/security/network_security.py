@@ -4,6 +4,7 @@ import json
 
 from ...resources import Resources
 from hardeneks.rules import Rule, Result
+from hardeneks import helpers
 
 
 class check_vpc_flow_logs(Rule):
@@ -45,13 +46,16 @@ class check_awspca_exists(Rule):
     url = "https://aws.github.io/aws-eks-best-practices/security/docs/network/#acm-private-ca-with-cert-manager"
 
     def check(self, resources: Resources):
-        services = client.CoreV1Api().list_service_for_all_namespaces().items
-        for service in services:
-            if service.metadata.name.startswith("aws-privateca-issuer"):
-                self.result = Result(status=True, resource_type="Service")
+        Status = False
+        (ret1, serviceData) = helpers.is_service_exists_in_cluster("aws-privateca-issuer")
+        (ret2, serviceData) = helpers.is_service_exists_in_cluster("cert-manager")
+        
+        print("ret1={} ret2={}".format(ret1,ret2))
+        if ret1 and ret2:
+            Status = True
 
         self.result = Result(
-            status=False,
+            status=Status,
             resource_type="Service",
             resources=["aws-privateca-issuer"],
         )
