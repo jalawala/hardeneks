@@ -323,22 +323,36 @@ kubectl apply -f ns-quota-default.yaml
 kubectl apply -f ns-quota-karpenter.yaml
 kubectl apply -f ns-quota-opentelemetry-operator-system.yaml
 kubectl apply -f ns-quota-prometheus.yaml
-kubectl apply -f ns-quota-sample.yaml
-kubectl apply -f ns-quota-sample.yaml
-kubectl apply -f ns-quota-sample.yaml
-
-
-
-
-
-
+kubectl apply -f ns-quota-windows.yaml
 
 
 
 ```
-text for the bash command
+## detective_controls
+### check_logs_are_enabled
 
 ```bash
+aws eks update-cluster-config --name eks126 \
+--logging '{"clusterLogging":[{"types":["api","audit"],"enabled":true}]}'
+
+{
+    "update": {
+        "id": "b53fde61-df0f-446a-9713-811a06e3d62f",
+        "status": "InProgress",
+        "type": "LoggingUpdate",
+        "params": [
+            {
+                "type": "ClusterLogging",
+                "value": "{\"clusterLogging\":[{\"types\":[\"api\",\"audit\"],\"enabled\":true}]}"
+            }
+        ],
+        "createdAt": "2023-06-23T10:05:11.301000+00:00",
+        "errors": []
+    }
+}
+
+
+
 
 ```
 text for the bash command

@@ -123,7 +123,7 @@ def _get_filtered_namespaces(ignored_ns: list, selected_namespaces: str) -> list
                 print("namespace {} does not exist in cluster. Removing it from the list".format(ns))
                 namespaces_not_available_in_cluster.append(ns)
         
-        namespaces = list(set(selected_namespaces_list) - set(namespaces_not_available_in_cluster))        
+        namespaces = list(set(selected_namespaces_list) - set(namespaces_not_available_in_cluster))
         
     return namespaces
 
