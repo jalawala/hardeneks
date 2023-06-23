@@ -12,20 +12,21 @@ def harden(resources, config, _type):
         #print("pillar={} _type={}".format(pillar, _type))
         if pillar in hardeneks.pillarsList:
             for section in config[pillar]:
-                for rule in config[pillar][section]:
-                    #print("Checking rule={} section={} pillar={} scope={}".format(rule, section, pillar, _type))
-                    module = import_module(f"hardeneks.{_type}.{pillar}.{section}")
-                    try:
-                        cls = getattr(module, rule)
-                        #print("cls={}".format(cls))
-                    except AttributeError as exc:
-                        print(f"[bold][red]{exc}")
-                    try:
-                        ruleObject = cls()
-                        ruleObject.name = rule
-                        ruleObject.check(resources)
-                        results.append(ruleObject)
-                    except Exception as exc:
-                        print(f"[bold][red]{exc}")
+                if section in hardeneks.sectionsList[pillar]:
+                    for rule in config[pillar][section]:
+                        #print("Checking rule={} section={} pillar={} scope={}".format(rule, section, pillar, _type))
+                        module = import_module(f"hardeneks.{_type}.{pillar}.{section}")
+                        try:
+                            cls = getattr(module, rule)
+                            #print("cls={}".format(cls))
+                        except AttributeError as exc:
+                            print(f"[bold][red]{exc}")
+                        try:
+                            ruleObject = cls()
+                            ruleObject.name = rule
+                            ruleObject.check(resources)
+                            results.append(ruleObject)
+                        except Exception as exc:
+                            print(f"[bold][red]{exc}")
 
     return results

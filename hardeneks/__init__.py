@@ -28,6 +28,16 @@ console = Console(record=True)
 pillarsList = []
 ignoredNSList = []
 
+sectionsList = {
+    'cluster_data': ['cluster_data'],
+    #'security': ['iam', 'multi_tenancy', 'detective_controls', 'network_security', 'encryption_secrets', 'infrastructure_security', 'pod_security', 'image_security'],
+    'security': ['detective_controls'],
+    'reliability': ['applications'],
+    'scalability': ['control_plane'],
+    'cluster_autoscaling': ['cluster_autoscaler'],
+    'networking': ['vpc_subnets', 'vpc-cni', 'prefix_mode', 'load-balancing'],
+}
+ 
 def _config_callback(value: str):
 
     config = Path(value)
