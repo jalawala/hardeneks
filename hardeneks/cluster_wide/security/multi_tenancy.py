@@ -11,12 +11,14 @@ class ensure_namespace_quotas_exist(Rule):
 
     def check(self, resources: Resources):
         offenders = resources.namespaces
-
+    
         for quota in resources.resource_quotas:
             offenders.remove(quota.metadata.namespace)
-
-        self.result = Result(status=True, resource_type="Namespace")
+        
         if offenders:
-            self.result = Result(
-                status=False, resources=offenders, resource_type="Namepsace"
-            )
+            Info = "Resource Quots does not exist for namespaces : " + " ".join(offenders)
+            self.result = Result(status=False, resource_type="Namepsace", info=Info)
+        else:
+            Info = "All Namespaces have Resource Quotas"
+            self.result = Result(status=True, resource_type="Namespace", info=Info)
+            

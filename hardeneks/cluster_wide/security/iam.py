@@ -70,14 +70,12 @@ class restrict_wildcard_for_cluster_roles(Rule):
     _type = "cluster_wide"
     pillar = "security"
     section = "iam"
-    message = "ClusterRoles should not have '*' in Verbs or Resources."
+    message = "Employ least privileged access when creating RoleBindings and ClusterRoleBindings"
     url = "https://aws.github.io/aws-eks-best-practices/security/docs/iam/#employ-least-privileged-access-when-creating-rolebindings-and-clusterrolebindings"
 
     def check(self, resources: Resources):
 
         offenders = []
-        self.result = Result(status=True, resource_type="Cluster Role")
-
         allow_list = [
             "aws-node",
             "cluster-admin",
@@ -85,6 +83,7 @@ class restrict_wildcard_for_cluster_roles(Rule):
             "eks:cloud-controller-manager",
         ]
 
+        #print("cluster_roles={}".format(resources.cluster_roles))
         for role in resources.cluster_roles:
             role_name = role.metadata.name
             if not (role_name.startswith("system") or role_name in allow_list):
@@ -100,6 +99,8 @@ class restrict_wildcard_for_cluster_roles(Rule):
                 resources=offenders,
                 resource_type="Cluster Role",
             )
+        else:
+            self.result = Result(status=True, resource_type="Cluster Role")
 
 
 class check_aws_node_daemonset_service_account(Rule):
@@ -156,7 +157,7 @@ class check_access_to_instance_profile(Rule):
             HttpPutResponseHopLimit =  instance["Instances"][0]["MetadataOptions"]["HttpPutResponseHopLimit"]
             HttpEndpoint = instance["Instances"][0]["MetadataOptions"]["HttpEndpoint"]
             HttpTokens = instance["Instances"][0]["MetadataOptions"]["HttpTokens"]
-            Info = "HttpPutResponseHopLimit={} HttpEndpoint={} HttpTokens={}".format(HttpPutResponseHopLimit, HttpEndpoint, HttpTokens)
+            Info = "HttpPutResponseHopLimit : {} HttpEndpoint : {} HttpTokens : {}".format(HttpPutResponseHopLimit, HttpEndpoint, HttpTokens)
             
             if HttpPutResponseHopLimit != 2 or HttpEndpoint != 'enabled' or HttpTokens != 'required':
                 offenders.append(instance["Instances"][0]["InstanceId"])

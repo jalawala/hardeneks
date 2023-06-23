@@ -1,11 +1,14 @@
-# awseks
+# security
 This contains various example codes for Amazon EKS
+
+## iam
 
 ### disable_anonymous_access_for_cluster_roles
 
 ```bash
 cd ~/environment
 git clone https://github.com/FairwindsOps/rbac-lookup.git
+cd ~/environment/rbac-lookup
 cd rbac-lookup
 make
 
@@ -290,9 +293,35 @@ jp:~/environment/jalawala/hardeneks/misc/eks-waf-reference/eks-waf-examples/secu
 2023-06-22 19:08:47 [✔]  created 1 managed nodegroup(s) in cluster "eks126"
 2023-06-22 19:08:48 [ℹ]  checking security group configuration for all nodegroups
 ```
-text for the bash command
+
+## multi_tenancy
+
+### ensure_namespace_quotas_exist
 
 ```bash
+
+cat > ns-quota-sample.yaml <<EOF
+---
+apiVersion: v1
+kind: ResourceQuota
+metadata:
+  name: namespace-quota
+  namespace: sample
+spec:
+  hard:
+    pods: 20
+    requests.cpu: 10000m
+    requests.memory: 10Gi
+    limits.cpu: 20000m
+    limits.memory: 20Gi
+EOF
+
+kubectl apply -f ns-quota-sample.yaml
+
+
+
+
+
 
 ```
 text for the bash command
