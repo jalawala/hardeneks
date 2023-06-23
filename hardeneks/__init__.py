@@ -26,6 +26,7 @@ app = typer.Typer()
 console = Console(record=True)
 
 pillarsList = []
+ignoredNSList = []
 
 def _config_callback(value: str):
 
@@ -298,7 +299,7 @@ def run_hardeneks(
         None
 
     """
-    global pillarsList
+    global pillarsList, ignoredNSList
     
     (context, cluster) = _get_cluster_context_and_name(context, cluster)
     
@@ -334,7 +335,8 @@ def run_hardeneks(
         #namespaces = [namespace]
         #namespaces = namespace.split(',')
     
-    namespaces = _get_filtered_namespaces(config["ignore-namespaces"], namespace)
+    ignoredNSList = config["ignore-namespaces"]
+    namespaces = _get_filtered_namespaces(ignoredNSList, namespace)
     
 
     #print("namespaces={}".format(namespaces))

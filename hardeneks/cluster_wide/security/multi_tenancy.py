@@ -1,6 +1,6 @@
 from ...resources import Resources
 from hardeneks.rules import Rule, Result
-
+import hardeneks
 
 class ensure_namespace_quotas_exist(Rule):
     _type = "cluster_wide"
@@ -11,9 +11,20 @@ class ensure_namespace_quotas_exist(Rule):
 
     def check(self, resources: Resources):
         offenders = resources.namespaces
+        namespaces_with_resource_quotas = []
     
         for quota in resources.resource_quotas:
-            offenders.remove(quota.metadata.namespace)
+            namespaces_with_resource_quotas.append(quota.metadata.namespace)
+        
+        #print("offenders={} ignoredNSList={} namespaces_with_resource_quotas={}".format(offenders,  hardeneks.ignoredNSList, namespaces_with_resource_quotas))
+        
+        namespaces_with_resource_quotas = list(set(namespaces_with_resource_quotas) - set(hardeneks.ignoredNSList))
+                
+        #print("namespaces_with_resource_quotas={}".format(namespaces_with_resource_quotas))
+         
+        for ns in namespaces_with_resource_quotas:
+            #print("Removing ns {} from list {}".format(ns, offenders))    
+            offenders.remove(ns)
         
         if offenders:
             Info = "Resource Quots does not exist for namespaces : " + " ".join(offenders)

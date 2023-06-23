@@ -317,6 +317,18 @@ spec:
 EOF
 
 kubectl apply -f ns-quota-sample.yaml
+kubectl apply -f ns-quota-amazon-guardduty.yaml
+kubectl apply -f ns-quota-cert-manager.yaml
+kubectl apply -f ns-quota-default.yaml
+kubectl apply -f ns-quota-karpenter.yaml
+kubectl apply -f ns-quota-opentelemetry-operator-system.yaml
+kubectl apply -f ns-quota-prometheus.yaml
+kubectl apply -f ns-quota-sample.yaml
+kubectl apply -f ns-quota-sample.yaml
+kubectl apply -f ns-quota-sample.yaml
+
+
+
 
 
 
