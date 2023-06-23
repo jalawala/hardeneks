@@ -1,5 +1,6 @@
 import boto3
 from kubernetes import client
+import json
 
 from ...resources import Resources
 from hardeneks.rules import Rule, Result
@@ -13,22 +14,28 @@ class check_vpc_flow_logs(Rule):
     url = "https://aws.github.io/aws-eks-best-practices/security/docs/network/#log-network-traffic-metadata"
 
     def check(self, resources: Resources):
-        client = boto3.client("eks", region_name=resources.region)
-        cluster_metadata = client.describe_cluster(name=resources.cluster)
-
+        Status = False
+        
+        eksclient = boto3.client("eks", region_name=resources.region)
+        cluster_metadata = eksclient.describe_cluster(name=resources.cluster)
         vpc_id = cluster_metadata["cluster"]["resourcesVpcConfig"]["vpcId"]
-        client = boto3.client("ec2", region_name=resources.region)
+        
+        ec2client = boto3.client("ec2", region_name=resources.region)
 
-        flow_logs = client.describe_flow_logs(
+        response = ec2client.describe_flow_logs(
             Filters=[{"Name": "resource-id", "Values": [vpc_id]}]
-        )["FlowLogs"]
+        )
+        
+        flow_logs =  response["FlowLogs"]
+        #print(response['FlowLogs'])
 
-        self.result = Result(status=True, resource_type="VPC Configuration")
-        if not flow_logs:
-            self.result = Result(
-                status=False, resource_type="VPC Configuration"
-            )
-
+        
+        if flow_logs:
+            Status = True
+            
+        self.result = Result(status=Status, resource_type="VPC Configuration")
+        
+        
 
 class check_awspca_exists(Rule):
     _type = "cluster_wide"

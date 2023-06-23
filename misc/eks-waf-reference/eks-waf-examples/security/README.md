@@ -355,10 +355,27 @@ aws eks update-cluster-config --name eks126 \
 
 
 ```
-text for the bash command
+## network_security
+### check_vpc_flow_logs
 
 ```bash
 
+
+aws ec2 create-flow-logs \
+    --resource-type VPC \
+    --resource-ids vpc-03103b5e0fe171706 \
+    --traffic-type ALL \
+    --log-destination-type cloud-watch-logs \
+    --log-group-name eks126-vpc-flow-logs \
+    --deliver-logs-permission-arn arn:aws:iam::000474600478:role/MulticastECSBlog-FlowLogsRole-7W92ZOIUX3GI
+
+{
+    "ClientToken": "QJPAPX85N74936ZjhdUbBFmOyWn3USSAZxahDuhvDdk=",
+    "FlowLogIds": [
+        "fl-0fd34324dfeeaddc1"
+    ],
+    "Unsuccessful": []
+}    
 ```
 
 
