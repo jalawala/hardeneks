@@ -15,12 +15,11 @@ class use_encryption_with_ebs(Rule):
         for storage_class in resources.storage_classes:
             if storage_class.provisioner == "ebs.csi.aws.com":
                 encrypted = storage_class.parameters.get("encrypted")
+                print(encrypted)
                 if not encrypted:
                     offenders.append(storage_class)
                 elif encrypted == "false":
                     offenders.append(storage_class)
-
-        self.result = Result(status=True, resource_type="StorageClass")
 
         if offenders:
             self.result = Result(
@@ -28,7 +27,8 @@ class use_encryption_with_ebs(Rule):
                 resource_type="StorageClass",
                 resources=[i.metadata.name for i in offenders],
             )
-
+        else:
+            self.result = Result(status=True, resource_type="StorageClass")
 
 class use_encryption_with_efs(Rule):
     _type = "cluster_wide"

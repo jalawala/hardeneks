@@ -960,17 +960,195 @@ stars              allow-dns-access   <none>           3s
 stars              default-deny1      <none>           95s
 
 
-```bash
-
-```
-text for the bash command
 
 ```bash
 
 ```
-text for the bash command
+## encryption_secrets
+### use_encryption_with_ebs
 
 ```bash
+
+eksdemo install storage-ebs-csi -c eks126
+
+jp:~/environment $ eksdemo install storage-ebs-csi -c eks126
+Creating 1 dependencies for storage-ebs-csi
+Creating dependency: ebs-csi-irsa
+2023-06-24 12:14:10 [ℹ]  6 existing iamserviceaccount(s) (cert-manager/cert-manager,karpenter/karpenter,kube-system/aws-load-balancer-controller,kube-system/ebs-csi-controller-sa,prometheus/amp-irsa-role,sample/external-dns) will be excluded
+2023-06-24 12:14:10 [ℹ]  1 iamserviceaccount (kube-system/ebs-csi-controller-sa) was excluded (based on the include/exclude rules)
+2023-06-24 12:14:10 [!]  serviceaccounts that exist in Kubernetes will be excluded, use --override-existing-serviceaccounts to override
+2023-06-24 12:14:10 [ℹ]  no tasks
+Checking for default StorageClass
+Marking StorageClass "gp2" as non-default...done
+Downloading Chart: https://github.com/kubernetes-sigs/aws-ebs-csi-driver/releases/download/helm-chart-aws-ebs-csi-driver-2.19.0/aws-ebs-csi-driver-2.19.0.tgz
+Helm installing...
+2023/06/24 12:14:12 creating 1 resource(s)
+2023/06/24 12:14:12 creating 18 resource(s)
+Using chart version "2.19.0", installed "storage-ebs-csi" version "v1.19.0" in namespace "kube-system"
+NOTES:
+To verify that aws-ebs-csi-driver has started, run:
+
+    kubectl get pod -n kube-system -l "app.kubernetes.io/name=aws-ebs-csi-driver,app.kubernetes.io/instance=storage-ebs-csi"
+
+NOTE: The [CSI Snapshotter](https://github.com/kubernetes-csi/external-snapshotter) controller and CRDs will no longer be installed as part of this chart and moving forward will be a prerequisite of using the snap shotting functionality.
+
+
+
+```
+### use_encryption_with_efs
+
+
+```bash
+
+jp:~/environment $ kubectl get pod -n kube-system -l "app.kubernetes.io/name=aws-efs-csi-driver,app.kubernetes.io/instance=storage-efs-csi"
+NAME                                  READY   STATUS    RESTARTS   AGE
+efs-csi-controller-66f679d7cc-c4t5p   3/3     Running   0          116s
+efs-csi-node-77lpb                    3/3     Running   0          116sefs-csi-node-svn2w                    3/3     Running   0          116s
+efs-csi-node-x6km7                    3/3     Running   0          116s
+jp:~/environment $ kubectl get pod -n kube-system -l "app.kubernetes.io/name=aws-efs-csi-driver,app.kubernetes.io/instance=storage-efs-csi"
+NAME                                  READY   STATUS    RESTARTS   AGE
+efs-csi-controller-66f679d7cc-c4t5p   3/3     Running   0          116s
+efs-csi-node-77lpb                    3/3     Running   0          116sefs-csi-node-svn2w                    3/3     Running   0          116s
+efs-csi-node-x6km7                    3/3     Running   0          116s
+
+jp:~/environment $ kubectl get csidrivers
+NAME              ATTACHREQUIRED   PODINFOONMOUNT   STORAGECAPACITY   TOKENREQUESTS   REQUIRESREPUBLISH   MODES        AGE
+csi.tigera.io     true             true             false             <unset>         false               Ephemeral    7h9m
+ebs.csi.aws.com   true             false            false             <unset>         false               Persistent   115m
+efs.csi.aws.com   false            false            false             <unset>         false               Persistent   66m
+
+
+CLUSTER_NAME=eks126
+VPC_ID=$(aws eks describe-cluster --name $CLUSTER_NAME --query "cluster.resourcesVpcConfig.vpcId" --output text)
+echo $VPC_ID
+vpc-03103b5e0fe171706
+CIDR_BLOCK=$(aws ec2 describe-vpcs --vpc-ids $VPC_ID --query "Vpcs[].CidrBlock" --output text)
+echo $CIDR_BLOCK
+192.168.0.0/16
+
+
+MOUNT_TARGET_GROUP_NAME="eks-efs-group"
+MOUNT_TARGET_GROUP_DESC="NFS access to EFS from EKS worker nodes"
+MOUNT_TARGET_GROUP_ID=$(aws ec2 create-security-group --group-name $MOUNT_TARGET_GROUP_NAME --description "$MOUNT_TARGET_GROUP_DESC" --vpc-id $VPC_ID | jq --raw-output '.GroupId')
+aws ec2 authorize-security-group-ingress --group-id $MOUNT_TARGET_GROUP_ID --protocol tcp --port 2049 --cidr $CIDR_BLOCK
+
+
+{
+    "Return": true,
+    "SecurityGroupRules": [
+        {
+            "SecurityGroupRuleId": "sgr-06a90aac69d8f5ac2",
+            "GroupId": "sg-00f5be698daec90ff",
+            "GroupOwnerId": "000474600478",
+            "IsEgress": false,
+            "IpProtocol": "tcp",
+            "FromPort": 2049,
+            "ToPort": 2049,
+            "CidrIpv4": "192.168.0.0/16"
+        }
+    ]
+}
+
+FILE_SYSTEM_ID=$(aws efs create-file-system | jq --raw-output '.FileSystemId')
+
+fs-0d8e0b886dfb5c77a
+
+aws efs describe-file-systems --file-system-id $FILE_SYSTEM_ID
+
+{
+    "FileSystems": [
+        {
+            "OwnerId": "000474600478",
+            "CreationToken": "e65865fc-7e20-43e9-9f53-f655f4351fd2",
+            "FileSystemId": "fs-0d8e0b886dfb5c77a",
+            "FileSystemArn": "arn:aws:elasticfilesystem:us-east-1:000474600478:file-system/fs-0d8e0b886dfb5c77a",
+            "CreationTime": "2023-06-24T14:16:01+00:00",
+            "LifeCycleState": "available",
+            "NumberOfMountTargets": 0,
+            "SizeInBytes": {
+                "Value": 6144,
+                "ValueInIA": 0,
+                "ValueInStandard": 6144
+            },
+            "PerformanceMode": "generalPurpose",
+            "Encrypted": false,
+            "ThroughputMode": "bursting",
+            "Tags": []
+        }
+    ]
+}
+
+
+
+TAG1=tag:alpha.eksctl.io/cluster-name
+TAG2=tag:kubernetes.io/role/elb
+subnets=($(aws ec2 describe-subnets --filters "Name=$TAG1,Values=$CLUSTER_NAME" "Name=$TAG2,Values=1" | jq --raw-output '.Subnets[].SubnetId'))
+for subnet in ${subnets[@]}
+do
+    echo "creating mount target in " $subnet
+    aws efs create-mount-target --file-system-id $FILE_SYSTEM_ID --subnet-id $subnet --security-groups $MOUNT_TARGET_GROUP_ID
+done
+
+
+reating mount target in  subnet-07393d3be7a4110b2
+{
+    "OwnerId": "000474600478",
+    "MountTargetId": "fsmt-0cc60b19941e45340",
+    "FileSystemId": "fs-0d8e0b886dfb5c77a",
+    "SubnetId": "subnet-07393d3be7a4110b2",
+    "LifeCycleState": "creating",
+    "IpAddress": "192.168.39.130",
+    "NetworkInterfaceId": "eni-0efe181026794bffe",
+    "AvailabilityZoneId": "use1-az5",
+    "AvailabilityZoneName": "us-east-1f",
+    "VpcId": "vpc-03103b5e0fe171706"
+}
+creating mount target in  subnet-014dd53d0c2b6eb29
+{
+    "OwnerId": "000474600478",
+    "MountTargetId": "fsmt-061df2eb4f1382041",
+    "FileSystemId": "fs-0d8e0b886dfb5c77a",
+    "SubnetId": "subnet-014dd53d0c2b6eb29",
+    "LifeCycleState": "creating",
+    "IpAddress": "192.168.1.204",
+    "NetworkInterfaceId": "eni-0ab4901564e3f4010",
+    "AvailabilityZoneId": "use1-az2",
+    "AvailabilityZoneName": "us-east-1b",
+    "VpcId": "vpc-03103b5e0fe171706"
+}
+jp:~/environment $ 
+
+aws efs describe-mount-targets --file-system-id $FILE_SYSTEM_ID | jq --raw-output '.MountTargets[].LifeCycleState'
+creating
+creating
+
+wget https://archive.eksworkshop.com/beginner/190_efs/efs.files/efs-pvc.yaml
+
+namespace/storage created
+storageclass.storage.k8s.io/efs-sc created
+persistentvolume/efs-pvc created
+persistentvolumeclaim/efs-storage-claim created
+
+
+kubectl get pvc -n storage
+NAME                STATUS   VOLUME    CAPACITY   ACCESS MODES   STORAGECLASS   AGE
+efs-storage-claim   Bound    efs-pvc   5Gi        RWX            efs-sc         56s
+
+kubectl get pv
+
+NAME      CAPACITY   ACCESS MODES   RECLAIM POLICY   STATUS   CLAIM                       STORAGECLASS   REASON   AGE
+efs-pvc   5Gi        RWX            Retain           Bound    storage/efs-storage-claim   efs-sc                  79s
+
+kubectl apply -f efs-writer.yaml
+kubectl apply -f efs-reader.yaml
+
+jp:~/environment/jalawala/hardeneks/misc/eks-waf-reference/eks-waf-examples/security/encryption_secrets (main) $ kubectl exec -it efs-writer -n storage -- tail /shared/out.txt
+efs-writer.storage - Sat Jun 24 14:24:40 UTC 2023
+efs-writer.storage - Sat Jun 24 14:24:45 UTC 2023
+
+
+
+
 
 ```
 text for the bash command
