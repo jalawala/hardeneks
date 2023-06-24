@@ -40,7 +40,7 @@ class use_encryption_with_efs(Rule):
     def check(self, resources: Resources):
 
         offenders = []
-        Info = "All EFS PVs have have tls in the mount option"
+        Info = "All EFS PVs have tls in the mount option"
 
         for persistent_volume in resources.persistent_volumes:
             csi = persistent_volume.spec.csi
@@ -75,18 +75,23 @@ class use_efs_access_points(Rule):
     def check(self, resources: Resources):
 
         offenders = []
+        Info = "All EFS PVs have access points"
 
         for persistent_volume in resources.persistent_volumes:
             csi = persistent_volume.spec.csi
             if csi and csi.driver == "efs.csi.aws.com":
                 if "::" not in csi.volume_handle:
-                    offenders.append(persistent_volume)
+                    offenders.append(persistent_volume.metadata.name)
 
-        self.result = Result(status=True, resource_type="PersistentVolume")
+        
 
         if offenders:
+            Info = "EFS PVs without access points " + " ".join(offenders)
             self.result = Result(
                 status=False,
                 resource_type="PersistentVolume",
-                resources=[i.metadata.name for i in offenders],
+                resources=offenders,
+                info=Info
             )
+        else:
+            self.result = Result(status=True, resource_type="PersistentVolume", info=Info)

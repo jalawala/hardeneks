@@ -1151,9 +1151,73 @@ efs-writer.storage - Sat Jun 24 14:24:45 UTC 2023
 
 
 ```
-text for the bash command
+### use_efs_access_points
 
 ```bash
+kubectl logs efs-csi-controller-66f679d7cc-c4t5p -n kube-system -c csi-provisioner --tail 10
+jp:~/environment/jalawala/hardeneks/misc/eks-waf-reference/eks-waf-examples/security/encryption_secrets (main) $ kubectl logs efs-csi-controller-66f679d7cc-c4t5p -n kube-system -c csi-provisioner --tail 10                                                         
+I0624 17:32:09.744848       1 controller.go:1472] delete "pvc-1e8859ae-e108-477d-8cf6-c411affea290": started
+I0624 17:32:09.786946       1 controller.go:1487] delete "pvc-1e8859ae-e108-477d-8cf6-c411affea290": volume deleted
+I0624 17:32:09.795569       1 controller.go:1537] delete "pvc-1e8859ae-e108-477d-8cf6-c411affea290": persistentvolume deleted
+I0624 17:32:09.795592       1 controller.go:1542] delete "pvc-1e8859ae-e108-477d-8cf6-c411affea290": succeeded
+I0624 17:32:24.947032       1 controller.go:1332] provision "default/efs-claim" class "efs-sc2": started
+I0624 17:32:24.947201       1 event.go:282] Event(v1.ObjectReference{Kind:"PersistentVolumeClaim", Namespace:"default", Name:"efs-claim", UID:"c7bc663d-f3e9-498e-938a-ed1782360b06", APIVersion:"v1", ResourceVersion:"14562726", FieldPath:""}): type: 'Normal' reason: 'Provisioning' External provisioner is provisioning volume for claim "default/efs-claim"
+I0624 17:32:25.074068       1 controller.go:838] successfully created PV pvc-c7bc663d-f3e9-498e-938a-ed1782360b06 for PVC efs-claim and csi volume name fs-0d8e0b886dfb5c77a::fsap-0a3e1af5b22ae20a5
+I0624 17:32:25.074100       1 controller.go:1439] provision "default/efs-claim" class "efs-sc2": volume "pvc-c7bc663d-f3e9-498e-938a-ed1782360b06" provisioned
+I0624 17:32:25.074123       1 controller.go:1456] provision "default/efs-claim" class "efs-sc2": succeeded
+I0624 17:32:25.083494       1 event.go:282] Event(v1.ObjectReference{Kind:"PersistentVolumeClaim", Namespace:"default", Name:"efs-claim", UID:"c7bc663d-f3e9-498e-938a-ed1782360b06", APIVersion:"v1", ResourceVersion:"14562726", FieldPath:""}): type: 'Normal' reason: 'ProvisioningSucceeded' Successfully provisioned volume pvc-c7bc663d-f3e9-498e-938a-ed1782360b06
+
+
+jp:~/environment/jalawala/hardeneks (main) $ kubectl get pv,pvc
+NAME                                                        CAPACITY   ACCESS MODES   RECLAIM POLICY   STATUS      CLAIM                       STORAGECLASS   REASON   AGE
+persistentvolume/efs-pvc                                    5Gi        RWX            Retain           Bound       storage/efs-storage-claim   efs-sc                  3h12m
+persistentvolume/efs-pvc1                                   5Gi        RWX            Retain           Available                               efs-sc                  162m
+persistentvolume/pvc-c7bc663d-f3e9-498e-938a-ed1782360b06   20Gi       RWX            Delete           Bound       default/efs-claim           efs-sc2                 2m6s
+
+NAME                              STATUS   VOLUME                                     CAPACITY   ACCESS MODES   STORAGECLASS   AGE
+persistentvolumeclaim/efs-claim   Bound    pvc-c7bc663d-f3e9-498e-938a-ed1782360b06   20Gi       RWX            efs-sc2        2m7s
+jp:~/environment/jalawala/hardeneks (main) $ 
+
+kubectl get pods -o wide
+
+jp:~/environment/jalawala/hardeneks (main) $ kubectl get pods -o wide
+NAME          READY   STATUS    RESTARTS   AGE     IP                NODE                              NOMINATED NODE   READINESS GATES
+efs-example   1/1     Running   0          2m43s   192.168.112.186   ip-192-168-102-122.ec2.internal   <none>           <none>
+jp:~/environment/jalawala/hardeneks (main) $ kubectl exec efs-example -- bash -c "cat example/out.txt"
+Sat Jun 24 17:32:33 UTC 2023
+Sat Jun 24 17:32:38 UTC 2023
+Sat Jun 24 17:32:43 UTC 2023
+Sat Jun 24 17:32:48 UTC 2023
+Sat Jun 24 17:32:54 UTC 2023
+Sat Jun 24 17:32:59 UTC 2023
+Sat Jun 24 17:33:04 UTC 2023
+Sat Jun 24 17:33:09 UTC 2023
+Sat Jun 24 17:33:14 UTC 2023
+Sat Jun 24 17:33:19 UTC 2023
+Sat Jun 24 17:33:24 UTC 2023
+Sat Jun 24 17:33:29 UTC 2023
+Sat Jun 24 17:33:34 UTC 2023
+Sat Jun 24 17:33:39 UTC 2023
+Sat Jun 24 17:33:44 UTC 2023
+Sat Jun 24 17:33:49 UTC 2023
+Sat Jun 24 17:33:54 UTC 2023
+Sat Jun 24 17:33:59 UTC 2023
+Sat Jun 24 17:34:04 UTC 2023
+Sat Jun 24 17:34:09 UTC 2023
+Sat Jun 24 17:34:14 UTC 2023
+Sat Jun 24 17:34:19 UTC 2023
+Sat Jun 24 17:34:24 UTC 2023
+Sat Jun 24 17:34:29 UTC 2023
+Sat Jun 24 17:34:34 UTC 2023
+Sat Jun 24 17:34:39 UTC 2023
+Sat Jun 24 17:34:44 UTC 2023
+Sat Jun 24 17:34:49 UTC 2023
+Sat Jun 24 17:34:54 UTC 2023
+Sat Jun 24 17:34:59 UTC 2023
+Sat Jun 24 17:35:04 UTC 2023
+Sat Jun 24 17:35:09 UTC 2023
+Sat Jun 24 17:35:14 UTC 2023
+
 
 ```
 text for the bash command
@@ -1177,6 +1241,7 @@ text for the bash command
 ```bash
 
 ```
+
 text for the bash command
 
 ```bash
