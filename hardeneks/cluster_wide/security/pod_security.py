@@ -13,6 +13,7 @@ class ensure_namespace_psa_exist(Rule):
 
     def check(self, resources: Resources):
         offenders = []
+        Info = "All Namespaces have PSA labels"
 
         namespaces = kubernetes.client.CoreV1Api().list_namespace().items
         psa_labels = [
@@ -27,8 +28,9 @@ class ensure_namespace_psa_exist(Rule):
                 if not any(i in labels for i in psa_labels):
                     offenders.append(namespace.metadata.name)
 
-        self.result = Result(status=True, resource_type="Namespace")
         if offenders:
+            Info = "Namespaces without PSA labels " + " ".join(offenders)
             self.result = Result(
-                status=False, resource_type="Namespace", resources=offenders
-            )
+                status=False, resource_type="Namespace", info=Info)
+        else:
+            self.result = Result(status=True, resource_type="Namespace", info=Info)
