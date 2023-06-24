@@ -31,13 +31,12 @@ class deploy_workers_onto_private_subnets(Result):
             if instance["Instances"][0]["PublicDnsName"]:
                 offenders.append(instance["Instances"][0]["InstanceId"])
 
-        self.result = Result(status=True, resource_type="Node")
-
         if offenders:
             self.result = Result(
                 status=False, resource_type="Node", resources=offenders
             )
-
+        else:
+            self.result = Result(status=True, resource_type="Node")
 
 class make_sure_inspector_is_enabled(Rule):
     _type = "cluster_wide"
@@ -59,14 +58,15 @@ class make_sure_inspector_is_enabled(Rule):
         )
 
         resource_state = response["accounts"][0]["resourceState"]
+        #print("resource_state={}".format(resource_state))
         ec2_status = resource_state["ec2"]["status"]
         ecr_status = resource_state["ecr"]["status"]
-
-        self.result = Result(
-            status=True, resource_type="Inspector Configuration"
-        )
 
         if ec2_status != "ENABLED" and ecr_status != "ENABLED":
             self.result = Result(
                 status=False, resource_type="Inspector Configuration"
             )
+        else:
+            self.result = Result(
+                status=True, resource_type="Inspector Configuration"
+            )            
