@@ -1,0 +1,370 @@
+2023-06-24 07:00:18.549 [INFO][7] logutils.go 83: Early screen log level set to info
+2023-06-24 07:00:18.550 [INFO][7] daemon.go 175: Typha starting up GOMAXPROCS=4 buildDate="2023-03-31T00:11:15+0000" gitCommit="82dadbce194ac671508c71574a0e59eb82c911f9" version="v3.25.1"
+2023-06-24 07:00:18.550 [INFO][7] daemon.go 176: Command line arguments: map[--config-file:/etc/calico/typha.cfg --version:false]
+2023-06-24 07:00:18.550 [INFO][7] daemon.go 186: Kubernetes server override env vars. KUBERNETES_SERVICE_HOST="10.100.0.1" KUBERNETES_SERVICE_PORT="443"
+2023-06-24 07:00:18.550 [INFO][7] daemon.go 191: Loading configuration...
+2023-06-24 07:00:18.550 [INFO][7] env_var_loader.go 40: Found typha environment variable: "serverkeyfile"="/typha-certs/tls.key"
+2023-06-24 07:00:18.550 [INFO][7] env_var_loader.go 40: Found typha environment variable: "connectionrebalancingmode"="kubernetes"
+2023-06-24 07:00:18.550 [INFO][7] env_var_loader.go 40: Found typha environment variable: "healthport"="9098"
+2023-06-24 07:00:18.550 [INFO][7] env_var_loader.go 40: Found typha environment variable: "servercertfile"="/typha-certs/tls.crt"
+2023-06-24 07:00:18.550 [INFO][7] env_var_loader.go 40: Found typha environment variable: "fipsmodeenabled"="false"
+2023-06-24 07:00:18.550 [INFO][7] env_var_loader.go 40: Found typha environment variable: "logfilepath"="none"
+2023-06-24 07:00:18.550 [INFO][7] env_var_loader.go 40: Found typha environment variable: "logseveritysys"="none"
+2023-06-24 07:00:18.551 [INFO][7] env_var_loader.go 40: Found typha environment variable: "datastoretype"="kubernetes"
+2023-06-24 07:00:18.551 [INFO][7] env_var_loader.go 40: Found typha environment variable: "logseverityscreen"="info"
+2023-06-24 07:00:18.551 [INFO][7] env_var_loader.go 40: Found typha environment variable: "healthenabled"="true"
+2023-06-24 07:00:18.551 [INFO][7] env_var_loader.go 40: Found typha environment variable: "k8snamespace"="calico-system"
+2023-06-24 07:00:18.551 [INFO][7] env_var_loader.go 40: Found typha environment variable: "cafile"="/etc/pki/tls/certs/tigera-ca-bundle.crt"
+2023-06-24 07:00:18.551 [INFO][7] env_var_loader.go 40: Found typha environment variable: "shutdowntimeoutsecs"="300"
+2023-06-24 07:00:18.551 [INFO][7] env_var_loader.go 40: Found typha environment variable: "clientcn"="typha-client"
+2023-06-24 07:00:18.551 [INFO][7] config_params.go 169: Merging in config from environment variable: map[cafile:/etc/pki/tls/certs/tigera-ca-bundle.crt clientcn:typha-client connectionrebalancingmode:kubernetes datastoretype:kubernetes fipsmodeenabled:false healthenabled:true healthport:9098 k8snamespace:calico-system logfilepath:none logseverityscreen:info logseveritysys:none servercertfile:/typha-certs/tls.crt serverkeyfile:/typha-certs/tls.key shutdowntimeoutsecs:300]
+2023-06-24 07:00:18.551 [INFO][7] config_params.go 218: Parsing value for LogSeveritySys: none (from environment variable)
+2023-06-24 07:00:18.551 [INFO][7] config_params.go 234: Value set to 'none', replacing with zero-value: "".
+2023-06-24 07:00:18.551 [INFO][7] config_params.go 252: Parsed value for LogSeveritySys:  (from environment variable)
+2023-06-24 07:00:18.551 [INFO][7] config_params.go 218: Parsing value for K8sNamespace: calico-system (from environment variable)
+2023-06-24 07:00:18.551 [INFO][7] config_params.go 252: Parsed value for K8sNamespace: calico-system (from environment variable)
+2023-06-24 07:00:18.551 [INFO][7] config_params.go 218: Parsing value for ConnectionRebalancingMode: kubernetes (from environment variable)
+2023-06-24 07:00:18.551 [INFO][7] config_params.go 252: Parsed value for ConnectionRebalancingMode: kubernetes (from environment variable)
+2023-06-24 07:00:18.551 [INFO][7] config_params.go 218: Parsing value for CAFile: /etc/pki/tls/certs/tigera-ca-bundle.crt (from environment variable)
+2023-06-24 07:00:18.551 [INFO][7] param_types.go 201: Looking for required file path="/etc/pki/tls/certs/tigera-ca-bundle.crt"
+2023-06-24 07:00:18.552 [INFO][7] config_params.go 252: Parsed value for CAFile: /etc/pki/tls/certs/tigera-ca-bundle.crt (from environment variable)
+2023-06-24 07:00:18.552 [INFO][7] config_params.go 218: Parsing value for LogFilePath: none (from environment variable)
+2023-06-24 07:00:18.552 [INFO][7] config_params.go 234: Value set to 'none', replacing with zero-value: "".
+2023-06-24 07:00:18.552 [INFO][7] config_params.go 252: Parsed value for LogFilePath:  (from environment variable)
+2023-06-24 07:00:18.552 [INFO][7] config_params.go 218: Parsing value for ClientCN: typha-client (from environment variable)
+2023-06-24 07:00:18.552 [INFO][7] config_params.go 252: Parsed value for ClientCN: typha-client (from environment variable)
+2023-06-24 07:00:18.552 [INFO][7] config_params.go 218: Parsing value for DatastoreType: kubernetes (from environment variable)
+2023-06-24 07:00:18.552 [INFO][7] config_params.go 252: Parsed value for DatastoreType: kubernetes (from environment variable)
+2023-06-24 07:00:18.552 [INFO][7] config_params.go 218: Parsing value for ServerKeyFile: /typha-certs/tls.key (from environment variable)
+2023-06-24 07:00:18.552 [INFO][7] param_types.go 201: Looking for required file path="/typha-certs/tls.key"
+2023-06-24 07:00:18.552 [INFO][7] config_params.go 252: Parsed value for ServerKeyFile: /typha-certs/tls.key (from environment variable)
+2023-06-24 07:00:18.552 [INFO][7] config_params.go 218: Parsing value for HealthPort: 9098 (from environment variable)
+2023-06-24 07:00:18.552 [INFO][7] config_params.go 252: Parsed value for HealthPort: 9098 (from environment variable)
+2023-06-24 07:00:18.552 [INFO][7] config_params.go 218: Parsing value for ShutdownTimeoutSecs: 300 (from environment variable)
+2023-06-24 07:00:18.552 [INFO][7] config_params.go 252: Parsed value for ShutdownTimeoutSecs: 5m0s (from environment variable)
+2023-06-24 07:00:18.552 [INFO][7] config_params.go 218: Parsing value for LogSeverityScreen: info (from environment variable)
+2023-06-24 07:00:18.552 [INFO][7] config_params.go 252: Parsed value for LogSeverityScreen: INFO (from environment variable)
+2023-06-24 07:00:18.552 [INFO][7] config_params.go 218: Parsing value for FIPSModeEnabled: false (from environment variable)
+2023-06-24 07:00:18.552 [INFO][7] config_params.go 252: Parsed value for FIPSModeEnabled: false (from environment variable)
+2023-06-24 07:00:18.553 [INFO][7] config_params.go 218: Parsing value for HealthEnabled: true (from environment variable)
+2023-06-24 07:00:18.553 [INFO][7] config_params.go 252: Parsed value for HealthEnabled: true (from environment variable)
+2023-06-24 07:00:18.553 [INFO][7] config_params.go 218: Parsing value for ServerCertFile: /typha-certs/tls.crt (from environment variable)
+2023-06-24 07:00:18.553 [INFO][7] param_types.go 201: Looking for required file path="/typha-certs/tls.crt"
+2023-06-24 07:00:18.553 [INFO][7] config_params.go 252: Parsed value for ServerCertFile: /typha-certs/tls.crt (from environment variable)
+2023-06-24 07:00:18.553 [INFO][7] config_params.go 169: Merging in config from config file: map[LogFilePath:None LogSeverityFile:None MetadataAddr:None]
+2023-06-24 07:00:18.553 [INFO][7] config_params.go 218: Parsing value for CAFile: /etc/pki/tls/certs/tigera-ca-bundle.crt (from environment variable)
+2023-06-24 07:00:18.553 [INFO][7] param_types.go 201: Looking for required file path="/etc/pki/tls/certs/tigera-ca-bundle.crt"
+2023-06-24 07:00:18.553 [INFO][7] config_params.go 252: Parsed value for CAFile: /etc/pki/tls/certs/tigera-ca-bundle.crt (from environment variable)
+2023-06-24 07:00:18.553 [INFO][7] config_params.go 218: Parsing value for LogFilePath: none (from environment variable)
+2023-06-24 07:00:18.553 [INFO][7] config_params.go 234: Value set to 'none', replacing with zero-value: "".
+2023-06-24 07:00:18.553 [INFO][7] config_params.go 252: Parsed value for LogFilePath:  (from environment variable)
+2023-06-24 07:00:18.553 [INFO][7] config_params.go 218: Parsing value for ServerKeyFile: /typha-certs/tls.key (from environment variable)
+2023-06-24 07:00:18.553 [INFO][7] param_types.go 201: Looking for required file path="/typha-certs/tls.key"
+2023-06-24 07:00:18.553 [INFO][7] config_params.go 252: Parsed value for ServerKeyFile: /typha-certs/tls.key (from environment variable)
+2023-06-24 07:00:18.553 [INFO][7] config_params.go 218: Parsing value for HealthPort: 9098 (from environment variable)
+2023-06-24 07:00:18.553 [INFO][7] config_params.go 252: Parsed value for HealthPort: 9098 (from environment variable)
+2023-06-24 07:00:18.553 [INFO][7] config_params.go 218: Parsing value for ShutdownTimeoutSecs: 300 (from environment variable)
+2023-06-24 07:00:18.553 [INFO][7] config_params.go 252: Parsed value for ShutdownTimeoutSecs: 5m0s (from environment variable)
+2023-06-24 07:00:18.553 [INFO][7] config_params.go 218: Parsing value for ClientCN: typha-client (from environment variable)
+2023-06-24 07:00:18.553 [INFO][7] config_params.go 252: Parsed value for ClientCN: typha-client (from environment variable)
+2023-06-24 07:00:18.553 [INFO][7] config_params.go 218: Parsing value for DatastoreType: kubernetes (from environment variable)
+2023-06-24 07:00:18.553 [INFO][7] config_params.go 252: Parsed value for DatastoreType: kubernetes (from environment variable)
+2023-06-24 07:00:18.553 [INFO][7] config_params.go 218: Parsing value for FIPSModeEnabled: false (from environment variable)
+2023-06-24 07:00:18.553 [INFO][7] config_params.go 252: Parsed value for FIPSModeEnabled: false (from environment variable)
+2023-06-24 07:00:18.554 [INFO][7] config_params.go 218: Parsing value for HealthEnabled: true (from environment variable)
+2023-06-24 07:00:18.554 [INFO][7] config_params.go 252: Parsed value for HealthEnabled: true (from environment variable)
+2023-06-24 07:00:18.554 [INFO][7] config_params.go 218: Parsing value for ServerCertFile: /typha-certs/tls.crt (from environment variable)
+2023-06-24 07:00:18.554 [INFO][7] param_types.go 201: Looking for required file path="/typha-certs/tls.crt"
+2023-06-24 07:00:18.554 [INFO][7] config_params.go 252: Parsed value for ServerCertFile: /typha-certs/tls.crt (from environment variable)
+2023-06-24 07:00:18.554 [INFO][7] config_params.go 218: Parsing value for LogSeverityScreen: info (from environment variable)
+2023-06-24 07:00:18.554 [INFO][7] config_params.go 252: Parsed value for LogSeverityScreen: INFO (from environment variable)
+2023-06-24 07:00:18.554 [INFO][7] config_params.go 218: Parsing value for LogSeveritySys: none (from environment variable)
+2023-06-24 07:00:18.554 [INFO][7] config_params.go 234: Value set to 'none', replacing with zero-value: "".
+2023-06-24 07:00:18.554 [INFO][7] config_params.go 252: Parsed value for LogSeveritySys:  (from environment variable)
+2023-06-24 07:00:18.554 [INFO][7] config_params.go 218: Parsing value for K8sNamespace: calico-system (from environment variable)
+2023-06-24 07:00:18.554 [INFO][7] config_params.go 252: Parsed value for K8sNamespace: calico-system (from environment variable)
+2023-06-24 07:00:18.554 [INFO][7] config_params.go 218: Parsing value for ConnectionRebalancingMode: kubernetes (from environment variable)
+2023-06-24 07:00:18.554 [INFO][7] config_params.go 252: Parsed value for ConnectionRebalancingMode: kubernetes (from environment variable)
+2023-06-24 07:00:18.554 [INFO][7] config_params.go 218: Parsing value for LogFilePath: None (from config file)
+2023-06-24 07:00:18.554 [INFO][7] config_params.go 234: Value set to 'none', replacing with zero-value: "".
+2023-06-24 07:00:18.554 [INFO][7] config_params.go 252: Parsed value for LogFilePath:  (from config file)
+2023-06-24 07:00:18.555 [INFO][7] config_params.go 255: Skipping config value for LogFilePath from config file; already have a value from environment variable
+2023-06-24 07:00:18.555 [INFO][7] config_params.go 218: Parsing value for LogSeverityFile: None (from config file)
+2023-06-24 07:00:18.555 [INFO][7] config_params.go 234: Value set to 'none', replacing with zero-value: "".
+2023-06-24 07:00:18.555 [INFO][7] config_params.go 252: Parsed value for LogSeverityFile:  (from config file)
+2023-06-24 07:00:18.555 [INFO][7] config_params.go 206: Ignoring unknown config param. raw name="MetadataAddr"
+2023-06-24 07:00:18.556 [INFO][7] daemon.go 253: Successfully loaded configuration. GOMAXPROCS=4 buildDate="2023-03-31T00:11:15+0000" config=&config.Config{DatastoreType:"kubernetes", EtcdAddr:"127.0.0.1:2379", EtcdScheme:"http", EtcdKeyFile:"", EtcdCertFile:"", EtcdCaFile:"", EtcdEndpoints:[]string(nil), LogFilePath:"", LogSeverityFile:"", LogSeverityScreen:"INFO", LogSeveritySys:"", HealthEnabled:true, HealthHost:"localhost", HealthPort:9098, PrometheusMetricsEnabled:false, PrometheusMetricsHost:"", PrometheusMetricsPort:9093, PrometheusGoMetricsEnabled:true, PrometheusProcessMetricsEnabled:true, SnapshotCacheMaxBatchSize:100, ServerMaxMessageSize:100, ServerMaxFallBehindSecs:300000000000, ServerNewClientFallBehindGracePeriod:300000000000, ServerMinBatchingAgeThresholdSecs:10000000, ServerPingIntervalSecs:10000000000, ServerPongTimeoutSecs:60000000000, ServerPort:0, ServerKeyFile:"/typha-certs/tls.key", ServerCertFile:"/typha-certs/tls.crt", CAFile:"/etc/pki/tls/certs/tigera-ca-bundle.crt", ClientCN:"typha-client", ClientURISAN:"", DebugMemoryProfilePath:"", DebugDisableLogDropping:false, ConnectionRebalancingMode:"kubernetes", ConnectionDropIntervalSecs:1000000000, ShutdownTimeoutSecs:300000000000, ShutdownConnectionDropIntervalMaxSecs:1000000000, MaxConnectionsUpperLimit:10000, MaxConnectionsLowerLimit:400, K8sServicePollIntervalSecs:30000000000, K8sNamespace:"calico-system", K8sServiceName:"calico-typha", K8sPortName:"calico-typha", FIPSModeEnabled:false, sourceToRawConfig:map[config.Source]map[string]string{0x3:map[string]string{"LogFilePath":"None", "LogSeverityFile":"None", "MetadataAddr":"None"}, 0x4:map[string]string{"cafile":"/etc/pki/tls/certs/tigera-ca-bundle.crt", "clientcn":"typha-client", "connectionrebalancingmode":"kubernetes", "datastoretype":"kubernetes", "fipsmodeenabled":"false", "healthenabled":"true", "healthport":"9098", "k8snamespace":"calico-system", "logfilepath":"none", "logseverityscreen":"info", "logseveritysys":"none", "servercertfile":"/typha-certs/tls.crt", "serverkeyfile":"/typha-certs/tls.key", "shutdowntimeoutsecs":"300"}}, rawValues:map[string]string{"CAFile":"/etc/pki/tls/certs/tigera-ca-bundle.crt", "ClientCN":"typha-client", "ConnectionRebalancingMode":"kubernetes", "DatastoreType":"kubernetes", "FIPSModeEnabled":"false", "HealthEnabled":"true", "HealthPort":"9098", "K8sNamespace":"calico-system", "LogFilePath":"none", "LogSeverityFile":"None", "LogSeverityScreen":"info", "LogSeveritySys":"none", "MetadataAddr":"None", "ServerCertFile":"/typha-certs/tls.crt", "ServerKeyFile":"/typha-certs/tls.key", "ShutdownTimeoutSecs":"300"}} gitCommit="82dadbce194ac671508c71574a0e59eb82c911f9" version="v3.25.1"
+2023-06-24 07:00:18.556 [INFO][7] daemon.go 262: Using Kubernetes API datastore, checking if we need to migrate v1 -> v3
+2023-06-24 07:00:18.580 [INFO][7] customresource.go 102: Error getting resource Key=GlobalFelixConfig(name=CalicoVersion) Name="calicoversion" Resource="GlobalFelixConfigs" error=the server could not find the requested resource (get GlobalFelixConfigs.crd.projectcalico.org calicoversion)
+2023-06-24 07:00:18.580 [INFO][7] daemon.go 301: Migration not required.
+2023-06-24 07:00:18.580 [INFO][7] daemon.go 317: Initializing the datastore (if needed).
+2023-06-24 07:00:18.588 [INFO][7] daemon.go 327: Datastore initialized.
+2023-06-24 07:00:18.588 [INFO][7] cache.go 184: Defaulting WakeUpInterval. default=1s value=0s
+2023-06-24 07:00:18.589 [INFO][7] cache.go 184: Defaulting WakeUpInterval. default=1s value=0s
+2023-06-24 07:00:18.589 [INFO][7] cache.go 184: Defaulting WakeUpInterval. default=1s value=0s
+2023-06-24 07:00:18.589 [INFO][7] cache.go 184: Defaulting WakeUpInterval. default=1s value=0s
+2023-06-24 07:00:18.589 [INFO][7] sync_server.go 174: Defaulting BinarySnapshotTimeout. default=1s value=0s
+2023-06-24 07:00:18.589 [INFO][7] sync_server.go 221: Defaulting write timeout. default=2m0s
+2023-06-24 07:00:18.589 [INFO][7] sync_server.go 257: Defaulting Port. default=5473 value=0
+2023-06-24 07:00:18.589 [INFO][7] sync_server.go 276: Creating server config=syncserver.Config{Port:5473, MaxMessageSize:100, BinarySnapshotTimeout:1000000000, MaxFallBehind:300000000000, NewClientFallBehindGracePeriod:300000000000, MinBatchingAgeThreshold:10000000, PingInterval:10000000000, PongTimeout:60000000000, WriteTimeout:120000000000, DropInterval:1000000000, ShutdownTimeout:300000000000, ShutdownMaxDropInterval:1000000000, MaxConns:10000, HealthAggregator:(*health.HealthAggregator)(0xc000718150), KeyFile:"/typha-certs/tls.key", CertFile:"/typha-certs/tls.crt", CAFile:"/etc/pki/tls/certs/tigera-ca-bundle.crt", ClientCN:"typha-client", ClientURISAN:"", WriteBufferSize:0, DebugLogWrites:false, FIPSModeEnabled:false}
+2023-06-24 07:00:18.590 [INFO][7] daemon.go 415: Starting the datastore Syncer/cache layer
+2023-06-24 07:00:18.591 [INFO][7] daemon.go 106: Starting syncer syncerType="felix"
+2023-06-24 07:00:18.591 [INFO][7] watchersyncer.go 89: Start called
+2023-06-24 07:00:18.591 [INFO][7] daemon.go 108: Starting syncer-to-validator decoupler syncerType="felix"
+2023-06-24 07:00:18.591 [INFO][7] daemon.go 110: Starting validator-to-cache decoupler syncerType="felix"
+2023-06-24 07:00:18.591 [INFO][7] daemon.go 112: Starting cache syncerType="felix"
+2023-06-24 07:00:18.591 [INFO][7] watchersyncer.go 130: Sending status update Status=wait-for-ready
+2023-06-24 07:00:18.591 [INFO][7] watchersyncer.go 149: Starting main event processing loop
+2023-06-24 07:00:18.591 [INFO][7] watchercache.go 181: Full resync is required ListRoot="/calico/ipam/v2/assignment/"
+2023-06-24 07:00:18.591 [INFO][7] daemon.go 114: Started syncer pipeline syncerType="felix"
+2023-06-24 07:00:18.591 [INFO][7] watchercache.go 181: Full resync is required ListRoot="/calico/resources/v3/projectcalico.org/profiles"
+2023-06-24 07:00:18.591 [INFO][7] daemon.go 106: Starting syncer syncerType="bgp"
+2023-06-24 07:00:18.591 [INFO][7] watchersyncer.go 89: Start called
+2023-06-24 07:00:18.591 [INFO][7] daemon.go 108: Starting syncer-to-validator decoupler syncerType="bgp"
+2023-06-24 07:00:18.591 [INFO][7] daemon.go 110: Starting validator-to-cache decoupler syncerType="bgp"
+2023-06-24 07:00:18.591 [INFO][7] daemon.go 112: Starting cache syncerType="bgp"
+2023-06-24 07:00:18.591 [INFO][7] daemon.go 114: Started syncer pipeline syncerType="bgp"
+2023-06-24 07:00:18.591 [INFO][7] daemon.go 106: Starting syncer syncerType="tunnel-ip-allocation"
+2023-06-24 07:00:18.591 [INFO][7] watchercache.go 181: Full resync is required ListRoot="/calico/resources/v3/projectcalico.org/workloadendpoints"
+2023-06-24 07:00:18.591 [INFO][7] cache.go 300: Received status update message from datastore. status=wait-for-ready
+2023-06-24 07:00:18.591 [INFO][7] watchersyncer.go 89: Start called
+2023-06-24 07:00:18.592 [INFO][7] daemon.go 108: Starting syncer-to-validator decoupler syncerType="tunnel-ip-allocation"
+2023-06-24 07:00:18.592 [INFO][7] watchercache.go 181: Full resync is required ListRoot="/calico/resources/v3/projectcalico.org/networkpolicies"
+2023-06-24 07:00:18.592 [INFO][7] daemon.go 110: Starting validator-to-cache decoupler syncerType="tunnel-ip-allocation"
+2023-06-24 07:00:18.592 [INFO][7] daemon.go 112: Starting cache syncerType="tunnel-ip-allocation"
+2023-06-24 07:00:18.592 [INFO][7] daemon.go 114: Started syncer pipeline syncerType="tunnel-ip-allocation"
+2023-06-24 07:00:18.592 [INFO][7] daemon.go 106: Starting syncer syncerType="node-status"
+2023-06-24 07:00:18.592 [INFO][7] watchersyncer.go 89: Start called
+2023-06-24 07:00:18.592 [INFO][7] watchercache.go 181: Full resync is required ListRoot="/calico/resources/v3/projectcalico.org/ippools"
+2023-06-24 07:00:18.592 [INFO][7] daemon.go 108: Starting syncer-to-validator decoupler syncerType="node-status"
+2023-06-24 07:00:18.592 [INFO][7] daemon.go 110: Starting validator-to-cache decoupler syncerType="node-status"
+2023-06-24 07:00:18.592 [INFO][7] watchercache.go 181: Full resync is required ListRoot="/calico/resources/v3/projectcalico.org/networksets"
+2023-06-24 07:00:18.592 [INFO][7] watchersyncer.go 130: Sending status update Status=wait-for-ready
+2023-06-24 07:00:18.593 [INFO][7] daemon.go 112: Starting cache syncerType="node-status"
+2023-06-24 07:00:18.593 [INFO][7] daemon.go 114: Started syncer pipeline syncerType="node-status"
+2023-06-24 07:00:18.593 [INFO][7] watchersyncer.go 149: Starting main event processing loop
+2023-06-24 07:00:18.593 [INFO][7] daemon.go 421: Kubernetes connection rebalancing is enabled, starting k8s poll goroutine.
+2023-06-24 07:00:18.593 [INFO][7] watchercache.go 181: Full resync is required ListRoot="/calico/resources/v3/projectcalico.org/clusterinformations"
+2023-06-24 07:00:18.593 [INFO][7] daemon.go 428: Started the datastore Syncer/cache layer/server.
+2023-06-24 07:00:18.593 [INFO][7] watchercache.go 181: Full resync is required ListRoot="/calico/resources/v3/projectcalico.org/caliconodestatuses"
+2023-06-24 07:00:18.593 [INFO][7] daemon.go 439: Health enabled.  Starting server. host="localhost" port=9098
+2023-06-24 07:00:18.593 [INFO][7] health.go 347: Health enabled.  Starting server. host="localhost" port=9098
+2023-06-24 07:00:18.593 [INFO][7] watchercache.go 181: Full resync is required ListRoot="/calico/resources/v3/projectcalico.org/globalnetworksets"
+2023-06-24 07:00:18.593 [INFO][7] watchercache.go 181: Full resync is required ListRoot="/calico/resources/v3/projectcalico.org/nodes"
+2023-06-24 07:00:18.593 [INFO][7] cache.go 300: Received status update message from datastore. status=wait-for-ready
+2023-06-24 07:00:18.593 [INFO][7] sync_server.go 340: Opening TLS listen socket fipsModeEnabled=false port=5473 pwd="/code"
+2023-06-24 07:00:18.593 [INFO][7] watchercache.go 181: Full resync is required ListRoot="/calico/resources/v3/projectcalico.org/felixconfigurations"
+2023-06-24 07:00:18.593 [INFO][7] watchercache.go 181: Full resync is required ListRoot="/calico/resources/v3/projectcalico.org/bgpconfigurations"
+2023-06-24 07:00:18.593 [INFO][7] sync_server.go 352: Will verify client certificates port=5473
+2023-06-24 07:00:18.593 [INFO][7] watchercache.go 181: Full resync is required ListRoot="/calico/resources/v3/projectcalico.org/globalnetworkpolicies"
+2023-06-24 07:00:18.594 [INFO][7] tlsutils.go 39: Make certificate verifier requiredCN="typha-client" requiredURISAN="" roots=&x509.CertPool{byName:map[string][]int{"0!1\x1f0\x1d\x06\x03U\x04\x03\x13\x16tigera-operator-signer":[]int{0}}, lazyCerts:[]x509.lazyCert{x509.lazyCert{rawSubject:[]uint8{0x30, 0x21, 0x31, 0x1f, 0x30, 0x1d, 0x6, 0x3, 0x55, 0x4, 0x3, 0x13, 0x16, 0x74, 0x69, 0x67, 0x65, 0x72, 0x61, 0x2d, 0x6f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x6f, 0x72, 0x2d, 0x73, 0x69, 0x67, 0x6e, 0x65, 0x72}, getCert:(func() (*x509.Certificate, error))(0x62b3e0)}}, haveSum:map[x509.sum224]bool{x509.sum224{0xfd, 0xd5, 0x75, 0xd3, 0xde, 0x88, 0x32, 0x2f, 0xdd, 0x1a, 0xf5, 0xa9, 0xeb, 0x74, 0x1d, 0xde, 0x1b, 0xe1, 0x4a, 0x59, 0xb9, 0xfe, 0xf3, 0x4f, 0x3e, 0xf4, 0x18, 0xa3}:true}, systemPool:false}
+2023-06-24 07:00:18.594 [INFO][7] watchercache.go 181: Full resync is required ListRoot="/calico/resources/v3/projectcalico.org/kubernetesnetworkpolicies"
+2023-06-24 07:00:18.594 [INFO][7] sync_server.go 379: Opened listen socket port=5473
+2023-06-24 07:00:18.594 [INFO][7] watchersyncer.go 130: Sending status update Status=wait-for-ready
+2023-06-24 07:00:18.594 [INFO][7] rebalance.go 44: Kubernetes poll goroutine started. thread="k8s-poll"
+2023-06-24 07:00:18.594 [INFO][7] watchersyncer.go 149: Starting main event processing loop
+2023-06-24 07:00:18.594 [INFO][7] watchercache.go 181: Full resync is required ListRoot="/calico/ipam/v2/host/"
+2023-06-24 07:00:18.594 [INFO][7] watchercache.go 181: Full resync is required ListRoot="/calico/resources/v3/projectcalico.org/kubernetesendpointslices"
+2023-06-24 07:00:18.594 [INFO][7] watchercache.go 181: Full resync is required ListRoot="/calico/resources/v3/projectcalico.org/bgpconfigurations"
+2023-06-24 07:00:18.594 [INFO][7] watchercache.go 181: Full resync is required ListRoot="/calico/resources/v3/projectcalico.org/nodes"
+2023-06-24 07:00:18.594 [INFO][7] watchercache.go 181: Full resync is required ListRoot="/calico/resources/v3/projectcalico.org/bgppeers"
+2023-06-24 07:00:18.594 [INFO][7] cache.go 300: Received status update message from datastore. status=wait-for-ready
+2023-06-24 07:00:18.595 [INFO][7] watchercache.go 181: Full resync is required ListRoot="/calico/resources/v3/projectcalico.org/ippools"
+2023-06-24 07:00:18.595 [INFO][7] watchercache.go 181: Full resync is required ListRoot="/calico/resources/v3/projectcalico.org/hostendpoints"
+2023-06-24 07:00:18.595 [INFO][7] watchersyncer.go 130: Sending status update Status=wait-for-ready
+2023-06-24 07:00:18.595 [INFO][7] watchersyncer.go 149: Starting main event processing loop
+2023-06-24 07:00:18.595 [INFO][7] watchercache.go 181: Full resync is required ListRoot="/calico/resources/v3/projectcalico.org/nodes"
+2023-06-24 07:00:18.595 [INFO][7] watchercache.go 181: Full resync is required ListRoot="/calico/resources/v3/projectcalico.org/kubernetesservice"
+2023-06-24 07:00:18.595 [INFO][7] cache.go 300: Received status update message from datastore. status=wait-for-ready
+2023-06-24 07:00:18.595 [INFO][7] watchercache.go 181: Full resync is required ListRoot="/calico/resources/v3/projectcalico.org/ippools"
+2023-06-24 07:00:18.601 [INFO][7] watchersyncer.go 130: Sending status update Status=resync
+2023-06-24 07:00:18.601 [INFO][7] watchercache.go 294: Sending synced update ListRoot="/calico/resources/v3/projectcalico.org/workloadendpoints"
+2023-06-24 07:00:18.601 [INFO][7] watchersyncer.go 209: Received InSync event from one of the watcher caches
+2023-06-24 07:00:18.601 [INFO][7] cache.go 300: Received status update message from datastore. status=resync
+2023-06-24 07:00:18.608 [INFO][7] watchercache.go 294: Sending synced update ListRoot="/calico/resources/v3/projectcalico.org/clusterinformations"
+2023-06-24 07:00:18.608 [INFO][7] watchersyncer.go 209: Received InSync event from one of the watcher caches
+2023-06-24 07:00:18.608 [INFO][7] watchercache.go 294: Sending synced update ListRoot="/calico/resources/v3/projectcalico.org/kubernetesnetworkpolicies"
+2023-06-24 07:00:18.608 [INFO][7] watchersyncer.go 209: Received InSync event from one of the watcher caches
+2023-06-24 07:00:18.608 [INFO][7] watchercache.go 294: Sending synced update ListRoot="/calico/resources/v3/projectcalico.org/felixconfigurations"
+2023-06-24 07:00:18.609 [INFO][7] watchersyncer.go 209: Received InSync event from one of the watcher caches
+2023-06-24 07:00:18.609 [INFO][7] watchercache.go 294: Sending synced update ListRoot="/calico/resources/v3/projectcalico.org/bgpconfigurations"
+2023-06-24 07:00:18.609 [INFO][7] watchersyncer.go 209: Received InSync event from one of the watcher caches
+2023-06-24 07:00:18.609 [INFO][7] watchercache.go 294: Sending synced update ListRoot="/calico/resources/v3/projectcalico.org/bgpconfigurations"
+2023-06-24 07:00:18.610 [INFO][7] watchercache.go 294: Sending synced update ListRoot="/calico/resources/v3/projectcalico.org/nodes"
+2023-06-24 07:00:18.610 [INFO][7] watchercache.go 294: Sending synced update ListRoot="/calico/resources/v3/projectcalico.org/nodes"
+2023-06-24 07:00:18.610 [INFO][7] watchercache.go 294: Sending synced update ListRoot="/calico/resources/v3/projectcalico.org/nodes"
+2023-06-24 07:00:18.610 [INFO][7] watchersyncer.go 209: Received InSync event from one of the watcher caches
+2023-06-24 07:00:18.610 [INFO][7] watchersyncer.go 130: Sending status update Status=resync
+2023-06-24 07:00:18.610 [INFO][7] watchersyncer.go 209: Received InSync event from one of the watcher caches
+2023-06-24 07:00:18.611 [INFO][7] watchersyncer.go 130: Sending status update Status=resync
+2023-06-24 07:00:18.611 [INFO][7] watchersyncer.go 209: Received InSync event from one of the watcher caches
+2023-06-24 07:00:18.611 [INFO][7] watchercache.go 294: Sending synced update ListRoot="/calico/resources/v3/projectcalico.org/kubernetesendpointslices"
+2023-06-24 07:00:18.611 [INFO][7] cache.go 300: Received status update message from datastore. status=resync
+2023-06-24 07:00:18.611 [INFO][7] watchersyncer.go 209: Received InSync event from one of the watcher caches
+2023-06-24 07:00:18.611 [INFO][7] watchersyncer.go 209: Received InSync event from one of the watcher caches
+2023-06-24 07:00:18.612 [INFO][7] cache.go 300: Received status update message from datastore. status=resync
+2023-06-24 07:00:18.613 [INFO][7] watchercache.go 294: Sending synced update ListRoot="/calico/resources/v3/projectcalico.org/kubernetesservice"
+2023-06-24 07:00:18.613 [INFO][7] watchersyncer.go 209: Received InSync event from one of the watcher caches
+2023-06-24 07:00:18.617 [INFO][7] watchercache.go 294: Sending synced update ListRoot="/calico/resources/v3/projectcalico.org/profiles"
+2023-06-24 07:00:18.617 [INFO][7] watchersyncer.go 209: Received InSync event from one of the watcher caches
+2023-06-24 07:00:18.619 [INFO][7] watchercache.go 294: Sending synced update ListRoot="/calico/ipam/v2/assignment/"
+2023-06-24 07:00:18.619 [INFO][7] watchersyncer.go 209: Received InSync event from one of the watcher caches
+2023-06-24 07:00:18.642 [INFO][7] watchercache.go 294: Sending synced update ListRoot="/calico/resources/v3/projectcalico.org/networkpolicies"
+2023-06-24 07:00:18.642 [INFO][7] watchersyncer.go 209: Received InSync event from one of the watcher caches
+2023-06-24 07:00:18.652 [INFO][7] watchercache.go 294: Sending synced update ListRoot="/calico/resources/v3/projectcalico.org/ippools"
+2023-06-24 07:00:18.652 [INFO][7] watchersyncer.go 209: Received InSync event from one of the watcher caches
+2023-06-24 07:00:18.669 [INFO][7] watchercache.go 294: Sending synced update ListRoot="/calico/resources/v3/projectcalico.org/caliconodestatuses"
+2023-06-24 07:00:18.669 [INFO][7] watchersyncer.go 209: Received InSync event from one of the watcher caches
+2023-06-24 07:00:18.669 [INFO][7] watchersyncer.go 130: Sending status update Status=resync
+2023-06-24 07:00:18.669 [INFO][7] watchersyncer.go 221: All watchers have sync'd data - sending data and final sync
+2023-06-24 07:00:18.669 [INFO][7] watchersyncer.go 130: Sending status update Status=in-sync
+2023-06-24 07:00:18.670 [INFO][7] cache.go 300: Received status update message from datastore. status=resync
+2023-06-24 07:00:18.670 [INFO][7] cache.go 300: Received status update message from datastore. status=in-sync
+2023-06-24 07:00:18.670 [INFO][7] health.go 172: Health of component changed name="node-status-cache" newReport="live,ready" oldReport="live,non-ready"
+2023-06-24 07:00:18.691 [INFO][7] watchercache.go 294: Sending synced update ListRoot="/calico/resources/v3/projectcalico.org/globalnetworksets"
+2023-06-24 07:00:18.691 [INFO][7] watchersyncer.go 209: Received InSync event from one of the watcher caches
+2023-06-24 07:00:18.703 [INFO][7] watchercache.go 294: Sending synced update ListRoot="/calico/resources/v3/projectcalico.org/globalnetworkpolicies"
+2023-06-24 07:00:18.703 [INFO][7] watchersyncer.go 209: Received InSync event from one of the watcher caches
+2023-06-24 07:00:18.731 [INFO][7] watchercache.go 294: Sending synced update ListRoot="/calico/resources/v3/projectcalico.org/networksets"
+2023-06-24 07:00:18.732 [INFO][7] watchersyncer.go 209: Received InSync event from one of the watcher caches
+2023-06-24 07:00:18.744 [INFO][7] watchercache.go 294: Sending synced update ListRoot="/calico/ipam/v2/host/"
+2023-06-24 07:00:18.744 [INFO][7] watchersyncer.go 209: Received InSync event from one of the watcher caches
+2023-06-24 07:00:18.761 [INFO][7] watchercache.go 294: Sending synced update ListRoot="/calico/resources/v3/projectcalico.org/bgppeers"
+2023-06-24 07:00:18.761 [INFO][7] watchersyncer.go 209: Received InSync event from one of the watcher caches
+2023-06-24 07:00:18.769 [INFO][7] watchercache.go 294: Sending synced update ListRoot="/calico/resources/v3/projectcalico.org/ippools"
+2023-06-24 07:00:18.770 [INFO][7] watchersyncer.go 209: Received InSync event from one of the watcher caches
+2023-06-24 07:00:18.770 [INFO][7] watchersyncer.go 221: All watchers have sync'd data - sending data and final sync
+2023-06-24 07:00:18.770 [INFO][7] watchersyncer.go 130: Sending status update Status=in-sync
+2023-06-24 07:00:18.770 [INFO][7] cache.go 300: Received status update message from datastore. status=in-sync
+2023-06-24 07:00:18.770 [INFO][7] health.go 172: Health of component changed name="bgp-cache" newReport="live,ready" oldReport="live,non-ready"
+2023-06-24 07:00:18.770 [INFO][7] watchercache.go 294: Sending synced update ListRoot="/calico/resources/v3/projectcalico.org/ippools"
+2023-06-24 07:00:18.770 [INFO][7] watchersyncer.go 209: Received InSync event from one of the watcher caches
+2023-06-24 07:00:18.770 [INFO][7] watchersyncer.go 221: All watchers have sync'd data - sending data and final sync
+2023-06-24 07:00:18.770 [INFO][7] watchersyncer.go 130: Sending status update Status=in-sync
+2023-06-24 07:00:18.770 [INFO][7] cache.go 300: Received status update message from datastore. status=in-sync
+2023-06-24 07:00:18.770 [INFO][7] health.go 172: Health of component changed name="tunnel-ip-allocation-cache" newReport="live,ready" oldReport="live,non-ready"
+2023-06-24 07:00:18.772 [INFO][7] watchercache.go 294: Sending synced update ListRoot="/calico/resources/v3/projectcalico.org/hostendpoints"
+2023-06-24 07:00:18.772 [INFO][7] watchersyncer.go 209: Received InSync event from one of the watcher caches
+2023-06-24 07:00:18.772 [INFO][7] watchersyncer.go 221: All watchers have sync'd data - sending data and final sync
+2023-06-24 07:00:18.772 [INFO][7] watchersyncer.go 130: Sending status update Status=in-sync
+2023-06-24 07:00:18.772 [INFO][7] cache.go 300: Received status update message from datastore. status=in-sync
+2023-06-24 07:00:18.772 [INFO][7] health.go 172: Health of component changed name="felix-cache" newReport="live,ready" oldReport="live,non-ready"
+2023-06-24 07:00:19.168 [INFO][7] health.go 306: Overall health status changed: live=true ready=true
++----------------------------+---------+----------------+-----------------+--------+
+|         COMPONENT          | TIMEOUT |    LIVENESS    |    READINESS    | DETAIL |
++----------------------------+---------+----------------+-----------------+--------+
+| SyncServer                 | 20s     | reporting live | -               |        |
+| bgp-cache                  | 20s     | reporting live | reporting ready |        |
+| felix-cache                | 20s     | reporting live | reporting ready |        |
+| node-status-cache          | 20s     | reporting live | reporting ready |        |
+| tunnel-ip-allocation-cache | 20s     | reporting live | reporting ready |        |
++----------------------------+---------+----------------+-----------------+--------+
+2023-06-24 07:00:23.995 [INFO][7] sync_server.go 421: Accepted from 192.168.90.185:59586 port=5473
+2023-06-24 07:00:24.006 [INFO][7] sync_server.go 459: New connection connID=0x1 port=5473
+2023-06-24 07:00:24.006 [INFO][7] sync_server.go 421: Accepted from 192.168.90.185:59600 port=5473
+2023-06-24 07:00:24.006 [INFO][7] sync_server.go 721: Per-connection goroutine started client=192.168.90.185:59586 connID=0x1
+2023-06-24 07:00:24.007 [INFO][7] sync_server.go 905: Received Hello message from client. client=192.168.90.185:59586 connID=0x1 msg=syncproto.MsgClientHello{Hostname:"ip-192-168-90-185.ec2.internal", Info:"tunnel-ip-allocation v3.25.1", Version:"v3.25.1", SyncerType:"tunnel-ip-allocation", SupportsDecoderRestart:true, SupportedCompressionAlgorithms:[]syncproto.CompressionAlgorithm{"snappy"}, ClientConnID:0x1}
+2023-06-24 07:00:24.007 [INFO][7] sync_server.go 748: Restarting encoding. client=192.168.90.185:59586 connID=0x1 reasons=[]string{"enable compression: snappy", "send binary snapshot"} type="tunnel-ip-allocation"
+2023-06-24 07:00:24.008 [INFO][7] sync_server.go 984: Received ACK message from client. client=192.168.90.185:59586 connID=0x1 msg=syncproto.MsgACK{} type="tunnel-ip-allocation"
+2023-06-24 07:00:24.008 [INFO][7] sync_server.go 1231: Starting to write snapshot destination="compressed in-memory cache" seqNo=0x2 status=in-sync syncer="tunnel-ip-allocation" thread="snapshotter"
+2023-06-24 07:00:24.009 [INFO][7] sync_server.go 1275: Finished writing snapshot. destination="compressed in-memory cache" seqNo=0x2 status=in-sync syncer="tunnel-ip-allocation" thread="snapshotter"
+2023-06-24 07:00:24.010 [INFO][7] sync_server.go 459: New connection connID=0x2 port=5473
+2023-06-24 07:00:24.010 [INFO][7] sync_server.go 721: Per-connection goroutine started client=192.168.90.185:59600 connID=0x2
+2023-06-24 07:00:24.011 [INFO][7] sync_server.go 905: Received Hello message from client. client=192.168.90.185:59600 connID=0x2 msg=syncproto.MsgClientHello{Hostname:"ip-192-168-90-185.ec2.internal", Info:"node-status v3.25.1", Version:"v3.25.1", SyncerType:"node-status", SupportsDecoderRestart:true, SupportedCompressionAlgorithms:[]syncproto.CompressionAlgorithm{"snappy"}, ClientConnID:0x1}
+2023-06-24 07:00:24.011 [INFO][7] sync_server.go 984: Received ACK message from client. client=192.168.90.185:59586 connID=0x1 msg=syncproto.MsgACK{} type="tunnel-ip-allocation"
+2023-06-24 07:00:24.011 [INFO][7] sync_server.go 774: Sent compressed binary snapshot and received ACK from client. client=192.168.90.185:59586 connID=0x1 type="tunnel-ip-allocation"
+2023-06-24 07:00:24.011 [INFO][7] sync_server.go 806: Waiting for messages from client client=192.168.90.185:59586 connID=0x1 type="tunnel-ip-allocation"
+2023-06-24 07:00:24.011 [INFO][7] sync_server.go 748: Restarting encoding. client=192.168.90.185:59600 connID=0x2 reasons=[]string{"enable compression: snappy", "send binary snapshot"} type="node-status"
+2023-06-24 07:00:24.011 [INFO][7] sync_server.go 1070: Calculated end of client's grace period. graceEnd=2023-06-24 07:05:24.011913593 +0000 UTC m=+305.495889443
+2023-06-24 07:00:24.011 [INFO][7] sync_server.go 1076: Status update to send. client=192.168.90.185:59586 connID=0x1 newStatus=in-sync thread="kv-sender" type="tunnel-ip-allocation"
+2023-06-24 07:00:24.013 [INFO][7] sync_server.go 984: Received ACK message from client. client=192.168.90.185:59600 connID=0x2 msg=syncproto.MsgACK{} type="node-status"
+2023-06-24 07:00:24.013 [INFO][7] sync_server.go 1231: Starting to write snapshot destination="compressed in-memory cache" seqNo=0x1 status=in-sync syncer="node-status" thread="snapshotter"
+2023-06-24 07:00:24.014 [INFO][7] sync_server.go 1275: Finished writing snapshot. destination="compressed in-memory cache" seqNo=0x1 status=in-sync syncer="node-status" thread="snapshotter"
+2023-06-24 07:00:24.014 [INFO][7] sync_server.go 984: Received ACK message from client. client=192.168.90.185:59600 connID=0x2 msg=syncproto.MsgACK{} type="node-status"
+2023-06-24 07:00:24.014 [INFO][7] sync_server.go 774: Sent compressed binary snapshot and received ACK from client. client=192.168.90.185:59600 connID=0x2 type="node-status"
+2023-06-24 07:00:24.014 [INFO][7] sync_server.go 806: Waiting for messages from client client=192.168.90.185:59600 connID=0x2 type="node-status"
+2023-06-24 07:00:24.014 [INFO][7] sync_server.go 1070: Calculated end of client's grace period. graceEnd=2023-06-24 07:05:24.014965814 +0000 UTC m=+305.498941685
+2023-06-24 07:00:24.015 [INFO][7] sync_server.go 1076: Status update to send. client=192.168.90.185:59600 connID=0x2 newStatus=in-sync thread="kv-sender" type="node-status"
+2023-06-24 07:00:24.160 [INFO][7] sync_server.go 421: Accepted from 192.168.90.185:59604 port=5473
+2023-06-24 07:00:24.168 [INFO][7] sync_server.go 459: New connection connID=0x3 port=5473
+2023-06-24 07:00:24.169 [INFO][7] sync_server.go 721: Per-connection goroutine started client=192.168.90.185:59604 connID=0x3
+2023-06-24 07:00:24.172 [INFO][7] sync_server.go 905: Received Hello message from client. client=192.168.90.185:59604 connID=0x3 msg=syncproto.MsgClientHello{Hostname:"ip-192-168-90-185.ec2.internal", Info:"Revision: 82dadbce194ac671508c71574a0e59eb82c911f9; Build date: 2023-03-30T22:50:00+0000", Version:"v3.25.1", SyncerType:"felix", SupportsDecoderRestart:true, SupportedCompressionAlgorithms:[]syncproto.CompressionAlgorithm{"snappy"}, ClientConnID:0x1}
+2023-06-24 07:00:24.172 [INFO][7] sync_server.go 748: Restarting encoding. client=192.168.90.185:59604 connID=0x3 reasons=[]string{"enable compression: snappy", "send binary snapshot"} type="felix"
+2023-06-24 07:00:24.175 [INFO][7] sync_server.go 984: Received ACK message from client. client=192.168.90.185:59604 connID=0x3 msg=syncproto.MsgACK{} type="felix"
+2023-06-24 07:00:24.175 [INFO][7] sync_server.go 1231: Starting to write snapshot destination="compressed in-memory cache" seqNo=0x16 status=in-sync syncer="felix" thread="snapshotter"
+2023-06-24 07:00:24.177 [INFO][7] sync_server.go 1275: Finished writing snapshot. destination="compressed in-memory cache" seqNo=0x16 status=in-sync syncer="felix" thread="snapshotter"
+2023-06-24 07:00:24.187 [INFO][7] sync_server.go 421: Accepted from 192.168.113.123:47970 port=5473
+2023-06-24 07:00:24.195 [INFO][7] sync_server.go 459: New connection connID=0x4 port=5473
+2023-06-24 07:00:24.195 [INFO][7] sync_server.go 721: Per-connection goroutine started client=192.168.113.123:47970 connID=0x4
+2023-06-24 07:00:24.197 [INFO][7] sync_server.go 905: Received Hello message from client. client=192.168.113.123:47970 connID=0x4 msg=syncproto.MsgClientHello{Hostname:"ip-192-168-113-123.ec2.internal", Info:"node-status v3.25.1", Version:"v3.25.1", SyncerType:"node-status", SupportsDecoderRestart:true, SupportedCompressionAlgorithms:[]syncproto.CompressionAlgorithm{"snappy"}, ClientConnID:0x1}
+2023-06-24 07:00:24.197 [INFO][7] sync_server.go 748: Restarting encoding. client=192.168.113.123:47970 connID=0x4 reasons=[]string{"enable compression: snappy", "send binary snapshot"} type="node-status"
+2023-06-24 07:00:24.199 [INFO][7] sync_server.go 984: Received ACK message from client. client=192.168.113.123:47970 connID=0x4 msg=syncproto.MsgACK{} type="node-status"
+2023-06-24 07:00:24.201 [INFO][7] sync_server.go 984: Received ACK message from client. client=192.168.113.123:47970 connID=0x4 msg=syncproto.MsgACK{} type="node-status"
+2023-06-24 07:00:24.202 [INFO][7] sync_server.go 774: Sent compressed binary snapshot and received ACK from client. client=192.168.113.123:47970 connID=0x4 type="node-status"
+2023-06-24 07:00:24.202 [INFO][7] sync_server.go 806: Waiting for messages from client client=192.168.113.123:47970 connID=0x4 type="node-status"
+2023-06-24 07:00:24.202 [INFO][7] sync_server.go 1070: Calculated end of client's grace period. graceEnd=2023-06-24 07:05:24.202329314 +0000 UTC m=+305.686305123
+2023-06-24 07:00:24.202 [INFO][7] sync_server.go 1076: Status update to send. client=192.168.113.123:47970 connID=0x4 newStatus=in-sync thread="kv-sender" type="node-status"
+2023-06-24 07:00:24.204 [INFO][7] sync_server.go 984: Received ACK message from client. client=192.168.90.185:59604 connID=0x3 msg=syncproto.MsgACK{} type="felix"
+2023-06-24 07:00:24.204 [INFO][7] sync_server.go 774: Sent compressed binary snapshot and received ACK from client. client=192.168.90.185:59604 connID=0x3 type="felix"
+2023-06-24 07:00:24.205 [INFO][7] sync_server.go 806: Waiting for messages from client client=192.168.90.185:59604 connID=0x3 type="felix"
+2023-06-24 07:00:24.205 [INFO][7] sync_server.go 1070: Calculated end of client's grace period. graceEnd=2023-06-24 07:05:24.205089795 +0000 UTC m=+305.689065654
+2023-06-24 07:00:24.205 [INFO][7] sync_server.go 1076: Status update to send. client=192.168.90.185:59604 connID=0x3 newStatus=in-sync thread="kv-sender" type="felix"
+2023-06-24 07:00:24.258 [INFO][7] sync_server.go 421: Accepted from 192.168.113.123:47974 port=5473
+2023-06-24 07:00:24.263 [INFO][7] sync_server.go 459: New connection connID=0x5 port=5473
+2023-06-24 07:00:24.264 [INFO][7] sync_server.go 721: Per-connection goroutine started client=192.168.113.123:47974 connID=0x5
+2023-06-24 07:00:24.265 [INFO][7] sync_server.go 905: Received Hello message from client. client=192.168.113.123:47974 connID=0x5 msg=syncproto.MsgClientHello{Hostname:"ip-192-168-113-123.ec2.internal", Info:"tunnel-ip-allocation v3.25.1", Version:"v3.25.1", SyncerType:"tunnel-ip-allocation", SupportsDecoderRestart:true, SupportedCompressionAlgorithms:[]syncproto.CompressionAlgorithm{"snappy"}, ClientConnID:0x1}
+2023-06-24 07:00:24.265 [INFO][7] sync_server.go 748: Restarting encoding. client=192.168.113.123:47974 connID=0x5 reasons=[]string{"enable compression: snappy", "send binary snapshot"} type="tunnel-ip-allocation"
+2023-06-24 07:00:24.266 [INFO][7] sync_server.go 984: Received ACK message from client. client=192.168.113.123:47974 connID=0x5 msg=syncproto.MsgACK{} type="tunnel-ip-allocation"
+2023-06-24 07:00:24.268 [INFO][7] sync_server.go 984: Received ACK message from client. client=192.168.113.123:47974 connID=0x5 msg=syncproto.MsgACK{} type="tunnel-ip-allocation"
+2023-06-24 07:00:24.268 [INFO][7] sync_server.go 774: Sent compressed binary snapshot and received ACK from client. client=192.168.113.123:47974 connID=0x5 type="tunnel-ip-allocation"
+2023-06-24 07:00:24.268 [INFO][7] sync_server.go 806: Waiting for messages from client client=192.168.113.123:47974 connID=0x5 type="tunnel-ip-allocation"
+2023-06-24 07:00:24.268 [INFO][7] sync_server.go 1070: Calculated end of client's grace period. graceEnd=2023-06-24 07:05:24.268609784 +0000 UTC m=+305.752585689
+2023-06-24 07:00:24.268 [INFO][7] sync_server.go 1076: Status update to send. client=192.168.113.123:47974 connID=0x5 newStatus=in-sync thread="kv-sender" type="tunnel-ip-allocation"
+2023-06-24 07:00:24.347 [INFO][7] sync_server.go 421: Accepted from 192.168.113.123:47984 port=5473
+2023-06-24 07:00:24.359 [INFO][7] sync_server.go 459: New connection connID=0x6 port=5473
+2023-06-24 07:00:24.359 [INFO][7] sync_server.go 721: Per-connection goroutine started client=192.168.113.123:47984 connID=0x6
+2023-06-24 07:00:24.360 [INFO][7] sync_server.go 905: Received Hello message from client. client=192.168.113.123:47984 connID=0x6 msg=syncproto.MsgClientHello{Hostname:"ip-192-168-113-123.ec2.internal", Info:"Revision: 82dadbce194ac671508c71574a0e59eb82c911f9; Build date: 2023-03-30T22:50:00+0000", Version:"v3.25.1", SyncerType:"felix", SupportsDecoderRestart:true, SupportedCompressionAlgorithms:[]syncproto.CompressionAlgorithm{"snappy"}, ClientConnID:0x1}
+2023-06-24 07:00:24.360 [INFO][7] sync_server.go 748: Restarting encoding. client=192.168.113.123:47984 connID=0x6 reasons=[]string{"enable compression: snappy", "send binary snapshot"} type="felix"
+2023-06-24 07:00:24.366 [INFO][7] sync_server.go 984: Received ACK message from client. client=192.168.113.123:47984 connID=0x6 msg=syncproto.MsgACK{} type="felix"
+2023-06-24 07:00:24.382 [INFO][7] sync_server.go 984: Received ACK message from client. client=192.168.113.123:47984 connID=0x6 msg=syncproto.MsgACK{} type="felix"
+2023-06-24 07:00:24.382 [INFO][7] sync_server.go 774: Sent compressed binary snapshot and received ACK from client. client=192.168.113.123:47984 connID=0x6 type="felix"
+2023-06-24 07:00:24.382 [INFO][7] sync_server.go 806: Waiting for messages from client client=192.168.113.123:47984 connID=0x6 type="felix"
+2023-06-24 07:00:24.382 [INFO][7] sync_server.go 1070: Calculated end of client's grace period. graceEnd=2023-06-24 07:05:24.382276512 +0000 UTC m=+305.866252385
+2023-06-24 07:00:24.382 [INFO][7] sync_server.go 1076: Status update to send. client=192.168.113.123:47984 connID=0x6 newStatus=in-sync thread="kv-sender" type="felix"
+2023-06-24 07:00:25.670 [INFO][7] sync_server.go 421: Accepted from 192.168.94.105:36728 port=5473
+2023-06-24 07:00:25.676 [INFO][7] sync_server.go 459: New connection connID=0x7 port=5473
+2023-06-24 07:00:25.676 [INFO][7] sync_server.go 421: Accepted from 192.168.94.105:36734 port=5473
+2023-06-24 07:00:25.676 [INFO][7] sync_server.go 721: Per-connection goroutine started client=192.168.94.105:36728 connID=0x7
+2023-06-24 07:00:25.676 [INFO][7] sync_server.go 905: Received Hello message from client. client=192.168.94.105:36728 connID=0x7 msg=syncproto.MsgClientHello{Hostname:"ip-192-168-94-105.ec2.internal", Info:"tunnel-ip-allocation v3.25.1", Version:"v3.25.1", SyncerType:"tunnel-ip-allocation", SupportsDecoderRestart:true, SupportedCompressionAlgorithms:[]syncproto.CompressionAlgorithm{"snappy"}, ClientConnID:0x1}
+2023-06-24 07:00:25.677 [INFO][7] sync_server.go 748: Restarting encoding. client=192.168.94.105:36728 connID=0x7 reasons=[]string{"enable compression: snappy", "send binary snapshot"} type="tunnel-ip-allocation"
+2023-06-24 07:00:25.681 [INFO][7] sync_server.go 459: New connection connID=0x8 port=5473
+2023-06-24 07:00:25.681 [INFO][7] sync_server.go 721: Per-connection goroutine started client=192.168.94.105:36734 connID=0x8
+2023-06-24 07:00:25.682 [INFO][7] sync_server.go 905: Received Hello message from client. client=192.168.94.105:36734 connID=0x8 msg=syncproto.MsgClientHello{Hostname:"ip-192-168-94-105.ec2.internal", Info:"node-status v3.25.1", Version:"v3.25.1", SyncerType:"node-status", SupportsDecoderRestart:true, SupportedCompressionAlgorithms:[]syncproto.CompressionAlgorithm{"snappy"}, ClientConnID:0x1}
+2023-06-24 07:00:25.682 [INFO][7] sync_server.go 748: Restarting encoding. client=192.168.94.105:36734 connID=0x8 reasons=[]string{"enable compression: snappy", "send binary snapshot"} type="node-status"
+2023-06-24 07:00:25.683 [INFO][7] sync_server.go 984: Received ACK message from client. client=192.168.94.105:36728 connID=0x7 msg=syncproto.MsgACK{} type="tunnel-ip-allocation"
+2023-06-24 07:00:25.683 [INFO][7] sync_server.go 984: Received ACK message from client. client=192.168.94.105:36734 connID=0x8 msg=syncproto.MsgACK{} type="node-status"
+2023-06-24 07:00:25.684 [INFO][7] sync_server.go 984: Received ACK message from client. client=192.168.94.105:36734 connID=0x8 msg=syncproto.MsgACK{} type="node-status"
+2023-06-24 07:00:25.684 [INFO][7] sync_server.go 774: Sent compressed binary snapshot and received ACK from client. client=192.168.94.105:36734 connID=0x8 type="node-status"
+2023-06-24 07:00:25.684 [INFO][7] sync_server.go 806: Waiting for messages from client client=192.168.94.105:36734 connID=0x8 type="node-status"
+2023-06-24 07:00:25.684 [INFO][7] sync_server.go 1070: Calculated end of client's grace period. graceEnd=2023-06-24 07:05:25.684678337 +0000 UTC m=+307.168654148
+2023-06-24 07:00:25.684 [INFO][7] sync_server.go 1076: Status update to send. client=192.168.94.105:36734 connID=0x8 newStatus=in-sync thread="kv-sender" type="node-status"
+2023-06-24 07:00:25.685 [INFO][7] sync_server.go 984: Received ACK message from client. client=192.168.94.105:36728 connID=0x7 msg=syncproto.MsgACK{} type="tunnel-ip-allocation"
+2023-06-24 07:00:25.685 [INFO][7] sync_server.go 774: Sent compressed binary snapshot and received ACK from client. client=192.168.94.105:36728 connID=0x7 type="tunnel-ip-allocation"
+2023-06-24 07:00:25.685 [INFO][7] sync_server.go 806: Waiting for messages from client client=192.168.94.105:36728 connID=0x7 type="tunnel-ip-allocation"
+2023-06-24 07:00:25.685 [INFO][7] sync_server.go 1070: Calculated end of client's grace period. graceEnd=2023-06-24 07:05:25.68519522 +0000 UTC m=+307.169171181
+2023-06-24 07:00:25.685 [INFO][7] sync_server.go 1076: Status update to send. client=192.168.94.105:36728 connID=0x7 newStatus=in-sync thread="kv-sender" type="tunnel-ip-allocation"
+2023-06-24 07:00:25.926 [INFO][7] sync_server.go 421: Accepted from 192.168.94.105:36748 port=5473
+2023-06-24 07:00:25.944 [INFO][7] sync_server.go 459: New connection connID=0x9 port=5473
+2023-06-24 07:00:25.944 [INFO][7] sync_server.go 721: Per-connection goroutine started client=192.168.94.105:36748 connID=0x9
+2023-06-24 07:00:25.945 [INFO][7] sync_server.go 905: Received Hello message from client. client=192.168.94.105:36748 connID=0x9 msg=syncproto.MsgClientHello{Hostname:"ip-192-168-94-105.ec2.internal", Info:"Revision: 82dadbce194ac671508c71574a0e59eb82c911f9; Build date: 2023-03-30T22:50:00+0000", Version:"v3.25.1", SyncerType:"felix", SupportsDecoderRestart:true, SupportedCompressionAlgorithms:[]syncproto.CompressionAlgorithm{"snappy"}, ClientConnID:0x1}
+2023-06-24 07:00:25.945 [INFO][7] sync_server.go 748: Restarting encoding. client=192.168.94.105:36748 connID=0x9 reasons=[]string{"enable compression: snappy", "send binary snapshot"} type="felix"
+2023-06-24 07:00:25.946 [INFO][7] sync_server.go 984: Received ACK message from client. client=192.168.94.105:36748 connID=0x9 msg=syncproto.MsgACK{} type="felix"
+2023-06-24 07:00:25.946 [INFO][7] sync_server.go 1231: Starting to write snapshot destination="compressed in-memory cache" seqNo=0x17 status=in-sync syncer="felix" thread="snapshotter"
+2023-06-24 07:00:25.947 [INFO][7] sync_server.go 1275: Finished writing snapshot. destination="compressed in-memory cache" seqNo=0x17 status=in-sync syncer="felix" thread="snapshotter"
+2023-06-24 07:00:25.975 [INFO][7] sync_server.go 984: Received ACK message from client. client=192.168.94.105:36748 connID=0x9 msg=syncproto.MsgACK{} type="felix"
+2023-06-24 07:00:25.975 [INFO][7] sync_server.go 774: Sent compressed binary snapshot and received ACK from client. client=192.168.94.105:36748 connID=0x9 type="felix"
+2023-06-24 07:00:25.975 [INFO][7] sync_server.go 806: Waiting for messages from client client=192.168.94.105:36748 connID=0x9 type="felix"
+2023-06-24 07:00:25.975 [INFO][7] sync_server.go 1070: Calculated end of client's grace period. graceEnd=2023-06-24 07:05:25.975400153 +0000 UTC m=+307.459375995
+2023-06-24 07:00:25.975 [INFO][7] sync_server.go 1076: Status update to send. client=192.168.94.105:36748 connID=0x9 newStatus=in-sync thread="kv-sender" type="felix"
+2023-06-24 07:00:49.414 [INFO][7] rebalance.go 77: Calculated new connection limit. newLimit=400 numNodes=3 numSyncerTypes=4 numTyphas=2 reason="configured lower limit" thread="k8s-poll"
+2023-06-24 07:00:49.414 [INFO][7] sync_server.go 538: New target number of connections currentNum=9 newMax=400 oldMax=10000 thread="numConnsGov"

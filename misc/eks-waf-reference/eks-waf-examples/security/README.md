@@ -607,12 +607,339 @@ jp:~/environment/eksdemo (main) $
 
 
 ```
-text for the bash command
+### check_default_deny_policy_exists
 
-```bash
+https://docs.aws.amazon.com/eks/latest/userguide/calico.html
 
-```
-text for the bash command
+https://docs.tigera.io/calico/3.25/getting-started/kubernetes/helm#install-calico
+
+helm repo add projectcalico https://docs.tigera.io/calico/charts
+kubectl create namespace tigera-operator
+helm install calico projectcalico/tigera-operator --version v3.25.1 --namespace tigera-operator
+
+NAME: calico
+LAST DEPLOYED: Sat Jun 24 07:00:08 2023
+NAMESPACE: tigera-operator
+STATUS: deployed
+REVISION: 1
+TEST SUITE: None
+
+watch kubectl get pods -n calico-system
+jp:~/environment/code-samples (main) $ watch kubectl get pods -n calico-system
+jp:~/environment/code-samples (main) $  kubectl get pods -n calico-system
+NAME                                      READY   STATUS    RESTARTS   AGE
+calico-kube-controllers-645bf7994-sm776   1/1     Running   0          28s
+calico-node-47rrg                         1/1     Running   0          28s
+calico-node-dswr8                         1/1     Running   0          28s
+calico-node-fmdb2                         1/1     Running   0          28s
+calico-typha-8d9858874-9vm62              1/1     Running   0          29s
+calico-typha-8d9858874-cnjvp              1/1     Running   0          20s
+csi-node-driver-477lv                     2/2     Running   0          28s
+csi-node-driver-6jtp2                     2/2     Running   0          28s
+csi-node-driver-hjg2z                     2/2     Running   0          28s
+
+kubectl get all -n tigera-operator
+
+jp:~/environment/code-samples (main) $ kubectl get all -n tigera-operator
+NAME                                   READY   STATUS    RESTARTS   AGE
+pod/tigera-operator-5d6845b496-r9m94   1/1     Running   0          56s
+
+NAME                              READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/tigera-operator   1/1     1            1           56s
+
+NAME                                         DESIRED   CURRENT   READY   AGE
+replicaset.apps/tigera-operator-5d6845b496   1         1         1       56s
+
+kubectl get all -n calico-system
+
+jp:~/environment/code-samples (main) $ kubectl get all -n calico-system
+NAME                                          READY   STATUS    RESTARTS   AGE
+pod/calico-kube-controllers-645bf7994-sm776   1/1     Running   0          78s
+pod/calico-node-47rrg                         1/1     Running   0          78s
+pod/calico-node-dswr8                         1/1     Running   0          78s
+pod/calico-node-fmdb2                         1/1     Running   0          78s
+pod/calico-typha-8d9858874-9vm62              1/1     Running   0          79s
+pod/calico-typha-8d9858874-cnjvp              1/1     Running   0          70s
+pod/csi-node-driver-477lv                     2/2     Running   0          78s
+pod/csi-node-driver-6jtp2                     2/2     Running   0          78s
+pod/csi-node-driver-hjg2z                     2/2     Running   0          78s
+
+NAME                                      TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)    AGE
+service/calico-kube-controllers-metrics   ClusterIP   None            <none>        9094/TCP   74s
+service/calico-typha                      ClusterIP   10.100.42.125   <none>        5473/TCP   79s
+
+NAME                             DESIRED   CURRENT   READY   UP-TO-DATE   AVAILABLE   NODE SELECTOR            AGE
+daemonset.apps/calico-node       3         3         3       3            3           kubernetes.io/os=linux   79s
+daemonset.apps/csi-node-driver   3         3         3       3            3           kubernetes.io/os=linux   79s
+
+NAME                                      READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/calico-kube-controllers   1/1     1            1           79s
+deployment.apps/calico-typha              2/2     2            2           79s
+
+NAME                                                DESIRED   CURRENT   READY   AGE
+replicaset.apps/calico-kube-controllers-645bf7994   1         1         1       79s
+replicaset.apps/calico-typha-8d9858874              2         2         2       79s
+
+kubectl logs tigera-operator-5d6845b496-r9m94 -n tigera-operator | grep ERROR
+kubectl logs calico-node-47rrg -c calico-node -n calico-system | grep ERROR
+kubectl logs calico-typha-8d9858874-9vm62 -n calico-system | grep ERROR
+
+
+
+jp:~/environment/code-samples (main) $ kubectl logs tigera-operator-5d6845b496-r9m94 -n tigera-operator | grep ERROR
+jp:~/environment/code-samples (main) $ kubectl logs tigera-operator-5d6845b496-r9m94 -n tigera-operator 
+2023/06/24 07:00:12 [INFO] Version: v1.29.3
+2023/06/24 07:00:12 [INFO] Go Version: go1.19.7 X:boringcrypto
+2023/06/24 07:00:12 [INFO] Go OS/Arch: linux/amd64
+2023/06/24 07:00:14 [INFO] Active operator: proceeding
+{"level":"info","ts":1687590014.4589038,"logger":"setup","msg":"Checking type of cluster","provider":""}
+{"level":"info","ts":1687590014.4598296,"logger":"setup","msg":"Checking if PodSecurityPolicies are supported by the cluster","supported":false}
+{"level":"info","ts":1687590014.4609833,"logger":"setup","msg":"Checking if TSEE controllers are required","required":false}
+{"level":"info","ts":1687590014.564405,"logger":"typha_autoscaler","msg":"Starting typha autoscaler","syncPeriod":10}
+{"level":"info","ts":1687590014.564478,"logger":"setup","msg":"starting manager"}
+I0624 07:00:14.665013       1 leaderelection.go:248] attempting to acquire leader lease tigera-operator/operator-lock...
+I0624 07:00:14.674307       1 leaderelection.go:258] successfully acquired lease tigera-operator/operator-lock
+{"level":"info","ts":1687590014.6745012,"msg":"Starting EventSource","controller":"tigera-installation-controller","source":"kind source: *v1.Installation"}
+{"level":"info","ts":1687590014.674533,"msg":"Starting EventSource","controller":"apiserver-controller","source":"kind source: *v1.APIServer"}
+{"level":"info","ts":1687590014.6745527,"msg":"Starting EventSource","controller":"tigera-installation-controller","source":"kind source: *v1.TigeraStatus"}
+{"level":"info","ts":1687590014.6745567,"msg":"Starting EventSource","controller":"apiserver-controller","source":"kind source: *v1.Installation"}
+{"level":"info","ts":1687590014.6745608,"msg":"Starting EventSource","controller":"tigera-installation-controller","source":"kind source: *v1.Secret"}
+{"level":"info","ts":1687590014.6745632,"msg":"Starting EventSource","controller":"apiserver-controller","source":"kind source: *v1.ConfigMap"}
+{"level":"info","ts":1687590014.6745672,"msg":"Starting EventSource","controller":"tigera-installation-controller","source":"kind source: *v1.ConfigMap"}
+{"level":"info","ts":1687590014.6745698,"msg":"Starting EventSource","controller":"apiserver-controller","source":"kind source: *v1.Secret"}
+{"level":"info","ts":1687590014.6745737,"msg":"Starting EventSource","controller":"tigera-installation-controller","source":"kind source: *v1.ConfigMap"}
+{"level":"info","ts":1687590014.6745763,"msg":"Starting EventSource","controller":"apiserver-controller","source":"kind source: *v1.Secret"}
+{"level":"info","ts":1687590014.674583,"msg":"Starting EventSource","controller":"apiserver-controller","source":"kind source: *v1.Secret"}
+{"level":"info","ts":1687590014.6745894,"msg":"Starting EventSource","controller":"apiserver-controller","source":"kind source: *v1.Secret"}
+{"level":"info","ts":1687590014.6745956,"msg":"Starting EventSource","controller":"apiserver-controller","source":"kind source: *v1.Secret"}
+{"level":"info","ts":1687590014.6746027,"msg":"Starting EventSource","controller":"apiserver-controller","source":"kind source: *v1.Secret"}
+{"level":"info","ts":1687590014.6746068,"msg":"Starting EventSource","controller":"tigera-installation-controller","source":"kind source: *v1.ConfigMap"}
+{"level":"info","ts":1687590014.6746135,"msg":"Starting EventSource","controller":"apiserver-controller","source":"kind source: *v1.ImageSet"}
+{"level":"info","ts":1687590014.6746266,"msg":"Starting EventSource","controller":"apiserver-controller","source":"kind source: *v1.TigeraStatus"}
+{"level":"info","ts":1687590014.6746323,"msg":"Starting Controller","controller":"apiserver-controller"}
+{"level":"info","ts":1687590014.674614,"msg":"Starting EventSource","controller":"tigera-installation-controller","source":"kind source: *v1.ConfigMap"}
+{"level":"info","ts":1687590014.6747496,"msg":"Starting EventSource","controller":"tigera-installation-controller","source":"kind source: *v1.ConfigMap"}
+{"level":"info","ts":1687590014.674757,"msg":"Starting EventSource","controller":"tigera-installation-controller","source":"kind source: *v1.ImageSet"}
+{"level":"info","ts":1687590014.674764,"msg":"Starting EventSource","controller":"tigera-installation-controller","source":"kind source: *v1.DaemonSet"}
+{"level":"info","ts":1687590014.6747704,"msg":"Starting EventSource","controller":"tigera-installation-controller","source":"kind source: *v1.ClusterRole"}
+{"level":"info","ts":1687590014.6747775,"msg":"Starting EventSource","controller":"tigera-installation-controller","source":"kind source: *v1.ClusterRoleBinding"}
+{"level":"info","ts":1687590014.6747875,"msg":"Starting EventSource","controller":"tigera-installation-controller","source":"kind source: *v1.ServiceAccount"}
+{"level":"info","ts":1687590014.6747932,"msg":"Starting EventSource","controller":"tigera-installation-controller","source":"kind source: *v1.APIService"}
+{"level":"info","ts":1687590014.6748,"msg":"Starting EventSource","controller":"tigera-installation-controller","source":"kind source: *v1.Service"}
+{"level":"info","ts":1687590014.6748142,"msg":"Starting EventSource","controller":"tigera-installation-controller","source":"kind source: *v1.KubeControllersConfiguration"}
+{"level":"info","ts":1687590014.6748254,"msg":"Starting EventSource","controller":"tigera-installation-controller","source":"kind source: *v1.FelixConfiguration"}
+{"level":"info","ts":1687590014.6748326,"msg":"Starting EventSource","controller":"tigera-installation-controller","source":"kind source: *v1.BGPConfiguration"}
+{"level":"info","ts":1687590014.674843,"msg":"Starting Controller","controller":"tigera-installation-controller"}
+{"level":"info","ts":1687590014.9767592,"msg":"Starting workers","controller":"tigera-installation-controller","worker count":1}
+{"level":"info","ts":1687590014.9767544,"msg":"Starting workers","controller":"apiserver-controller","worker count":1}
+{"level":"info","ts":1687590014.977069,"logger":"controller_apiserver","msg":"Reconciling APIServer","Request.Namespace":"","Request.Name":"default"}
+{"level":"error","ts":1687590014.9771297,"logger":"controller_apiserver","msg":"Waiting for Installation to be ready","Request.Namespace":"","Request.Name":"default","reason":"ResourceNotReady","stacktrace":"github.com/tigera/operator/pkg/controller/status.(*statusManager).SetDegraded\n\t/go/src/github.com/tigera/operator/pkg/controller/status/status.go:406\ngithub.com/tigera/operator/pkg/controller/apiserver.(*ReconcileAPIServer).Reconcile\n\t/go/src/github.com/tigera/operator/pkg/controller/apiserver/apiserver_controller.go:253\nsigs.k8s.io/controller-runtime/pkg/internal/controller.(*Controller).Reconcile\n\t/go/pkg/mod/sigs.k8s.io/controller-runtime@v0.13.0/pkg/internal/controller/controller.go:121\nsigs.k8s.io/controller-runtime/pkg/internal/controller.(*Controller).reconcileHandler\n\t/go/pkg/mod/sigs.k8s.io/controller-runtime@v0.13.0/pkg/internal/controller/controller.go:320\nsigs.k8s.io/controller-runtime/pkg/internal/controller.(*Controller).processNextWorkItem\n\t/go/pkg/mod/sigs.k8s.io/controller-runtime@v0.13.0/pkg/internal/controller/controller.go:273\nsigs.k8s.io/controller-runtime/pkg/internal/controller.(*Controller).Start.func2.2\n\t/go/pkg/mod/sigs.k8s.io/controller-runtime@v0.13.0/pkg/internal/controller/controller.go:234"}
+{"level":"info","ts":1687590014.9895718,"logger":"windows_upgrader","msg":"Starting main loop"}
+{"level":"info","ts":1687590014.9905365,"logger":"controller_apiserver","msg":"Reconciling APIServer","Request.Namespace":"","Request.Name":"default"}
+{"level":"error","ts":1687590014.9906173,"logger":"controller_apiserver","msg":"Waiting for Installation to be ready","Request.Namespace":"","Request.Name":"default","reason":"ResourceNotReady","stacktrace":"github.com/tigera/operator/pkg/controller/status.(*statusManager).SetDegraded\n\t/go/src/github.com/tigera/operator/pkg/controller/status/status.go:406\ngithub.com/tigera/operator/pkg/controller/apiserver.(*ReconcileAPIServer).Reconcile\n\t/go/src/github.com/tigera/operator/pkg/controller/apiserver/apiserver_controller.go:253\nsigs.k8s.io/controller-runtime/pkg/internal/controller.(*Controller).Reconcile\n\t/go/pkg/mod/sigs.k8s.io/controller-runtime@v0.13.0/pkg/internal/controller/controller.go:121\nsigs.k8s.io/controller-runtime/pkg/internal/controller.(*Controller).reconcileHandler\n\t/go/pkg/mod/sigs.k8s.io/controller-runtime@v0.13.0/pkg/internal/controller/controller.go:320\nsigs.k8s.io/controller-runtime/pkg/internal/controller.(*Controller).processNextWorkItem\n\t/go/pkg/mod/sigs.k8s.io/controller-runtime@v0.13.0/pkg/internal/controller/controller.go:273\nsigs.k8s.io/controller-runtime/pkg/internal/controller.(*Controller).Start.func2.2\n\t/go/pkg/mod/sigs.k8s.io/controller-runtime@v0.13.0/pkg/internal/controller/controller.go:234"}
+{"level":"info","ts":1687590014.998275,"logger":"controller_apiserver","msg":"Reconciling APIServer","Request.Namespace":"","Request.Name":"default"}
+{"level":"error","ts":1687590014.9983213,"logger":"controller_apiserver","msg":"Waiting for Installation to be ready","Request.Namespace":"","Request.Name":"default","reason":"ResourceNotReady","stacktrace":"github.com/tigera/operator/pkg/controller/status.(*statusManager).SetDegraded\n\t/go/src/github.com/tigera/operator/pkg/controller/status/status.go:406\ngithub.com/tigera/operator/pkg/controller/apiserver.(*ReconcileAPIServer).Reconcile\n\t/go/src/github.com/tigera/operator/pkg/controller/apiserver/apiserver_controller.go:253\nsigs.k8s.io/controller-runtime/pkg/internal/controller.(*Controller).Reconcile\n\t/go/pkg/mod/sigs.k8s.io/controller-runtime@v0.13.0/pkg/internal/controller/controller.go:121\nsigs.k8s.io/controller-runtime/pkg/internal/controller.(*Controller).reconcileHandler\n\t/go/pkg/mod/sigs.k8s.io/controller-runtime@v0.13.0/pkg/internal/controller/controller.go:320\nsigs.k8s.io/controller-runtime/pkg/internal/controller.(*Controller).processNextWorkItem\n\t/go/pkg/mod/sigs.k8s.io/controller-runtime@v0.13.0/pkg/internal/controller/controller.go:273\nsigs.k8s.io/controller-runtime/pkg/internal/controller.(*Controller).Start.func2.2\n\t/go/pkg/mod/sigs.k8s.io/controller-runtime@v0.13.0/pkg/internal/controller/controller.go:234"}
+{"level":"info","ts":1687590015.2649622,"logger":"controller_installation","msg":"adding active configmap"}
+{"level":"info","ts":1687590015.4100316,"logger":"controller_apiserver","msg":"Reconciling APIServer","Request.Namespace":"tigera-operator","Request.Name":"tigera-ca-private"}
+{"level":"error","ts":1687590015.4100752,"logger":"controller_apiserver","msg":"Waiting for Installation to be ready","Request.Namespace":"tigera-operator","Request.Name":"tigera-ca-private","reason":"ResourceNotReady","stacktrace":"github.com/tigera/operator/pkg/controller/status.(*statusManager).SetDegraded\n\t/go/src/github.com/tigera/operator/pkg/controller/status/status.go:406\ngithub.com/tigera/operator/pkg/controller/apiserver.(*ReconcileAPIServer).Reconcile\n\t/go/src/github.com/tigera/operator/pkg/controller/apiserver/apiserver_controller.go:253\nsigs.k8s.io/controller-runtime/pkg/internal/controller.(*Controller).Reconcile\n\t/go/pkg/mod/sigs.k8s.io/controller-runtime@v0.13.0/pkg/internal/controller/controller.go:121\nsigs.k8s.io/controller-runtime/pkg/internal/controller.(*Controller).reconcileHandler\n\t/go/pkg/mod/sigs.k8s.io/controller-runtime@v0.13.0/pkg/internal/controller/controller.go:320\nsigs.k8s.io/controller-runtime/pkg/internal/controller.(*Controller).processNextWorkItem\n\t/go/pkg/mod/sigs.k8s.io/controller-runtime@v0.13.0/pkg/internal/controller/controller.go:273\nsigs.k8s.io/controller-runtime/pkg/internal/controller.(*Controller).Start.func2.2\n\t/go/pkg/mod/sigs.k8s.io/controller-runtime@v0.13.0/pkg/internal/controller/controller.go:234"}
+{"level":"info","ts":1687590016.5214705,"logger":"controller_installation","msg":"Failed to update object.","Name":"calico-node","Namespace":"calico-system","Kind":"DaemonSet","key":"calico-system/calico-node"}
+{"level":"info","ts":1687590016.5214958,"logger":"controller_installation","msg":"Failed to update object, retrying.","component":"*render.nodeComponent","key":"calico-system/calico-node","conflict_message":"Operation cannot be fulfilled on daemonsets.apps \"calico-node\": the object has been modified; please apply your changes to the latest version and try again"}
+{"level":"info","ts":1687590019.5715191,"logger":"controller_apiserver","msg":"Reconciling APIServer","Request.Namespace":"","Request.Name":"apiserver"}
+{"level":"error","ts":1687590019.5821075,"logger":"controller_apiserver","msg":"Waiting for Installation to be ready","Request.Namespace":"","Request.Name":"apiserver","reason":"ResourceNotReady","stacktrace":"github.com/tigera/operator/pkg/controller/status.(*statusManager).SetDegraded\n\t/go/src/github.com/tigera/operator/pkg/controller/status/status.go:406\ngithub.com/tigera/operator/pkg/controller/apiserver.(*ReconcileAPIServer).Reconcile\n\t/go/src/github.com/tigera/operator/pkg/controller/apiserver/apiserver_controller.go:253\nsigs.k8s.io/controller-runtime/pkg/internal/controller.(*Controller).Reconcile\n\t/go/pkg/mod/sigs.k8s.io/controller-runtime@v0.13.0/pkg/internal/controller/controller.go:121\nsigs.k8s.io/controller-runtime/pkg/internal/controller.(*Controller).reconcileHandler\n\t/go/pkg/mod/sigs.k8s.io/controller-runtime@v0.13.0/pkg/internal/controller/controller.go:320\nsigs.k8s.io/controller-runtime/pkg/internal/controller.(*Controller).processNextWorkItem\n\t/go/pkg/mod/sigs.k8s.io/controller-runtime@v0.13.0/pkg/internal/controller/controller.go:273\nsigs.k8s.io/controller-runtime/pkg/internal/controller.(*Controller).Start.func2.2\n\t/go/pkg/mod/sigs.k8s.io/controller-runtime@v0.13.0/pkg/internal/controller/controller.go:234"}
+{"level":"info","ts":1687590019.5824127,"logger":"controller_apiserver","msg":"Reconciling APIServer","Request.Namespace":"","Request.Name":"default"}
+{"level":"error","ts":1687590019.5824492,"logger":"controller_apiserver","msg":"Waiting for Installation to be ready","Request.Namespace":"","Request.Name":"default","reason":"ResourceNotReady","stacktrace":"github.com/tigera/operator/pkg/controller/status.(*statusManager).SetDegraded\n\t/go/src/github.com/tigera/operator/pkg/controller/status/status.go:406\ngithub.com/tigera/operator/pkg/controller/apiserver.(*ReconcileAPIServer).Reconcile\n\t/go/src/github.com/tigera/operator/pkg/controller/apiserver/apiserver_controller.go:253\nsigs.k8s.io/controller-runtime/pkg/internal/controller.(*Controller).Reconcile\n\t/go/pkg/mod/sigs.k8s.io/controller-runtime@v0.13.0/pkg/internal/controller/controller.go:121\nsigs.k8s.io/controller-runtime/pkg/internal/controller.(*Controller).reconcileHandler\n\t/go/pkg/mod/sigs.k8s.io/controller-runtime@v0.13.0/pkg/internal/controller/controller.go:320\nsigs.k8s.io/controller-runtime/pkg/internal/controller.(*Controller).processNextWorkItem\n\t/go/pkg/mod/sigs.k8s.io/controller-runtime@v0.13.0/pkg/internal/controller/controller.go:273\nsigs.k8s.io/controller-runtime/pkg/internal/controller.(*Controller).Start.func2.2\n\t/go/pkg/mod/sigs.k8s.io/controller-runtime@v0.13.0/pkg/internal/controller/controller.go:234"}
+{"level":"info","ts":1687590019.7040384,"logger":"controller_apiserver","msg":"Reconciling APIServer","Request.Namespace":"","Request.Name":"default"}
+{"level":"error","ts":1687590019.7040894,"logger":"controller_apiserver","msg":"Waiting for Installation to be ready","Request.Namespace":"","Request.Name":"default","reason":"ResourceNotReady","stacktrace":"github.com/tigera/operator/pkg/controller/status.(*statusManager).SetDegraded\n\t/go/src/github.com/tigera/operator/pkg/controller/status/status.go:406\ngithub.com/tigera/operator/pkg/controller/apiserver.(*ReconcileAPIServer).Reconcile\n\t/go/src/github.com/tigera/operator/pkg/controller/apiserver/apiserver_controller.go:253\nsigs.k8s.io/controller-runtime/pkg/internal/controller.(*Controller).Reconcile\n\t/go/pkg/mod/sigs.k8s.io/controller-runtime@v0.13.0/pkg/internal/controller/controller.go:121\nsigs.k8s.io/controller-runtime/pkg/internal/controller.(*Controller).reconcileHandler\n\t/go/pkg/mod/sigs.k8s.io/controller-runtime@v0.13.0/pkg/internal/controller/controller.go:320\nsigs.k8s.io/controller-runtime/pkg/internal/controller.(*Controller).processNextWorkItem\n\t/go/pkg/mod/sigs.k8s.io/controller-runtime@v0.13.0/pkg/internal/controller/controller.go:273\nsigs.k8s.io/controller-runtime/pkg/internal/controller.(*Controller).Start.func2.2\n\t/go/pkg/mod/sigs.k8s.io/controller-runtime@v0.13.0/pkg/internal/controller/controller.go:234"}
+{"level":"info","ts":1687590020.0870497,"logger":"controller_apiserver","msg":"Reconciling APIServer","Request.Namespace":"","Request.Name":"default"}
+{"level":"error","ts":1687590020.0870984,"logger":"controller_apiserver","msg":"Waiting for Installation to be ready","Request.Namespace":"","Request.Name":"default","reason":"ResourceNotReady","stacktrace":"github.com/tigera/operator/pkg/controller/status.(*statusManager).SetDegraded\n\t/go/src/github.com/tigera/operator/pkg/controller/status/status.go:406\ngithub.com/tigera/operator/pkg/controller/apiserver.(*ReconcileAPIServer).Reconcile\n\t/go/src/github.com/tigera/operator/pkg/controller/apiserver/apiserver_controller.go:253\nsigs.k8s.io/controller-runtime/pkg/internal/controller.(*Controller).Reconcile\n\t/go/pkg/mod/sigs.k8s.io/controller-runtime@v0.13.0/pkg/internal/controller/controller.go:121\nsigs.k8s.io/controller-runtime/pkg/internal/controller.(*Controller).reconcileHandler\n\t/go/pkg/mod/sigs.k8s.io/controller-runtime@v0.13.0/pkg/internal/controller/controller.go:320\nsigs.k8s.io/controller-runtime/pkg/internal/controller.(*Controller).processNextWorkItem\n\t/go/pkg/mod/sigs.k8s.io/controller-runtime@v0.13.0/pkg/internal/controller/controller.go:273\nsigs.k8s.io/controller-runtime/pkg/internal/controller.(*Controller).Start.func2.2\n\t/go/pkg/mod/sigs.k8s.io/controller-runtime@v0.13.0/pkg/internal/controller/controller.go:234"}
+{"level":"info","ts":1687590024.5689476,"logger":"typha_autoscaler","msg":"Updating typha replicas from 1 to 2"}
+{"level":"info","ts":1687590024.5736635,"logger":"controller_apiserver","msg":"Reconciling APIServer","Request.Namespace":"","Request.Name":"apiserver"}
+{"level":"info","ts":1687590024.5808454,"logger":"status_manager","msg":"update to tigera status conflicted, retrying","reason":"Operation cannot be fulfilled on tigerastatuses.operator.tigera.io \"calico\": the object has been modified; please apply your changes to the latest version and try again"}
+{"level":"info","ts":1687590024.582924,"logger":"KubeAPIWarningLogger","msg":"unknown field \"status.conditions\""}
+{"level":"error","ts":1687590024.5831842,"logger":"controller_apiserver","msg":"Waiting for Installation to be ready","Request.Namespace":"","Request.Name":"apiserver","reason":"ResourceNotReady","stacktrace":"github.com/tigera/operator/pkg/controller/status.(*statusManager).SetDegraded\n\t/go/src/github.com/tigera/operator/pkg/controller/status/status.go:406\ngithub.com/tigera/operator/pkg/controller/apiserver.(*ReconcileAPIServer).Reconcile\n\t/go/src/github.com/tigera/operator/pkg/controller/apiserver/apiserver_controller.go:253\nsigs.k8s.io/controller-runtime/pkg/internal/controller.(*Controller).Reconcile\n\t/go/pkg/mod/sigs.k8s.io/controller-runtime@v0.13.0/pkg/internal/controller/controller.go:121\nsigs.k8s.io/controller-runtime/pkg/internal/controller.(*Controller).reconcileHandler\n\t/go/pkg/mod/sigs.k8s.io/controller-runtime@v0.13.0/pkg/internal/controller/controller.go:320\nsigs.k8s.io/controller-runtime/pkg/internal/controller.(*Controller).processNextWorkItem\n\t/go/pkg/mod/sigs.k8s.io/controller-runtime@v0.13.0/pkg/internal/controller/controller.go:273\nsigs.k8s.io/controller-runtime/pkg/internal/controller.(*Controller).Start.func2.2\n\t/go/pkg/mod/sigs.k8s.io/controller-runtime@v0.13.0/pkg/internal/controller/controller.go:234"}
+{"level":"info","ts":1687590024.6029682,"logger":"controller_apiserver","msg":"Reconciling APIServer","Request.Namespace":"","Request.Name":"default"}
+{"level":"error","ts":1687590024.6030939,"logger":"controller_apiserver","msg":"Waiting for Installation to be ready","Request.Namespace":"","Request.Name":"default","reason":"ResourceNotReady","stacktrace":"github.com/tigera/operator/pkg/controller/status.(*statusManager).SetDegraded\n\t/go/src/github.com/tigera/operator/pkg/controller/status/status.go:406\ngithub.com/tigera/operator/pkg/controller/apiserver.(*ReconcileAPIServer).Reconcile\n\t/go/src/github.com/tigera/operator/pkg/controller/apiserver/apiserver_controller.go:253\nsigs.k8s.io/controller-runtime/pkg/internal/controller.(*Controller).Reconcile\n\t/go/pkg/mod/sigs.k8s.io/controller-runtime@v0.13.0/pkg/internal/controller/controller.go:121\nsigs.k8s.io/controller-runtime/pkg/internal/controller.(*Controller).reconcileHandler\n\t/go/pkg/mod/sigs.k8s.io/controller-runtime@v0.13.0/pkg/internal/controller/controller.go:320\nsigs.k8s.io/controller-runtime/pkg/internal/controller.(*Controller).processNextWorkItem\n\t/go/pkg/mod/sigs.k8s.io/controller-runtime@v0.13.0/pkg/internal/controller/controller.go:273\nsigs.k8s.io/controller-runtime/pkg/internal/controller.(*Controller).Start.func2.2\n\t/go/pkg/mod/sigs.k8s.io/controller-runtime@v0.13.0/pkg/internal/controller/controller.go:234"}
+{"level":"info","ts":1687590029.579541,"logger":"status_manager","msg":"update to tigera status conflicted, retrying","reason":"Operation cannot be fulfilled on tigerastatuses.operator.tigera.io \"calico\": the object has been modified; please apply your changes to the latest version and try again"}
+{"level":"info","ts":1687590029.588188,"logger":"status_manager","msg":"update to tigera status conflicted, retrying","reason":"Operation cannot be fulfilled on tigerastatuses.operator.tigera.io \"calico\": the object has been modified; please apply your changes to the latest version and try again"}
+{"level":"info","ts":1687590029.6034722,"logger":"controller_apiserver","msg":"Reconciling APIServer","Request.Namespace":"","Request.Name":"default"}
+{"level":"error","ts":1687590029.6035213,"logger":"controller_apiserver","msg":"Waiting for Installation to be ready","Request.Namespace":"","Request.Name":"default","reason":"ResourceNotReady","stacktrace":"github.com/tigera/operator/pkg/controller/status.(*statusManager).SetDegraded\n\t/go/src/github.com/tigera/operator/pkg/controller/status/status.go:406\ngithub.com/tigera/operator/pkg/controller/apiserver.(*ReconcileAPIServer).Reconcile\n\t/go/src/github.com/tigera/operator/pkg/controller/apiserver/apiserver_controller.go:253\nsigs.k8s.io/controller-runtime/pkg/internal/controller.(*Controller).Reconcile\n\t/go/pkg/mod/sigs.k8s.io/controller-runtime@v0.13.0/pkg/internal/controller/controller.go:121\nsigs.k8s.io/controller-runtime/pkg/internal/controller.(*Controller).reconcileHandler\n\t/go/pkg/mod/sigs.k8s.io/controller-runtime@v0.13.0/pkg/internal/controller/controller.go:320\nsigs.k8s.io/controller-runtime/pkg/internal/controller.(*Controller).processNextWorkItem\n\t/go/pkg/mod/sigs.k8s.io/controller-runtime@v0.13.0/pkg/internal/controller/controller.go:273\nsigs.k8s.io/controller-runtime/pkg/internal/controller.(*Controller).Start.func2.2\n\t/go/pkg/mod/sigs.k8s.io/controller-runtime@v0.13.0/pkg/internal/controller/controller.go:234"}
+{"level":"info","ts":1687590029.791918,"logger":"KubeAPIWarningLogger","msg":"unknown field \"status.calicoVersion\""}
+{"level":"info","ts":1687590029.7920902,"logger":"controller_apiserver","msg":"Reconciling APIServer","Request.Namespace":"","Request.Name":"default"}
+{"level":"info","ts":1687590030.4263365,"logger":"controller_apiserver","msg":"Reconciling APIServer","Request.Namespace":"tigera-operator","Request.Name":"calico-apiserver-certs"}
+{"level":"info","ts":1687590030.6239512,"logger":"controller_apiserver","msg":"Reconciling APIServer","Request.Namespace":"","Request.Name":"default"}
+{"level":"info","ts":1687590034.5793407,"logger":"controller_apiserver","msg":"Reconciling APIServer","Request.Namespace":"","Request.Name":"apiserver"}
+{"level":"info","ts":1687590034.5889068,"logger":"status_manager","msg":"update to tigera status conflicted, retrying","reason":"Operation cannot be fulfilled on tigerastatuses.operator.tigera.io \"apiserver\": the object has been modified; please apply your changes to the latest version and try again"}
+{"level":"info","ts":1687590034.6017728,"logger":"status_manager","msg":"update to tigera status conflicted, retrying","reason":"Operation cannot be fulfilled on tigerastatuses.operator.tigera.io \"apiserver\": the object has been modified; please apply your changes to the latest version and try again"}
+{"level":"info","ts":1687590034.7516904,"logger":"controller_apiserver","msg":"Reconciling APIServer","Request.Namespace":"","Request.Name":"apiserver"}
+{"level":"info","ts":1687590044.573506,"logger":"controller_apiserver","msg":"Reconciling APIServer","Request.Namespace":"","Request.Name":"apiserver"}
+{"level":"info","ts":1687590044.5789342,"logger":"status_manager","msg":"update to tigera status conflicted, retrying","reason":"Operation cannot be fulfilled on tigerastatuses.operator.tigera.io \"apiserver\": the object has been modified; please apply your changes to the latest version and try again"}
+{"level":"info","ts":1687590044.5881534,"logger":"status_manager","msg":"update to tigera status conflicted, retrying","reason":"Operation cannot be fulfilled on tigerastatuses.operator.tigera.io \"apiserver\": the object has been modified; please apply your changes to the latest version and try again"}
+{"level":"info","ts":1687590044.7325304,"logger":"controller_apiserver","msg":"Reconciling APIServer","Request.Namespace":"","Request.Name":"default"}
+{"level":"info","ts":1687590044.8746805,"logger":"controller_apiserver","msg":"Reconciling APIServer","Request.Namespace":"","Request.Name":"apiserver"}
+{"level":"info","ts":1687590049.8594966,"logger":"controller_apiserver","msg":"Reconciling APIServer","Request.Namespace":"","Request.Name":"default"}
+{"level":"info","ts":1687590060.427039,"logger":"controller_apiserver","msg":"Reconciling APIServer","Request.Namespace":"","Request.Name":"default"}
+{"level":"info","ts":1687590060.6250296,"logger":"controller_apiserver","msg":"Reconciling APIServer","Request.Namespace":"tigera-operator","Request.Name":"calico-apiserver-certs"}
+{"level":"info","ts":1687590064.7524297,"logger":"controller_apiserver","msg":"Reconciling APIServer","Request.Namespace":"","Request.Name":"apiserver"}
+jp:~/environment/code-samples (main) $ 
+
+
+
+jp:~/environment/code-samples (main) $ kubectl logs calico-node-47rrg -c calico-node -n calico-system | grep ERROR
+
+jp:~/environment/code-samples (main) $ kubectl logs calico-node-47rrg -c calico-node -n calico-system 
+
+
+
+kubectl describe daemonset aws-node -n kube-system | grep amazon-k8s-cni: | cut -d ":" -f 3
+
+
+v1.12.5-eksbuild.2
+
+cat << EOF > append.yaml
+- apiGroups:
+  - ""
+  resources:
+  - pods
+  verbs:
+  - patch
+EOF
+
+
+kubectl apply -f <(cat <(kubectl get clusterrole aws-node -o yaml) append.yaml)
+
+
+clusterrole.rbac.authorization.k8s.io/aws-node configured
+
+
+kubectl set env daemonset aws-node -n kube-system ANNOTATE_POD_IP=true
+
+daemonset.apps/aws-node env updated
+
+kubectl delete pod calico-kube-controllers-645bf7994-sm776 -n calico-system
+jp:~/environment/jalawala/hardeneks/misc/eks-waf-reference/eks-waf-examples/security/network_security (main) $ kubectl delete pod calico-kube-controllers-645bf7994-sm776 -n calico-system
+pod "calico-kube-controllers-645bf7994-sm776" deleted
+
+kubectl get pods -n calico-system
+
+jp:~/environment/jalawala/hardeneks/misc/eks-waf-reference/eks-waf-examples/security/network_security (main) $ kubectl get pods -n calico-system
+NAME                                      READY   STATUS    RESTARTS   AGE
+calico-kube-controllers-645bf7994-xtsjw   1/1     Running   0          18s
+calico-node-47rrg                         1/1     Running   0          30m
+calico-node-dswr8                         1/1     Running   0          30m
+calico-node-fmdb2                         1/1     Running   0          30m
+calico-typha-8d9858874-9vm62              1/1     Running   0          30m
+calico-typha-8d9858874-cnjvp              1/1     Running   0          30m
+csi-node-driver-477lv                     2/2     Running   0          30m
+csi-node-driver-6jtp2                     2/2     Running   0          30m
+csi-node-driver-hjg2z                     2/2     Running   0          30m
+
+kubectl describe pod calico-kube-controllers-645bf7994-xtsjw -n calico-system | grep vpc.amazonaws.com/pod-ips
+
+jp:~/environment/jalawala/hardeneks/misc/eks-waf-reference/eks-waf-examples/security/network_security (main) $ kubectl describe pod calico-kube-controllers-645bf7994-xtsjw -n calico-system | grep vpc.amazonaws.com/pod-ips
+Annotations:          vpc.amazonaws.com/pod-ips: 192.168.125.239
+
+kubectl apply -f https://docs.projectcalico.org/v3.5/getting-started/kubernetes/tutorials/stars-policy/manifests/00-namespace.yaml
+kubectl apply -f https://docs.projectcalico.org/v3.5/getting-started/kubernetes/tutorials/stars-policy/manifests/01-management-ui.yaml
+kubectl apply -f https://docs.projectcalico.org/v3.5/getting-started/kubernetes/tutorials/stars-policy/manifests/02-backend.yaml
+kubectl apply -f https://docs.projectcalico.org/v3.5/getting-started/kubernetes/tutorials/stars-policy/manifests/03-frontend.yaml
+kubectl apply -f https://docs.projectcalico.org/v3.5/getting-started/kubernetes/tutorials/stars-policy/manifests/04-client.yaml
+
+jp:~/environment/jalawala/hardeneks/misc/eks-waf-reference/eks-waf-examples/security/network_security (main) $ kubectl apply -f https://docs.projectcalico.org/v3.5/getting-started/kubernetes/tutorials/stars-policy/manifests/00-namespace.yaml
+namespace/stars created
+jp:~/environment/jalawala/hardeneks/misc/eks-waf-reference/eks-waf-examples/security/network_security (main) $ kubectl apply -f https://docs.projectcalico.org/v3.5/getting-started/kubernetes/tutorials/stars-policy/manifests/01-management-ui.yaml
+namespace/management-ui created
+service/management-ui created
+replicationcontroller/management-ui created
+jp:~/environment/jalawala/hardeneks/misc/eks-waf-reference/eks-waf-examples/security/network_security (main) $ kubectl apply -f https://docs.projectcalico.org/v3.5/getting-started/kubernetes/tutorials/stars-policy/manifests/02-backend.yaml
+service/backend created
+replicationcontroller/backend created
+jp:~/environment/jalawala/hardeneks/misc/eks-waf-reference/eks-waf-examples/security/network_security (main) $ kubectl apply -f https://docs.projectcalico.org/v3.5/getting-started/kubernetes/tutorials/stars-policy/manifests/03-frontend.yaml
+service/frontend created
+replicationcontroller/frontend created
+jp:~/environment/jalawala/hardeneks/misc/eks-waf-reference/eks-waf-examples/security/network_security (main) $ kubectl apply -f https://docs.projectcalico.org/v3.5/getting-started/kubernetes/tutorials/stars-policy/manifests/04-client.yaml
+namespace/client created
+replicationcontroller/client created
+service/client created
+
+kubectl get pods -A
+
+jp:~/environment/jalawala/hardeneks/misc/eks-waf-reference/eks-waf-examples/security/network_security (main) $ kubectl get pods -A
+NAMESPACE                       NAME                                                READY   STATUS             RESTARTS          AGE
+amazon-guardduty                aws-guardduty-agent-2fvhv                           1/1     Running            1 (31h ago)       36h
+amazon-guardduty                aws-guardduty-agent-5jn45                           1/1     Running            1 (7h33m ago)     36h
+amazon-guardduty                aws-guardduty-agent-r4b6g                           1/1     Running            1 (7h33m ago)     36h
+assets                          assets-6cf85dd9d4-lghwf                             1/1     Running            0                 57m
+aws-pca-issuer                  aws-privateca-issuer-1687522474-6f84cf587f-4mjlk    1/1     Running            1 (7h33m ago)     19h
+calico-apiserver                calico-apiserver-6ddffdb4fc-kwbcx                   1/1     Running            0                 35m
+calico-apiserver                calico-apiserver-6ddffdb4fc-t5r28                   1/1     Running            0                 35m
+calico-system                   calico-kube-controllers-645bf7994-xtsjw             1/1     Running            0                 5m20s
+calico-system                   calico-node-47rrg                                   1/1     Running            0                 35m
+calico-system                   calico-node-dswr8                                   1/1     Running            0                 35m
+calico-system                   calico-node-fmdb2                                   1/1     Running            0                 35m
+calico-system                   calico-typha-8d9858874-9vm62                        1/1     Running            0                 35m
+calico-system                   calico-typha-8d9858874-cnjvp                        1/1     Running            0                 35m
+calico-system                   csi-node-driver-477lv                               2/2     Running            0                 35m
+calico-system                   csi-node-driver-6jtp2                               2/2     Running            0                 35m
+calico-system                   csi-node-driver-hjg2z                               2/2     Running            0                 35m
+carts                           carts-847dfcd6c4-n7rv5                              1/1     Running            0                 57m
+carts                           carts-dynamodb-64fc88f7d6-97vbw                     1/1     Running            0                 57m
+catalog                         catalog-689b4bcd78-sqf65                            1/1     Running            2 (63m ago)       63m
+catalog                         catalog-mysql-0                                     1/1     Running            0                 63m
+cert-manager                    cert-manager-bfcd95fbc-6kmgv                        1/1     Running            1 (7h33m ago)     27h
+cert-manager                    cert-manager-cainjector-6c65c9f988-4vtjq            1/1     Running            1 (7h33m ago)     27h
+cert-manager                    cert-manager-webhook-78b75fb78f-tphwp               1/1     Running            0                 27h
+checkout                        checkout-55ddcfc5f8-phhxk                           1/1     Running            0                 57m
+checkout                        checkout-redis-6698687878-547gn                     1/1     Running            0                 57m
+client                          client-nmbd9                                        1/1     Running            0                 15s
+karpenter                       karpenter-986b9456b-hqjz6                           1/1     Running            1 (7h33m ago)     25h
+kube-system                     aws-load-balancer-controller-65d588d98b-nf4pn       1/1     Running            1 (7h33m ago)     27h
+kube-system                     aws-load-balancer-controller-65d588d98b-pgmmt       1/1     Running            0                 27h
+kube-system                     aws-node-bcrp5                                      1/1     Running            0                 5m50s
+kube-system                     aws-node-jfgk7                                      1/1     Running            0                 5m54s
+kube-system                     aws-node-pjd87                                      1/1     Running            0                 5m58s
+kube-system                     coredns-55fb5d545d-7j545                            1/1     Running            1 (7h33m ago)     27h
+kube-system                     coredns-55fb5d545d-h9bd9                            1/1     Running            1 (7h33m ago)     27h
+kube-system                     kube-proxy-mc5gk                                    1/1     Running            1 (7h33m ago)     36h
+kube-system                     kube-proxy-rgcw6                                    1/1     Running            1 (7h33m ago)     36h
+kube-system                     kube-proxy-xm6b2                                    1/1     Running            1 (31h ago)       36h
+management-ui                   management-ui-t55ss                                 1/1     Running            0                 21s
+opentelemetry-operator-system   opentelemetry-operator-68dd777685-7zb76             2/2     Running            0                 27h
+orders                          orders-5fdbcbdd7c-g6w67                             1/1     Running            0                 57m
+orders                          orders-mysql-854b8b4f8f-2zrw7                       1/1     Running            0                 57m
+prometheus                      observability-collector-7d4b898559-k7vlw            0/1     CrashLoopBackOff   326 (2m32s ago)   27h
+rabbitmq                        rabbitmq-0                                          1/1     Running            0                 57m
+sample                          external-dns-5f4f5ffcf9-l98ks                       0/1     CrashLoopBackOff   272 (72s ago)     27h
+sample                          sample-ui-5d699dbf98-7gczt                          1/1     Running            0                 27h
+stars                           backend-9n52b                                       1/1     Running            0                 19s
+stars                           frontend-bdkb7                                      1/1     Running            0                 18s
+tigera-operator                 tigera-operator-5d6845b496-r9m94                    1/1     Running            0                 35m
+ui                              ui-5b4f9bdcd5-l2xtw                                 1/1     Running            0                 57m
+windows                         windows-server-iis-ltsc2022-85dbb85495-dsvgn        0/1     Pending            0                 39d
+windows                         windows-server-iis-ltsc2022-85dbb85495-wmw4c        0/1     Pending            0                 39d
+windows                         windows-server-iis-ltsc2022-host-664dbfddc9-rnm42   0/1     Pending            0                 39d
+jp:~/environment/jalawala/hardeneks/misc/eks-waf-reference/eks-waf-examples/security/network_security (main) $ 
+
+
+kubectl apply -f https://docs.projectcalico.org/v3.5/getting-started/kubernetes/tutorials/stars-policy/manifests/00-namespace.yaml
+kubectl apply -f https://docs.projectcalico.org/v3.5/getting-started/kubernetes/tutorials/stars-policy/manifests/01-management-ui.yaml
+kubectl apply -f https://docs.projectcalico.org/v3.5/getting-started/kubernetes/tutorials/stars-policy/manifests/02-backend.yaml
+kubectl apply -f https://docs.projectcalico.org/v3.5/getting-started/kubernetes/tutorials/stars-policy/manifests/03-frontend.yaml
+kubectl apply -f 
+
+
+
+kubectl apply -n stars -f https://docs.projectcalico.org/v3.5/getting-started/kubernetes/tutorials/stars-policy/policies/default-deny.yaml
+kubectl apply -n client -f https://docs.projectcalico.org/v3.5/getting-started/kubernetes/tutorials/stars-policy/policies/default-deny.yaml
+
+
+
+
+
+
+kubectl port-forward service/management-ui -n management-ui 8080
+
+
+
 
 ```bash
 

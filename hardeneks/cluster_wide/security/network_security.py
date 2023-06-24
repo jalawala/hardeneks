@@ -71,6 +71,9 @@ class check_default_deny_policy_exists(Rule):
     def check(self, resources: Resources):
         offenders = resources.namespaces
 
+        
+        print(json.dumps(resources.network_policies, indent=4))
+        
         for policy in resources.network_policies:
             offenders.remove(policy.metadata.namespace)
 
