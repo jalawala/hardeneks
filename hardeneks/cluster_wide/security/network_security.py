@@ -72,10 +72,11 @@ class check_default_deny_policy_exists(Rule):
         offenders = resources.namespaces
 
         
-        print(json.dumps(resources.network_policies, indent=4))
+        #print(resources.network_policies)
         
         for policy in resources.network_policies:
-            offenders.remove(policy.metadata.namespace)
+            print("namespace={} name={}".format(policy.metadata.namespace, policy.metadata.name))
+            #offenders.remove(policy.metadata.namespace)
 
         self.result = Result(status=True, resource_type="Namespace")
 
