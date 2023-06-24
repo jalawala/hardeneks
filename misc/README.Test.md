@@ -39,6 +39,13 @@ hardeneks --pillars cluster_data
 hardeneks --pillars cluster_data,networking --only_cluster_level_rules
 hardeneks --pillars security --only_cluster_level_rules
 
+hardeneks --pillars reliability --only_cluster_level_rules
+
+hardeneks --pillars scalability --only_cluster_level_rules
+
+
+
+
 
 
 hardeneks --namespace default,kubecost --pillars reliability --context arn:aws:eks:us-east-1:000474600478:cluster/eksworkshop-eksctl
