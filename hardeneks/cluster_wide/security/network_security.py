@@ -1,6 +1,7 @@
 import boto3
 from kubernetes import client
 import json
+import hardeneks
 
 from ...resources import Resources
 from hardeneks.rules import Rule, Result
@@ -50,7 +51,7 @@ class check_awspca_exists(Rule):
         (ret1, serviceData) = helpers.is_service_exists_in_cluster("aws-privateca-issuer")
         (ret2, serviceData) = helpers.is_service_exists_in_cluster("cert-manager")
         
-        print("ret1={} ret2={}".format(ret1,ret2))
+        #print("ret1={} ret2={}".format(ret1,ret2))
         if ret1 and ret2:
             Status = True
 
@@ -69,18 +70,39 @@ class check_default_deny_policy_exists(Rule):
     url = "https://aws.github.io/aws-eks-best-practices/security/docs/network/#create-a-default-deny-policy"
 
     def check(self, resources: Resources):
+        
+        Info = "default deny policy exist for all namespaces"
+        
         offenders = resources.namespaces
 
-        
+        namespaces_with_network_policies = []
+    
+        for policy in resources.network_policies:
+            namespaces_with_network_policies.append(policy.metadata.namespace)
+            
+        namespaces_with_network_policies = list(set(namespaces_with_network_policies) - set(hardeneks.ignoredNSList))    
         #print(resources.network_policies)
         
         for policy in resources.network_policies:
-            print("namespace={} name={}".format(policy.metadata.namespace, policy.metadata.name))
-            #offenders.remove(policy.metadata.namespace)
-
-        self.result = Result(status=True, resource_type="Namespace")
-
+            
+            #print(policy)
+            name = policy.metadata.name
+            ns = policy.metadata.namespace
+            match_labels = policy.spec.pod_selector.match_labels
+            match_expressions = policy.spec.pod_selector.match_labels
+            
+            policy_types = policy.spec.policy_types
+            
+            if match_labels is None and match_expressions is None and 'Ingress' in policy_types and 'Egress' in policy_types:
+                #print("Removing namespace {} from list as there is a default deny policy".format(ns))
+                offenders.remove(ns)
+            
+            #print(type(policy_types))
+            #print(type(match_expressions))
+            #print("namespace={} name={}m match_labels={} match_expressions={} ".format(ns, name, match_labels, match_expressions))
+            
         if offenders:
-            self.result = Result(
-                status=False, resource_type="Service", resources=offenders
-            )
+            Info = "default deny policy doesn't exist for namespaces : " + " ".join(offenders)
+            self.result = Result(status=False, resource_type="Namespace", info=Info)
+        else:
+            self.result = Result(status=True, resource_type="Namespace", info=Info)
