@@ -15,7 +15,7 @@ class use_encryption_with_ebs(Rule):
         for storage_class in resources.storage_classes:
             if storage_class.provisioner == "ebs.csi.aws.com":
                 encrypted = storage_class.parameters.get("encrypted")
-                print(encrypted)
+                #print(encrypted)
                 if not encrypted:
                     offenders.append(storage_class)
                 elif encrypted == "false":
@@ -40,26 +40,30 @@ class use_encryption_with_efs(Rule):
     def check(self, resources: Resources):
 
         offenders = []
+        Info = "All EFS PVs have have tls in the mount option"
 
         for persistent_volume in resources.persistent_volumes:
             csi = persistent_volume.spec.csi
             if csi and csi.driver == "efs.csi.aws.com":
+                pv = persistent_volume.metadata.name
                 mount_options = persistent_volume.spec.mount_options
+                #print("name={} mount_options={}".format(pv, mount_options))
                 if not mount_options:
-                    offenders.append(persistent_volume)
+                    offenders.append(pv)
                 else:
                     if "tls" not in mount_options:
-                        offenders.append(persistent_volume)
-
-        self.result = Result(status=True, resource_type="PersistentVolume")
+                        offenders.append(pv)
 
         if offenders:
+            Info = "EFS PVs without tls in the mount option " + " ".join(offenders)
             self.result = Result(
                 status=False,
                 resource_type="PersistentVolume",
-                resources=[i.metadata.name for i in offenders],
+                resources=offenders,
+                info=Info
             )
-
+        else:
+            self.result = Result(status=True, resource_type="PersistentVolume", info=Info)
 
 class use_efs_access_points(Rule):
     _type = "cluster_wide"
