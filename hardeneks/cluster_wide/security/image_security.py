@@ -13,17 +13,23 @@ class use_immutable_tags_with_ecr(Rule):
 
     def check(self, resources: Resources):
         offenders = []
+        
+        Info = "All ECR Repos have Immutable Tags"
 
         client = boto3.client("ecr", region_name=resources.region)
         repositories = client.describe_repositories()
         for repository in repositories["repositories"]:
             if repository["imageTagMutability"] != "IMMUTABLE":
-                offenders.append(repository)
-
-        self.result = Result(status=True, resource_type="ECR Repository")
+                offenders.append(repository["repositoryName"])
+    
         if offenders:
+            Info = "ECR Repos without Immutable Tags " + " ".join(offenders)
             self.result = Result(
                 status=False,
                 resource_type="ECR Repository",
-                resources=[i["repositoryName"] for i in offenders],
+                info = Info
             )
+        else:
+            self.result = Result(status=True, resource_type="ECR Repository", info = Info)
+            
+            
