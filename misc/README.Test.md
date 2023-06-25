@@ -45,6 +45,7 @@ hardeneks --pillars scalability --only_cluster_level_rules
 hardeneks --pillars networking --only_cluster_level_rules
 
 hardeneks --pillars security --only_namespace_level_rules
+hardeneks --pillars security --only_namespace_level_rules --namespace default
 
 
 

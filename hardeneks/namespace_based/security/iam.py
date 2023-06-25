@@ -119,6 +119,7 @@ class disable_run_as_root_user(Rule):
     def check(self, namespaced_resources: NamespacedResources):
 
         offenders = []
+        Info = "All pods run as non-root user"
 
         for pod in namespaced_resources.pods:
             security_context = pod.spec.security_context
@@ -126,19 +127,18 @@ class disable_run_as_root_user(Rule):
                 not security_context.run_as_group
                 and not security_context.run_as_user
             ):
-                offenders.append(pod)
-
-        self.result = Result(status=True, resource_type="Pod", namespace=namespaced_resources.namespace)
+                offenders.append(pod.metadata.name)
+        
         if offenders:
+            Info = "Pods running as root : " + " ".join(offenders) 
             self.result = Result(
                 status=False,
                 resource_type="Pod",
-                resources=[i.metadata.name for i in offenders],
                 namespace=namespaced_resources.namespace,
+                info = Info
             )
-
-
-
+        else:
+            self.result = Result(status=True, resource_type="Pod", namespace=namespaced_resources.namespace, info=Info)
 
 class use_dedicated_service_accounts_for_each_deployment(Rule):
     _type = "namespace_based"
