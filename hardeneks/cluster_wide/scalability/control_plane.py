@@ -39,20 +39,20 @@ class check_kubectl_compression(Rule):
     url = "https://aws.github.io/aws-eks-best-practices/scalability/docs/control-plane/#disable-kubectl-compression"
 
     def check(self, resources: Resources):
+        Status = False
         kubeconfig = helpers.get_kube_config()
         for cluster in kubeconfig.get("clusters", []):
             clusterName = cluster.get("name", "")
             if resources.cluster in clusterName:
-                if not (
-                    cluster.get("cluster", {}).get(
-                        "disable-compression", False
-                    )
-                ):
-                    self.result = Result(
-                        status=False, resource_type="Compression Setting"
-                    )
-                else:
-                    self.result = Result(
-                        status=True, resource_type="Compression Setting"
-                    )
-                break
+                
+                #print(cluster)
+                #print(cluster['cluster'].keys())
+                
+                if 'disable-compression' in cluster['cluster'].keys():
+                    disable_compression = cluster['cluster']['disable-compression']
+                    if disable_compression == True:
+                        Status = True
+                    
+                self.result = Result(status=Status, resource_type="Compression Setting")
+                
+                
