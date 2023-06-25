@@ -4,6 +4,43 @@ from ...resources import NamespacedResources
 from hardeneks.rules import Rule, Result
 
 
+class disable_anonymous_access_for_roles(Rule):
+    _type = "namespace_based"
+    pillar = "security"
+    section = "iam"
+    message = "Don't bind roles to anonymous or unauthenticated groups."
+    url = "https://aws.github.io/aws-eks-best-practices/security/docs/iam/#review-and-revoke-unnecessary-anonymous-access"
+
+    def check(self, namespaced_resources: NamespacedResources):
+
+        offenders = []
+        Info = "None of the roles bound to anonymous or unauthenticated groups."
+
+        for role_binding in namespaced_resources.role_bindings:
+            if role_binding.subjects:
+                for subject in role_binding.subjects:
+                    if (
+                        subject.name == "system:unauthenticated"
+                        or subject.name == "system:anonymous"
+                    ):
+                        offenders.append(role_binding.metadata.name)
+
+        
+        if offenders:
+            Info = "RoleBinding with failed checks " + " ".join(offenders) 
+            self.result = Result(
+                status=False,
+                resource_type="RoleBinding",
+                resources=offenders,
+                namespace=namespaced_resources.namespace,
+                info = Info
+            )
+        else:
+            self.result = Result(status=True, resource_type="RoleBinding", namespace=namespaced_resources.namespace, info=Info)
+        
+        #print("self.result={}".format(self.result))
+        
+
 class restrict_wildcard_for_roles(Rule):
     _type = "namespace_based"
     pillar = "security"
@@ -13,25 +50,33 @@ class restrict_wildcard_for_roles(Rule):
 
     def check(self, namespaced_resources: NamespacedResources):
         offenders = []
+        Info = "None of the roles have '*' in Verbs or Resources."
 
         if namespaced_resources.roles:
             for role in namespaced_resources.roles:
+                name = role.metadata.name
                 if role.rules:
                     for rule in role.rules:
                         if "*" in rule.verbs:
-                            offenders.append(role)
+                            offenders.append(name)
                         if "*" in rule.resources:
-                            offenders.append(role)
+                            offenders.append(name)
 
-        self.result = Result(status=True, resource_type="Role", namespace=namespaced_resources.namespace)
+        
         if offenders:
+            Info = "Roles with failed checks " + " ".join(offenders) 
             self.result = Result(
                 status=False,
                 resource_type="Role",
-                resources=[i.metadata.name for i in offenders],
                 namespace=namespaced_resources.namespace,
+                info = Info
             )
-
+        else:
+            self.result = Result(status=True, 
+            resource_type="Role", 
+            namespace=namespaced_resources.namespace, 
+            info = Info
+            )
 
 class disable_service_account_token_mounts(Rule):
     _type = "namespace_based"
@@ -43,19 +88,25 @@ class disable_service_account_token_mounts(Rule):
     def check(self, namespaced_resources: NamespacedResources):
 
         offenders = []
+        Info = "None of the pods have auto mounted SA"
 
         for pod in namespaced_resources.pods:
-            if pod.spec.automount_service_account_token:
-                offenders.append(pod)
+            #print(pod.spec.automount_service_account_token)
+            #print(pod)
+            if pod.spec.automount_service_account_token != False:
+                offenders.append(pod.metadata.name)
 
-        self.result = Result(status=True, resource_type="Pod", namespace=namespaced_resources.namespace)
+        
         if offenders:
+            Info = "Pods with auto mounted SA : " + " ".join(offenders) 
             self.result = Result(
                 status=False,
                 resource_type="Pod",
-                resources=[i.metadata.name for i in offenders],
                 namespace=namespaced_resources.namespace,
+                info =  Info
             )
+        else:
+            self.result = Result(status=True, resource_type="Pod", namespace=namespaced_resources.namespace, info=Info)
 
 
 class disable_run_as_root_user(Rule):
@@ -87,37 +138,6 @@ class disable_run_as_root_user(Rule):
             )
 
 
-class disable_anonymous_access_for_roles(Rule):
-    _type = "namespace_based"
-    pillar = "security"
-    section = "iam"
-    message = "Don't bind roles to anonymous or unauthenticated groups."
-    url = "https://aws.github.io/aws-eks-best-practices/security/docs/iam/#review-and-revoke-unnecessary-anonymous-access"
-
-    def check(self, namespaced_resources: NamespacedResources):
-
-        offenders = []
-
-        for role_binding in namespaced_resources.role_bindings:
-            if role_binding.subjects:
-                for subject in role_binding.subjects:
-                    if (
-                        subject.name == "system:unauthenticated"
-                        or subject.name == "system:anonymous"
-                    ):
-                        offenders.append(role_binding)
-
-        self.result = Result(status=True, resource_type="RoleBinding", namespace=namespaced_resources.namespace)
-        if offenders:
-            self.result = Result(
-                status=False,
-                resource_type="RoleBinding",
-                resources=[i.metadata.name for i in offenders],
-                namespace=namespaced_resources.namespace,
-            )
-        
-        #print("self.result={}".format(self.result))
-        
 
 
 class use_dedicated_service_accounts_for_each_deployment(Rule):

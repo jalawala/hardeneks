@@ -4,6 +4,7 @@ kind: Pod
 metadata:
   name: efs-example2
 spec:
+  automountServiceAccountToken: false
   containers:
     - name: app
       image: centos
