@@ -11,6 +11,8 @@ class disallow_container_socket_mount(Rule):
 
     def check(self, namespaced_resources: NamespacedResources):
         offenders = []
+        
+        Info = "None of the Pods have socket mounts"
 
         sockets = [
             "/var/run/docker.sock",
@@ -21,17 +23,19 @@ class disallow_container_socket_mount(Rule):
         for pod in namespaced_resources.pods:
             for volume in pod.spec.volumes:
                 if volume.host_path and volume.host_path.path in sockets:
-                    offenders.append(pod)
+                    offenders.append(pod.metadata.name)
 
-        self.result = Result(status=True, resource_type="Pod", namespace=namespaced_resources.namespace)
+        
         if offenders:
+            Info = "Pods with socket mounts : " + " ".join(offenders) 
             self.result = Result(
                 status=False,
                 resource_type="Pod",
-                resources=[i.metadata.name for i in offenders],
                 namespace=namespaced_resources.namespace,
+                info = Info
             )
-
+        else:
+            self.result = Result(status=True, resource_type="Pod", namespace=namespaced_resources.namespace, info=Info)
 
 class disallow_host_path_or_make_it_read_only(Rule):
     _type = "namespace_based"
@@ -43,21 +47,38 @@ class disallow_host_path_or_make_it_read_only(Rule):
     def check(self, namespaced_resources: NamespacedResources):
 
         offenders = []
+        
+        Info = "None of the Pods have Restrict hostpath"
 
         for pod in namespaced_resources.pods:
             for volume in pod.spec.volumes:
+                
                 if volume.host_path:
-                    offenders.append(pod)
-
-        self.result = Result(status=True, resource_type="Pod", namespace=namespaced_resources.namespace)
+                    volumeName = volume.name
+                    #print("name={} volume={}".format(volume.name, volume.host_path))
+                    
+                    for container in pod.spec.containers:
+                        #print("volume_mounts={}".format(container.volume_mounts))
+                        for mount in container.volume_mounts:
+                            if mount.name == volumeName:
+                                read_only = mount.read_only
+                                if read_only == True:
+                                    Status = True
+                                    #print(read_only)
+                                else:
+                                    Status = False
+                                    offenders.append(pod.metadata.name)
+                    
         if offenders:
+            Info = "Pods without restricted hostpath : " + " ".join(offenders) 
             self.result = Result(
                 status=False,
                 resource_type="Pod",
-                resources=[i.metadata.name for i in offenders],
                 namespace=namespaced_resources.namespace,
+                info = Info
             )
-
+        else:
+            self.result = Result(status=True, resource_type="Pod", namespace=namespaced_resources.namespace, info=Info)
 
 class set_requests_limits_for_containers(Rule):
     _type = "namespace_based"

