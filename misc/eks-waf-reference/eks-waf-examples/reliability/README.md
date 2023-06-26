@@ -13,7 +13,8 @@ cd jalawala/hardeneks/misc/eks-waf-reference/eks-waf-examples/reliability/applic
 kubectl autoscale deployment deploy1 --cpu-percent=50 --min=1 --max=10
 kubectl apply -f hpa1.yaml
 ```
-text for the bash command
+### schedule_replicas_across_nodes
+
 
 ```bash
 

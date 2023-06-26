@@ -39,17 +39,19 @@ class run_multiple_replicas(Rule):
 
         for deployment in namespaced_resources.deployments:
             if deployment.spec.replicas < 2:
-                offenders.append(deployment)
+                offenders.append(deployment.metadata.name)
 
-        self.result = Result(status=True, resource_type="Deployment", namespace=namespaced_resources.namespace)
+        
         if offenders:
+            resource = " ".join(offenders)
             self.result = Result(
                 status=False,
                 resource_type="Deployment",
-                resources=[i.metadata.name for i in offenders],
+                resources=[resource],
                 namespace=namespaced_resources.namespace,
             )
-
+        else:
+            self.result = Result(status=True, resource_type="Deployment", namespace=namespaced_resources.namespace)
 
 class schedule_replicas_across_nodes(Rule):
     _type = "namespace_based"
@@ -65,23 +67,27 @@ class schedule_replicas_across_nodes(Rule):
         for deployment in namespaced_resources.deployments:
             spread = deployment.spec.template.spec.topology_spread_constraints
             if not spread:
-                offenders.append(deployment)
+                offenders.append(deployment.metadata.name)
             else:
+                #print(spread)
                 topology_keys = set([i.topology_key for i in spread])
+                #print(topology_keys)
                 if not set(["topology.kubernetes.io/zone"]).issubset(
                     topology_keys
                 ):
-                    offenders.append(deployment)
+                    offenders.append(deployment.metadata.name)
 
-        self.result = Result(status=True, resource_type="Deployment", namespace=namespaced_resources.namespace)
+        
         if offenders:
+            resource = " ".join(offenders)
             self.result = Result(
                 status=False,
                 resource_type="Deployment",
-                resources=[i.metadata.name for i in offenders],
+                resources=[resource],
                 namespace=namespaced_resources.namespace,
             )
-
+        else:
+            self.result = Result(status=True, resource_type="Deployment", namespace=namespaced_resources.namespace)
 
 class check_horizontal_pod_autoscaling_exists(Rule):
     _type = "namespace_based"

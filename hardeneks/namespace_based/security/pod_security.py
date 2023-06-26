@@ -161,7 +161,7 @@ class check_read_only_root_file_system(Rule):
                     offenders.append(pod.metadata.name)
                     
         if offenders:
-            resource = " ".join(offenders)
+            resource = " ".join(offenders
             self.result = Result(
                 status=False,
                 resource_type="Pod",
