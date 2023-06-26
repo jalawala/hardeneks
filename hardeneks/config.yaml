@@ -70,7 +70,7 @@ rules:
         - cluster_endpoint_public_and_private_mode
       vpc-cni:
         - deploy_vpc_cni_managed_add_on
-        #- use_separate_iam_role_for_cni
+        - use_separate_iam_role_for_cni
         #- monitor_IP_adress_inventory
         - use_small_dedicated_cluster_subnets
       prefix_mode:
@@ -105,3 +105,6 @@ rules:
         - schedule_replicas_across_nodes
         - run_multiple_replicas
         - avoid_running_singleton_pods
+    networking:
+      load-balancing:
+        - use_ip_target_type_load_balancers   
