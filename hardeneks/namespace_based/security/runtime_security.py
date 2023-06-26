@@ -28,15 +28,22 @@ class disallow_linux_capabilities(Rule):
             "SYS_CHROOT",
         ]
         for pod in namespaced_resources.pods:
+            #print("namespace={} pod={}".format(namespaced_resources.namespace, pod.metadata.name))
+            #print(pod)
             for container in pod.spec.containers:
                 if (
                     container.security_context
                     and container.security_context.capabilities
                 ):
-                    capabilities = set(
-                        container.security_context.capabilities.add
-                    )
-                    #print(capabilities)
+                    #print(container.security_context.capabilities.add)
+                    if container.security_context.capabilities.add:
+                        capabilities = set(
+                            container.security_context.capabilities.add
+                        )
+                    else:
+                        capabilities = set()
+                        
+                    #print("namespace={} capabilities={}".format(namespaced_resources.namespace, capabilities))
                     
                     if not capabilities.issubset(set(allowed_list)):
                         offenders.append(pod.metadata.name)

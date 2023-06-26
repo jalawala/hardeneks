@@ -19,14 +19,25 @@ def harden(resources, config, _type):
                         try:
                             cls = getattr(module, rule)
                             #print("cls={}".format(cls))
-                        except AttributeError as exc:
-                            print(f"[bold][red]{exc}")
+                        #except AttributeError as exc:
+                        #    print(f"[bold][red]{exc}")
+                        except Exception as exc:
+                            if _type == "cluster_wide":
+                                print(f"AttributeError for rule {rule} in Section {section} for Pillar {pillar} for scope {_type}: [bold][red]{exc}")
+                            else:
+                                print(f"AttributeError for rule {rule} in Section {section} for Pillar {pillar} for scope {_type} for namespace: {resources.namespace}: [bold][red]{exc}")
                         try:
                             ruleObject = cls()
                             ruleObject.name = rule
                             ruleObject.check(resources)
                             results.append(ruleObject)
+                        #except Exception as exc:
+                        #    print(f"[bold][red]{exc}")
                         except Exception as exc:
-                            print(f"[bold][red]{exc}")
+                            if _type == "cluster_wide":
+                                print(f"Exception for rule {rule} in Section {section} for Pillar {pillar} for scope {_type}: [bold][red]{exc}")
+                            else:
+                                print(f"Exception for rule {rule} in Section {section} for Pillar {pillar} for scope {_type} for namespace: {resources.namespace}: [bold][red]{exc}")
+                                                                      
 
     return results

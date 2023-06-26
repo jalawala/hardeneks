@@ -145,7 +145,7 @@ class get_nodegroups_provisioners(Rule):
             elif 'alpha.eksctl.io/nodegroup-name' in labels.keys():
                 selfmnglist.add(labels['alpha.eksctl.io/nodegroup-name'])
             elif 'karpenter.sh/provisioner-name' in labels.keys():          
-                provisionerlist.add(labels['alpha.eksctl.io/nodegroup-name'])
+                provisionerlist.add(labels['karpenter.sh/provisioner-name'])
         
         resource=f"EKS MNG : {len(eksmnglist)} Self MNG : {len(selfmnglist)} Provisioners: {len(provisionerlist)}"
         self.result = Result(status=checkStatus, resource_type="Node groups and Provisioners",resources=[resource],)
