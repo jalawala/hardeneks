@@ -1240,15 +1240,22 @@ kubectl apply -f https://raw.githubusercontent.com/BishopFox/badPods/main/manife
 kubectl exec -it hostpath-exec-pod -- bash
 ```
 
-text for the bash command
+### use_encryption_with_aws_load_balancers
 
 ```bash
+cd /home/ec2-user/environment/jalawala/hardeneks/misc/eks-waf-reference/eks-waf-examples/security/network_security
 
+kubectl apply -f lb-encryption.yaml
 ```
-text for the bash command
+## encryption_secrets
+
+### disallow_secrets_from_env_vars
 
 ```bash
-
+~/environment/jalawala/hardeneks/misc/eks-waf-reference/eks-waf-examples/security/encryption_secrets (main) $ echo -n "username" | base64                                                                                                                
+dXNlcm5hbWU=
+jp:~/environment/jalawala/hardeneks/misc/eks-waf-reference/eks-waf-examples/security/encryption_secrets (main) $ echo -n "password" | base64                                                                                                                
+cGFzc3dvcmQ=
 ```
 
 text for the bash command

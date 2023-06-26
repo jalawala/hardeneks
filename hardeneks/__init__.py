@@ -31,7 +31,7 @@ ignoredNSList = []
 sectionsList = {
     'cluster_data': ['cluster_data'],
     #'security': ['iam', 'multi_tenancy', 'detective_controls', 'network_security', 'encryption_secrets', 'infrastructure_security', 'pod_security', 'image_security'],
-    'security': ['pod_security'],
+    'security': ['encryption_secrets'],
     'reliability': ['applications'],
     'scalability': ['control_plane'],
     'cluster_autoscaling': ['cluster_autoscaler'],

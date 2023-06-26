@@ -22,13 +22,17 @@ class use_encryption_with_aws_load_balancers(Rule):
                     "service.beta.kubernetes.io/aws-load-balancer-ssl-ports"
                 )
                 if not (ssl_cert and ssl_cert_port == "443"):
-                    offenders.append(service)
+                    offenders.append(service.metadata.name)
 
-        self.result = Result(status=True, resource_type="Service", namespace=namespaced_resources.namespace)
+        
         if offenders:
+            resource = " ".join(offenders)
             self.result = Result(
                 status=False,
                 resource_type="Service",
-                resources=[i.metadata.name for i in offenders],
+                resources=[resource],
                 namespace=namespaced_resources.namespace,
             )
+        else:
+            self.result = Result(status=True, resource_type="Service", namespace=namespaced_resources.namespace)
+            

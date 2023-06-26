@@ -14,20 +14,26 @@ class disallow_secrets_from_env_vars(Rule):
 
         for pod in namespaced_resources.pods:
             for container in pod.spec.containers:
+                
                 if container.env:
+                    #print(container.env)
                     for env in container.env:
                         if env.value_from and env.value_from.secret_key_ref:
-                            offenders.append(pod)
+                            offenders.append(pod.metadata.name)
                 if container.env_from:
+                    #print(container.env_from)
                     for env_from in container.env_from:
                         if env_from.secret_ref:
-                            offenders.append(pod)
+                            offenders.append(pod.metadata.name)
 
-        self.result = Result(status=True, resource_type="Pod", namespace=namespaced_resources.namespace)
+        
         if offenders:
+            resource = " ".join(offenders)
             self.result = Result(
                 status=False,
                 resource_type="Pod",
-                resources=[i.metadata.name for i in offenders],
+                resources=[resource],
                 namespace=namespaced_resources.namespace,
             )
+        else:
+            self.result = Result(status=True, resource_type="Pod", namespace=namespaced_resources.namespace)

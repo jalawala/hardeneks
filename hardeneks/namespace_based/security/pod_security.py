@@ -96,17 +96,19 @@ class set_requests_limits_for_containers(Rule):
                 if not (
                     container.resources.limits and container.resources.requests
                 ):
-                    offenders.append(pod)
+                    offenders.append(pod.metadata.name)
 
-        self.result = Result(status=True, resource_type="Pod", namespace=namespaced_resources.namespace)
         if offenders:
+            resource = " ".join(offenders)
             self.result = Result(
                 status=False,
                 resource_type="Pod",
-                resources=[i.metadata.name for i in offenders],
+                resources=[resource],
                 namespace=namespaced_resources.namespace,
             )
-
+        else:
+            self.result = Result(status=True, resource_type="Pod", namespace=namespaced_resources.namespace)
+            
 
 class disallow_privilege_escalation(Rule):
     _type = "namespace_based"
@@ -125,17 +127,20 @@ class disallow_privilege_escalation(Rule):
                     container.security_context
                     and container.security_context.allow_privilege_escalation
                 ):
-                    offenders.append(pod)
+                    offenders.append(pod.metadata.name)
 
-        self.result = Result(status=True, resource_type="Pod", namespace=namespaced_resources.namespace)
+        
         if offenders:
+            resource = " ".join(offenders)
             self.result = Result(
                 status=False,
                 resource_type="Pod",
-                resources=[i.metadata.name for i in offenders],
+                resources=[resource],
                 namespace=namespaced_resources.namespace,
             )
-
+        else:
+            self.result = Result(status=True, resource_type="Pod", namespace=namespaced_resources.namespace)
+            
 
 class check_read_only_root_file_system(Rule):
     _type = "namespace_based"
@@ -153,12 +158,15 @@ class check_read_only_root_file_system(Rule):
                     container.security_context
                     and not container.security_context.read_only_root_filesystem
                 ):
-                    offenders.append(pod)
-        self.result = Result(status=True, resource_type="Pod", namespace=namespaced_resources.namespace)
+                    offenders.append(pod.metadata.name)
+                    
         if offenders:
+            resource = " ".join(offenders)
             self.result = Result(
                 status=False,
                 resource_type="Pod",
-                resources=[i.metadata.name for i in offenders],
+                resources=[resource],
                 namespace=namespaced_resources.namespace,
             )
+        else:
+            self.result = Result(status=True, resource_type="Pod", namespace=namespaced_resources.namespace)
