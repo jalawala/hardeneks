@@ -36,14 +36,19 @@ class disallow_linux_capabilities(Rule):
                     capabilities = set(
                         container.security_context.capabilities.add
                     )
+                    #print(capabilities)
+                    
                     if not capabilities.issubset(set(allowed_list)):
-                        offenders.append(pod)
+                        offenders.append(pod.metadata.name)
 
-        self.result = Result(status=True, resource_type="Pod",namespace=namespaced_resources.namespace)
+        
         if offenders:
+            resource = " ".join(offenders)
             self.result = Result(
                 status=False,
                 resource_type="Pod",
-                resources=[i.metadata.name for i in offenders],
+                resources=[resource],
                 namespace=namespaced_resources.namespace,
             )
+        else:
+            self.result = Result(status=True, resource_type="Pod",namespace=namespaced_resources.namespace)

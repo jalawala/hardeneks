@@ -1257,10 +1257,13 @@ dXNlcm5hbWU=
 jp:~/environment/jalawala/hardeneks/misc/eks-waf-reference/eks-waf-examples/security/encryption_secrets (main) $ echo -n "password" | base64                                                                                                                
 cGFzc3dvcmQ=
 ```
+## runtime_security
 
-text for the bash command
+### disallow_linux_capabilities
+
 
 ```bash
+kubectl apply -f pod_linux_capabilities.yaml
 
 ```
 text for the bash command

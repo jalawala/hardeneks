@@ -101,17 +101,19 @@ class check_horizontal_pod_autoscaling_exists(Rule):
 
         for deployment in namespaced_resources.deployments:
             if deployment.metadata.name not in hpas:
-                offenders.append(deployment)
+                offenders.append(deployment.metadata.name)
 
-        self.result = Result(status=True, resource_type="Deployment", namespace=namespaced_resources.namespace)
         if offenders:
+            resource = " ".join(offenders)
             self.result = Result(
                 status=False,
                 resource_type="Deployment",
-                resources=[i.metadata.name for i in offenders],
+                resources=[resource],
                 namespace=namespaced_resources.namespace,
             )
-
+        else:
+            self.result = Result(status=True, resource_type="Deployment", namespace=namespaced_resources.namespace)
+            
 
 class check_readiness_probes(Rule):
     _type = "namespace_based"
