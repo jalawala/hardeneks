@@ -1,6 +1,7 @@
 # security
 This contains various example codes for Amazon EKS
 
+# cluster_wide
 ## iam
 
 ### disable_anonymous_access_for_cluster_roles
@@ -1220,7 +1221,10 @@ Sat Jun 24 17:35:14 UTC 2023
 
 
 ```
-text for the bash command
+# namespace_based
+## iam
+
+### use_dedicated_service_accounts_for_each_deployment
 
 ```bash
 

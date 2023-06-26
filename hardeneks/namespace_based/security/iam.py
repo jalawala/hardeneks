@@ -150,6 +150,7 @@ class use_dedicated_service_accounts_for_each_deployment(Rule):
     def check(self, namespaced_resources: NamespacedResources):
 
         offenders = []
+        Info = "Each deployment uses dedicated SA"
 
         count = Counter(
             [
@@ -157,24 +158,32 @@ class use_dedicated_service_accounts_for_each_deployment(Rule):
                 for i in namespaced_resources.deployments
             ]
         )
+        
+        #print(count)
+        
         repeated_service_accounts = {
-            x: count for x, count in count.items() if count > 1
+            x: counter for x, counter in count.items() if counter > 1
         }
+        
+        #print(repeated_service_accounts)
 
         for k, v in repeated_service_accounts.items():
             for deployment in namespaced_resources.deployments:
                 if k == deployment.spec.template.spec.service_account_name:
-                    offenders.append(deployment)
+                    offenders.append(deployment.metadata.name)
 
-        self.result = Result(status=True, resource_type="Deployment", namespace=namespaced_resources.namespace)
+
         if offenders:
+            Info = "Deployments with common SA : " + " ".join(offenders) 
             self.result = Result(
                 status=False,
                 resource_type="Deployment",
-                resources=[i.metadata.name for i in offenders],
                 namespace=namespaced_resources.namespace,
+                info=Info
             )
-
+        else:
+            self.result = Result(status=True, resource_type="Deployment", namespace=namespaced_resources.namespace, info=Info)
+            
 
 class use_dedicated_service_accounts_for_each_stateful_set(
     Rule,
