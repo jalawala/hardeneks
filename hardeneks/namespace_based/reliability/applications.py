@@ -12,19 +12,22 @@ class avoid_running_singleton_pods(Rule):
     def check(self, namespaced_resources: NamespacedResources):
         offenders = []
         for pod in namespaced_resources.pods:
+            
             owner = pod.metadata.owner_references
+            #print(owner)
             if not owner:
-                offenders.append(pod)
-
-        self.result = Result(status=True, resource_type="Pod",namespace=namespaced_resources.namespace)
+                offenders.append(pod.metadata.name)
+        
         if offenders:
+            resource = " ".join(offenders)
             self.result = Result(
                 status=False,
                 resource_type="Pod",
-                resources=[i.metadata.name for i in offenders],
+                resources=[resource],
                 namespace=namespaced_resources.namespace,
             )
-
+        else:
+            self.result = Result(status=True, resource_type="Pod",namespace=namespaced_resources.namespace)
 
 class run_multiple_replicas(Rule):
     _type = "namespace_based"
