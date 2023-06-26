@@ -17,6 +17,7 @@ kubectl apply -f hpa1.yaml
 
 
 ```bash
+kubectl apply -f topology.yaml
 
 ```
 text for the bash command

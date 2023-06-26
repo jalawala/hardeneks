@@ -109,3 +109,4 @@ rules:
       load-balancing:
         - use_ip_target_type_load_balancers
         - use_ip_target_type_ingresses
+        - use_pod_readiness_gate

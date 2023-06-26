@@ -99,3 +99,51 @@ class use_ip_target_type_ingresses(Rule):
             )
         else:
             self.result = Result(status=True, resource_type="Ingresses",namespace=namespaced_resources.namespace, info=Info)            
+            
+
+class use_pod_readiness_gate(Rule):
+    _type = "namespace_based"
+    pillar = "networking"
+    section = "load-balancing"
+    message = "Pod readiness gate"
+    url = "https://kubernetes-sigs.github.io/aws-load-balancer-controller/v2.4/deploy/pod_readiness_gate/"
+
+    
+    def check(self, namespaced_resources: NamespacedResources):    
+        offenders = []
+        Status = False
+        Info = "The Namespace is configured for Pod Readinedd gate"
+        
+        is_there_any_lb_service_in_namespace = False  
+        is_there_any_lb_ingress_in_namespace = False
+        
+        for service in namespaced_resources.services:
+            if service.spec.type == 'LoadBalancer':
+                is_there_any_lb_service_in_namespace = True
+                break
+                
+        for ingress in namespaced_resources.ingresses:
+            is_there_any_lb_ingress_in_namespace = True
+            break
+
+        if is_there_any_lb_service_in_namespace or is_there_any_lb_ingress_in_namespace:
+            Info = "elbv2.k8s.aws/pod-readiness-gate-inject is enabled"
+            
+            namespaces = kubernetes.client.CoreV1Api().list_namespace().items
+            
+            for namespace in namespaces:
+                if namespace.metadata.name == namespaced_resources.namespace:
+                    if 'elbv2.k8s.aws/pod-readiness-gate-inject' in namespace.metadata.labels.keys():
+                        value = namespace.metadata.labels["elbv2.k8s.aws/pod-readiness-gate-inject"]
+                        if value == 'enabled':
+                            Status = True
+                        else:
+                            Info = "elbv2.k8s.aws/pod-readiness-gate-inject is not enabled"
+                    else:
+                        Info = "elbv2.k8s.aws/pod-readiness-gate-inject does not exist in labels"
+        else:
+            Info = "The Namespace does not have any ingress ot LoabBalancer service"
+        
+        self.result = Result(status=Status, resource_type="Namespace",namespace=namespaced_resources.namespace, info=Info)            
+            
+                        

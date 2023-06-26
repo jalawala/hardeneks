@@ -2,7 +2,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: lb-svc-ip-node
-  namespace: default
+  namespace: lb
   labels:
     app: lb-svc-ip-node
   annotations:
@@ -18,26 +18,3 @@ spec:
   selector:
     app: lb-svc-ip-node
 ---
-kind: Deployment
-apiVersion: apps/v1
-metadata:
-  name: nginx
-  namespace: default
-  labels:
-    app: lb-svc-ip-node
-spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: lb-svc-ip-node
-  template:
-    metadata:
-      labels:
-        app: lb-svc-ip-node
-    spec:
-      containers:
-        - name: nginx
-          image: nginx
-          ports:
-            - containerPort: 80
-              protocol: TCP
