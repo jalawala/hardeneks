@@ -162,16 +162,19 @@ class use_dedicated_service_accounts_for_each_deployment(Rule):
         #print(count)
         
         repeated_service_accounts = {
-            x: counter for x, counter in count.items() if counter > 1
+            x: repeatcount for x, repeatcount in count.items() if repeatcount > 1
         }
         
         #print(repeated_service_accounts)
 
-        for k, v in repeated_service_accounts.items():
-            for deployment in namespaced_resources.deployments:
-                if k == deployment.spec.template.spec.service_account_name:
-                    offenders.append(deployment.metadata.name)
-
+        if len(namespaced_resources.deployments) > 0:
+            for k, v in repeated_service_accounts.items():
+                for deployment in namespaced_resources.deployments:
+                    if k == deployment.spec.template.spec.service_account_name:
+                        offenders.append(deployment.metadata.name)
+        else:
+            Info = "There are no Deployments in the Namespace"
+            
 
         if offenders:
             Info = "Deployments with common SA : " + " ".join(offenders) 
@@ -198,6 +201,8 @@ class use_dedicated_service_accounts_for_each_stateful_set(
 
         offenders = []
 
+        Info = "Each StatefulSet uses dedicated SA"
+        
         count = Counter(
             [
                 i.spec.template.spec.service_account_name
@@ -205,23 +210,27 @@ class use_dedicated_service_accounts_for_each_stateful_set(
             ]
         )
         repeated_service_accounts = {
-            x: count for x, count in count.items() if count > 1
+            x: repeatcount for x, repeatcount in count.items() if repeatcount > 1
         }
 
-        for k, v in repeated_service_accounts.items():
-            for deployment in namespaced_resources.stateful_sets:
-                if k == deployment.spec.template.spec.service_account_name:
-                    offenders.append(deployment)
-
-        self.result = Result(status=True, resource_type="StatefulSet", namespace=namespaced_resources.namespace)
+        if len(namespaced_resources.stateful_sets) > 0:
+            for k, v in repeated_service_accounts.items():
+                for deployment in namespaced_resources.stateful_sets:
+                    if k == deployment.spec.template.spec.service_account_name:
+                        offenders.append(deployment.metadata.name)
+        else:
+            Info = "There are no StatefulSets in the Namespace"
+        
         if offenders:
+            Info = "StatefulSets with common SA : " + " ".join(offenders) 
             self.result = Result(
                 status=False,
                 resource_type="StatefulSet",
-                resources=[i.metadata.name for i in offenders],
                 namespace=namespaced_resources.namespace,
+                info = Info
             )
-
+        else:
+            self.result = Result(status=True, resource_type="StatefulSet", namespace=namespaced_resources.namespace, info=Info)
 
 class use_dedicated_service_accounts_for_each_daemon_set(
     Rule,
@@ -235,6 +244,8 @@ class use_dedicated_service_accounts_for_each_daemon_set(
     def check(self, namespaced_resources: NamespacedResources):
 
         offenders = []
+        
+        Info = "Each DaemonSet uses dedicated SA"
 
         count = Counter(
             [
@@ -243,19 +254,26 @@ class use_dedicated_service_accounts_for_each_daemon_set(
             ]
         )
         repeated_service_accounts = {
-            x: count for x, count in count.items() if count > 1
+            x: repeatcount for x, repeatcount in count.items() if repeatcount > 1
         }
 
-        for k, v in repeated_service_accounts.items():
-            for deployment in namespaced_resources.daemon_sets:
-                if k == deployment.spec.template.spec.service_account_name:
-                    offenders.append(deployment)
+        if len(namespaced_resources.daemon_sets) > 0:            
+            for k, v in repeated_service_accounts.items():
+                for daemon_set in namespaced_resources.daemon_sets:
+                    if k == daemon_set.spec.template.spec.service_account_name:
+                        offenders.append(daemon_set.metadata.name)
 
-        self.result = Result(status=True, resource_type="DaemonSet",namespace=namespaced_resources.namespace)
+        else:
+            Info = "There are no DaemonSets in the Namespace"
+            
         if offenders:
+            Info = "DaemonSets with common SA : " + " ".join(offenders) 
             self.result = Result(
                 status=False,
                 resource_type="DaemonSet",
-                resources=[i.metadata.name for i in offenders],
                 namespace=namespaced_resources.namespace,
+                info = Info
             )
+        else:
+            self.result = Result(status=True, resource_type="DaemonSet",namespace=namespaced_resources.namespace, info=Info)
+            
