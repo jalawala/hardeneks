@@ -1247,7 +1247,26 @@ REVISION: 1
 TEST SUITE: None
 ```
 
+### do_not_assign_system_masters_for_normal_users
 
+```bash
+https://archive.eksworkshop.com/030_eksctl/console/
+
+c9builder=$(aws cloud9 describe-environment-memberships --environment-id=$C9_PID | jq -r '.memberships[].userArn')
+if echo ${c9builder} | grep -q user; then
+	rolearn=${c9builder}
+        echo Role ARN: ${rolearn}
+elif echo ${c9builder} | grep -q assumed-role; then
+        assumedrolename=$(echo ${c9builder} | awk -F/ '{print $(NF-1)}')
+        rolearn=$(aws iam get-role --role-name ${assumedrolename} --query Role.Arn --output text) 
+        echo Role ARN: ${rolearn}
+fi
+
+Role ARN: arn:aws:iam::000474600478:user/jp
+
+eksctl create iamidentitymapping --cluster eks126 --arn ${rolearn} --group system:masters --username admin
+
+```
 
 # namespace_based
 ## iam

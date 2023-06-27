@@ -3,7 +3,7 @@ from kubernetes import client
 import kubernetes
 from hardeneks.rules import Rule, Result
 from ...resources import Resources
-
+import pprint
 
 class disable_anonymous_access_for_cluster_roles(Rule):
     _type = "cluster_wide"
@@ -173,4 +173,59 @@ class check_access_to_instance_profile(Rule):
         else:
             self.result = Result(status=True, resource_type="Node",info=Info)
             
+class use_iam_role_for_multiple_iam_users(Rule):
+    _type = "cluster_wide"
+    pillar = "security"
+    section = "iam"
+    message = "Use IAM Roles when multiple users need identical access to the cluster¶"
+    url = "https://aws.github.io/aws-eks-best-practices/security/docs/iam/#use-iam-roles-when-multiple-users-need-identical-access-to-the-cluster"
 
+
+    def check(self, resources: Resources):
+
+        Status = True
+        Info = "mapUsers does not exist in aws-auth config map"
+        
+        cm = kubernetes.client.CoreV1Api().read_namespaced_config_map(name="aws-auth", namespace="kube-system")
+        #print(pprint.pformat(cm, indent=4))
+
+        if 'mapUsers' in cm.data.keys():
+            Status = False
+            Info = "mapUsers exist in aws-auth config map"
+        
+        self.result = Result(status=Status, resource_type="iam users",info=Info)    
+    
+    
+    
+    
+    
+class do_not_assign_system_masters_for_normal_users(Rule):
+    _type = "cluster_wide"
+    pillar = "security"
+    section = "iam"
+    message = "Do not assign system:masters group to normal users"
+    url = "https://aws.github.io/aws-eks-best-practices/security/docs/iam/#employ-least-privileged-access-when-creating-rolebindings-and-clusterrolebindings"
+
+
+    def check(self, resources: Resources):
+
+        Status = True
+        Info = "system:masters does not exist in aws-auth config map"
+        
+        cm = kubernetes.client.CoreV1Api().read_namespaced_config_map(name="aws-auth", namespace="kube-system")
+        #print(pprint.pformat(cm, indent=4))
+        #map_roles = cm['data']['mapRoles']
+        map_roles = cm.data['mapRoles']
+        map_users = cm.data['mapUsers']
+        if "system:masters" in map_roles or "system:masters" in map_users:
+            Status = False
+            Info = "system:masters exist in aws-auth config map"
+        #print(type(map_roles))
+        #print(pprint.pformat(map_roles, indent=4))
+        
+        
+        self.result = Result(status=Status, resource_type="least privileged rbac role",info=Info)    
+    
+    
+    
+    

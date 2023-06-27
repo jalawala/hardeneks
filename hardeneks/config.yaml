@@ -28,6 +28,8 @@ rules:
         - check_aws_node_daemonset_service_account
         - check_access_to_instance_profile
         - restrict_wildcard_for_cluster_roles
+        - do_not_assign_system_masters_for_normal_users
+        - use_iam_role_for_multiple_iam_users
       multi_tenancy:
         - ensure_namespace_quotas_exist
       detective_controls:
