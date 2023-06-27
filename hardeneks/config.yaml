@@ -40,6 +40,7 @@ rules:
         - use_encryption_with_ebs
         - use_encryption_with_efs
         - use_efs_access_points
+        - rotate_cmk_for_eks_envelope_encryption
       infrastructure_security:
         - deploy_workers_onto_private_subnets
         - make_sure_inspector_is_enabled

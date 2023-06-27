@@ -1,6 +1,8 @@
 from ...resources import Resources
 from hardeneks.rules import Rule, Result
-
+import boto3
+import json
+import pprint
 
 class use_encryption_with_ebs(Rule):
     _type = "cluster_wide"
@@ -95,3 +97,48 @@ class use_efs_access_points(Rule):
             )
         else:
             self.result = Result(status=True, resource_type="PersistentVolume", info=Info)
+            
+
+class rotate_cmk_for_eks_envelope_encryption(Rule):
+    _type = "cluster_wide"
+    pillar = "security"
+    section = "encryption_secrets"
+    message = "Rotate KMS CMK for KMS Envelope Encryption of K8s Secrets"
+    url = "https://aws.github.io/aws-eks-best-practices/security/docs/data/#use-efs-access-points-to-simplify-access-to-shared-datasets"
+
+
+    def check(self, resources: Resources):
+        Status = False
+        Info = "EKS Envelope Encryption is not Enabled"
+        
+        
+        kmsclient = boto3.client('kms')
+        eksclient = boto3.client("eks", region_name=resources.region)
+        
+        cluster_metadata = eksclient.describe_cluster(name=resources.cluster)        
+        #print(pprint.pformat(cluster_metadata, indent=4))
+        
+        is_envelope_encryption_enabled = False
+        
+        #print(cluster_metadata["cluster"].keys())
+        if 'encryptionConfig' in cluster_metadata["cluster"].keys():
+            for config in cluster_metadata["cluster"]["encryptionConfig"]:
+                #print(config)
+                key_arn =  config['provider']['keyArn']
+                #print(key_arn)
+                if 'secrets' in config['resources'] and key_arn:
+                    is_envelope_encryption_enabled = True
+                    
+            if is_envelope_encryption_enabled:
+                response = kmsclient.get_key_rotation_status(KeyId=key_arn)
+                #print(pprint.pformat(response, indent=4))
+                is_key_rotation_enabled = response['KeyRotationEnabled']
+                if is_key_rotation_enabled:
+                    Status = True
+                    Info = "EKS Envelope Encryption is Enabled and Key Rotation is Enabled"
+                else:
+                    Info = "EKS Envelope Encryption is Enabled but Key Rotaion is Disabled"         
+ 
+        self.result = Result(status=Status, resource_type="EKS Envelope Encryption", info=Info)
+        
+ 
