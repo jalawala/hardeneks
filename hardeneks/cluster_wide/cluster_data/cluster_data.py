@@ -137,17 +137,32 @@ class get_nodegroups_provisioners(Rule):
         eksmnglist = set()
         selfmnglist=set()
         provisionerlist=set()
+        linuxnglist=set()
+        windowsnglist=set()
         
         for node in nodeList:
             labels = node.metadata.labels
+            
             if 'eks.amazonaws.com/nodegroup' in labels.keys():
-                eksmnglist.add(labels['eks.amazonaws.com/nodegroup'])
+                nodeName = labels['eks.amazonaws.com/nodegroup']
+                eksmnglist.add(nodeName)
             elif 'alpha.eksctl.io/nodegroup-name' in labels.keys():
-                selfmnglist.add(labels['alpha.eksctl.io/nodegroup-name'])
-            elif 'karpenter.sh/provisioner-name' in labels.keys():          
-                provisionerlist.add(labels['karpenter.sh/provisioner-name'])
-        
-        resource=f"EKS MNG : {len(eksmnglist)} Self MNG : {len(selfmnglist)} Provisioners: {len(provisionerlist)}"
+                nodeName = labels['alpha.eksctl.io/nodegroup-name']
+                selfmnglist.add(nodeName)
+            elif 'karpenter.sh/provisioner-name' in labels.keys():
+                nodeName = labels['karpenter.sh/provisioner-name']
+                provisionerlist.add(nodeName)
+            else:
+                nodeName = "Unkown-nodegroup"
+            
+            if labels['kubernetes.io/os'] == "linux":
+                linuxnglist.add(nodeName)
+            elif labels['kubernetes.io/os'] == "windows":
+                windowsnglist.add(nodeName)
+                                                    
+        linux_ng = " ".join(list(linuxnglist))
+        windows_ng = " ".join(list(windowsnglist))
+        resource=f"EKS MNG : {len(eksmnglist)} Self MNG : {len(selfmnglist)} Provisioners: {len(provisionerlist)} Linux NGs: {linux_ng} Windows NGs: {windows_ng}"
         self.result = Result(status=checkStatus, resource_type="Node groups and Provisioners",resources=[resource],)
                     
 
