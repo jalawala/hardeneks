@@ -265,7 +265,7 @@ class create_cluster_with_dedicated_iam_role(Rule):
     
         role_name = response["InstanceProfile"]["Roles"][0]["RoleName"]
         role_arn = response["InstanceProfile"]["Roles"][0]["Arn"]
-        print(role_arn)
+        #print(role_arn)
         
         Info = "IAM Role {} does not have AdministratorAccess policy".format(role_arn)
         

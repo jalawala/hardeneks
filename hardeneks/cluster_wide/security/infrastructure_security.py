@@ -2,6 +2,8 @@ import boto3
 
 from ...resources import Resources
 from hardeneks.rules import Rule, Result
+import kubernetes
+import pprint
 
 
 class deploy_workers_onto_private_subnets(Result):
@@ -69,4 +71,42 @@ class make_sure_inspector_is_enabled(Rule):
         else:
             self.result = Result(
                 status=True, resource_type="Inspector Configuration"
-            )            
+            )         
+            
+class use_OS_optimized_for_running_containers(Rule):
+    
+    _type = "cluster_wide"
+    pillar = "security"
+    section = "infrastructure_security"
+    message = "Use an OS optimized for running containers"
+    url = "https://aws.github.io/aws-eks-best-practices/security/docs/hosts/#use-an-os-optimized-for-running-containers"
+
+    def check(self, resources: Resources):
+        
+        checkStatus = True
+        
+        nodeList = (kubernetes.client.CoreV1Api().list_node().items)
+        
+        oslist = set()
+        
+        for node in nodeList:
+            #print(pprint.pformat(node.status.node_info, indent=4))            
+            os = node.status.node_info.os_image
+            #print(pprint.pformat(os, indent=4))
+            if 'Bottlerocket OS' not in os:
+                oslist.add(os)
+            
+        if oslist:
+            Info = "Node OS is not optimized for containers "
+            resource = " ".join(list(oslist))
+            self.result = Result(
+                status=False,
+                resource_type="Node OS",
+                resources=[resource],
+                info = Info
+            )
+        else:
+            Info = "Node OS is optimized for containers "
+            self.result = Result(status=True, resource_type="Node OS", info = Info, )
+            
+        

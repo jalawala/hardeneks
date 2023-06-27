@@ -49,6 +49,7 @@ rules:
       infrastructure_security:
         - deploy_workers_onto_private_subnets
         - make_sure_inspector_is_enabled
+        - use_OS_optimized_for_running_containers
       pod_security:
         - ensure_namespace_psa_exist
       image_security:
