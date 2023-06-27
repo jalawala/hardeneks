@@ -3,27 +3,34 @@ import kubernetes
 from hardeneks import helpers
 from hardeneks.rules import Rule, Result
 from hardeneks import Resources
+import boto3
 
 
 class check_EKS_version(Rule):
     _type = "cluster_wide"
     pillar = "scalability"
     section = "control_plane"
-    message = "EKS Version Should be greater or equal to 1.27"
+    message = "EKS Version should be 1.27"
     url = "https://aws.github.io/aws-eks-best-practices/scalability/docs/control-plane/#use-eks-124-or-above"
 
     def check(self, resources: Resources):
-        checkStatus = False
-        client = kubernetes.client.VersionApi()
-        version = client.get_code()
-        minor = version.minor
-        resources=f"{version.major}.{minor}"
-        #print("version={} minor={} reg={} resources={}".format(version, minor, int(re.sub("[^0-9]", "", minor)), resources))
-        Info = "EKS Version is " + resources
-        if int(re.sub("[^0-9]", "", minor)) == 27:
-            checkStatus = True
+        
+        eks_latest_version_str = "1.27"
+        
+        eksclient = boto3.client("eks", region_name=resources.region)
+        cluster_metadata = eksclient.describe_cluster(name=resources.cluster)
+        cluster_version_str = cluster_metadata["cluster"]["version"]
+        current_version = int(cluster_version_str.split('.')[-1])
+        latest_version = int(eks_latest_version_str.split('.')[-1])
+        
+        if current_version < latest_version:
+            Status = False
+            Info = "EKS Cluster Version {}. Upgrade to Latest Version {}".format(cluster_version_str, eks_latest_version_str)
+        else:
+            Status = True
+            Info = "EKS Cluster Version {} is at Latest Version {}".format(cluster_version_str, eks_latest_version_str)            
             
-        self.result = Result(status=checkStatus, resource_type="EKS Cluster Version", info=Info)
+        self.result = Result(status=Status, resource_type="EKS Cluster Version", info=Info)
 
 
 

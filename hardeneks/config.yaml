@@ -21,6 +21,7 @@ rules:
         - get_available_free_ips_in_vpc
         - get_cluster_size_details
         - get_nodegroups_provisioners
+        - get_fargate_profiles
     security:
       iam:
         - disable_anonymous_access_for_cluster_roles

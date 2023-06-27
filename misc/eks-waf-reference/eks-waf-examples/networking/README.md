@@ -29,7 +29,7 @@ kubectl describe namespace lb
 First create service or ingress
 kubectl apply -f lb-svc-ip-mode-svc.yaml
 
-and then create deployment
+and then create deployments
 
 kubectl apply -f lb-svc-ip-mode-deploy.yaml
 

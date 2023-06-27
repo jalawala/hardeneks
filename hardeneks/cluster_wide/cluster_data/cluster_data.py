@@ -4,6 +4,7 @@ from hardeneks import helpers
 from hardeneks.rules import Rule, Result
 from hardeneks import Resources
 import boto3
+import pprint
 
 class get_EKS_version(Rule):
     _type = "cluster_wide"
@@ -15,17 +16,15 @@ class get_EKS_version(Rule):
     
     
     def check(self, resources: Resources):
-        checkStatus = False
-        client = kubernetes.client.VersionApi()
-        version = client.get_code()
-        minor = version.minor
-        resources=f"{version.major}.{minor}"
-        #print("version={} minor={} reg={} resources={}".format(version, minor, int(re.sub("[^0-9]", "", minor)), resources))
 
-        if int(re.sub("[^0-9]", "", minor)) >= 25:
-            checkStatus = True
+        eksclient = boto3.client("eks", region_name=resources.region)
+        cluster_metadata = eksclient.describe_cluster(name=resources.cluster)
+        versionStr = cluster_metadata["cluster"]["version"]
+        #version = int(versionStr.split('.')[-1))
+        
+        Info = "EKS Cluster Version {}".format(versionStr)
             
-        self.result = Result(status=checkStatus, resource_type="EKS Cluster Version")
+        self.result = Result(status=True, resource_type="EKS Cluster Version", info=Info)
 
         
         
@@ -166,3 +165,21 @@ class get_nodegroups_provisioners(Rule):
         self.result = Result(status=checkStatus, resource_type="Node groups and Provisioners",resources=[resource],)
                     
 
+class get_fargate_profiles(Rule):
+    _type = "cluster_wide"
+    pillar = "cluster_data"
+    section = "data_plane"
+    message = "Get EKS Fargate Profiles"
+    url = "https://aws.github.io/aws-eks-best-practices/scalability/docs/control-plane/#use-eks-124-or-above"
+
+
+    def check(self, resources: Resources):
+        
+        eksclient = boto3.client("eks", region_name=resources.region)       
+        response = eksclient.list_fargate_profiles(clusterName=resources.cluster,)
+        
+        Info = "EKS Fargate Profiles: " + " ".join(response['fargateProfileNames'])
+        #print(pprint.pformat(response['fargateProfileNames'], indent=4))
+        
+        self.result = Result(status=True, resource_type="EKS Fargate Profiles", info=Info)
+                    
