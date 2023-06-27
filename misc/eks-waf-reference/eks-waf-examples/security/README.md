@@ -1268,6 +1268,115 @@ eksctl create iamidentitymapping --cluster eks126 --arn ${rolearn} --group syste
 
 ```
 
+
+### use_dedicated_iam_role_eks_cluster
+
+```bash
+TRUST="{ \"Version\": \"2012-10-17\", \"Statement\": [ { \"Effect\": \"Allow\", \"Principal\": { \"Service\": \"ec2.amazonaws.com\" }, \"Action\": \"sts:AssumeRole\" } ] }"
+ROLE_ARN=$(aws iam create-role --role-name eks-cluster-creator-role --assume-role-policy-document "$TRUST" --query 'Role.Arn')
+echo $ROLE_ARN
+export ROLE_NAME="eks-cluster-creator-role"
+arn:aws:iam::000474600478:role/eks-cluster-creator-role
+
+eks:CreateCluster
+eks:DeleteCluster
+eks:DescribeCluster
+eks:ListClusters
+iam:PassRole
+iam:GetRole
+
+
+
+cat > eks-cluster-creator-iam-policy.json <<EOF
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Action": [
+                "eks:CreateCluster",
+                "eks:DescribeCluster",
+                "eks:DeleteCluster",
+                "eks:UpdateClusterVersion",
+                "eks:UpdateClusterConfig",
+                "eks:CreateFargateProfile"
+            ],
+            "Resource": "*"
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "eks:DescribeFargateProfile",
+                "eks:DeleteFargateProfile"
+            ],
+            "Resource": "*"
+        },
+        {
+              "Action": "iam:GetRole",
+              "Effect": "Allow",
+              "Resource": "*"
+        },
+        {
+              "Action": "iam:CreateServiceLinkedRole",
+              "Effect": "Allow",
+              "Resource": "*"
+        }
+    ]
+}
+EOF
+
+
+
+    
+    
+POLICY_ARN=$(aws iam create-policy  --policy-name eks-cluster-creator-iam-policy     --policy-document file://eks-cluster-creator-iam-policy.json --query "Policy.Arn" | sed 's/"//g')
+echo $POLICY_ARN
+
+aws iam attach-role-policy --region=$AWS_REGION --role-name=$ROLE_NAME --policy-arn=$POLICY_ARN
+
+
+
+aws iam delete-policy --policy-arn arn:aws:iam::000474600478:policy/eks-cluster-creator-iam-policy
+
+
+{
+    "Policy": {
+        "PolicyName": "eks-cluster-creator-iam-policy",
+        "PolicyId": "ANPAQAHCJ2QPFDK357KPS",
+        "Arn": "arn:aws:iam::000474600478:policy/eks-cluster-creator-iam-policy",
+        "Path": "/",
+        "DefaultVersionId": "v1",
+        "AttachmentCount": 0,
+        "PermissionsBoundaryUsageCount": 0,
+        "IsAttachable": true,
+        "CreateDate": "2023-06-27T12:28:01+00:00",
+        "UpdateDate": "2023-06-27T12:28:01+00:00"
+    }
+}  
+
+aws iam create-instance-profile --instance-profile-name eks-cluster-creator-instance_profile --query 
+
+{
+    "InstanceProfile": {
+        "Path": "/",
+        "InstanceProfileName": "eks-cluster-creator-instance_profile",
+        "InstanceProfileId": "AIPAQAHCJ2QPPGDRATSR6",
+        "Arn": "arn:aws:iam::000474600478:instance-profile/eks-cluster-creator-instance_profile",
+        "CreateDate": "2023-06-27T12:43:35+00:00",
+        "Roles": []
+    }
+}
+
+aws iam add-role-to-instance-profile --role-name $ROLE_NAME --instance-profile-name eks-cluster-creator-instance_profile
+
+
+eksdemo create cluster blue --os bottlerocket -i t3.xlarge -N 3 --dry-run
+
+
+```
+
+
+
 # namespace_based
 ## iam
 
