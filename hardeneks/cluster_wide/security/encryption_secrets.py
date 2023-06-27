@@ -1,8 +1,8 @@
 from ...resources import Resources
 from hardeneks.rules import Rule, Result
 import boto3
-import json
 import pprint
+from hardeneks import helpers
 
 class use_encryption_with_ebs(Rule):
     _type = "cluster_wide"
@@ -141,4 +141,39 @@ class rotate_cmk_for_eks_envelope_encryption(Rule):
  
         self.result = Result(status=Status, resource_type="EKS Envelope Encryption", info=Info)
         
- 
+        
+class use_external_secret_provider_with_aws_secret_manager(Rule):
+    _type = "cluster_wide"
+    pillar = "security"
+    section = "encryption_secrets"
+    message = "Use an external secrets provider"
+    url = "https://aws.github.io/aws-eks-best-practices/security/docs/data/#use-an-external-secrets-provider"
+
+    def check(self, resources: Resources):
+        Status = False
+        Info = ""
+        
+        (ret1, serviceData) = helpers.is_daemonset_exists_in_cluster("secrets-provider-aws-secrets-store-csi-driver-provider-aws")
+        if ret1:
+            Info += "ASCP is deployed"
+        else:
+            Info += "ASCP is not deployed"
+        
+        (ret2, serviceData) = helpers.is_daemonset_exists_in_cluster("csi-secrets-store-secrets-store-csi-driver")
+        
+        if ret2:
+            Info += " Secrets CSI Driver is deployed"
+        else:
+            Info += " Secrets CSI Driver is not deployed"
+            
+        #print("ret1={} ret2={}".format(ret1,ret2))
+        if ret1 and ret2:
+            Status = True
+    
+
+        self.result = Result(
+            status=Status,
+            resource_type="Service",
+            info=Info,
+        )
+        

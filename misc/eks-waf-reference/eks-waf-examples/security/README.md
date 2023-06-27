@@ -1221,6 +1221,34 @@ Sat Jun 24 17:35:14 UTC 2023
 
 
 ```
+### use_external_secret_provider_with_aws_secret_manager
+
+```bash
+
+helm repo add secrets-store-csi-driver1 \
+  https://kubernetes-sigs.github.io/secrets-store-csi-driver/charts
+
+helm install -n kube-system csi-secrets-store \
+  --set syncSecret.enabled=true \
+  --set enableSecretRotation=true \
+  secrets-store-csi-driver1/secrets-store-csi-driver
+  
+  
+ 
+
+helm repo add aws-secrets-manager https://aws.github.io/secrets-store-csi-driver-provider-aws
+helm install -n kube-system secrets-provider-aws aws-secrets-manager/secrets-store-csi-driver-provider-aws
+
+NAME: secrets-provider-aws
+LAST DEPLOYED: Tue Jun 27 04:58:21 2023
+NAMESPACE: kube-system
+STATUS: deployed
+REVISION: 1
+TEST SUITE: None
+```
+
+
+
 # namespace_based
 ## iam
 
