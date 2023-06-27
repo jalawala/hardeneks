@@ -243,7 +243,8 @@ class create_cluster_with_dedicated_iam_role(Rule):
     def check(self, resources: Resources):
 
         Status = True
-        Info = "system:masters does not exist in aws-auth config map"
+        
+        
         
         url = "http://169.254.169.254/latest/meta-data/instance-id"
         response = requests.get(url)
@@ -266,25 +267,28 @@ class create_cluster_with_dedicated_iam_role(Rule):
         role_arn = response["InstanceProfile"]["Roles"][0]["Arn"]
         print(role_arn)
         
+        Info = "IAM Role {} does not have AdministratorAccess policy".format(role_arn)
+        
         attached_policies = iamclient.list_attached_role_policies(
             RoleName=role_name)["AttachedPolicies"]
             
         inline_policies = iamclient.list_role_policies(RoleName=role_name)["PolicyNames" ]
         
-        print(pprint.pformat(attached_policies, indent=4))
-        print(pprint.pformat(inline_policies, indent=4))
+        #print(pprint.pformat(attached_policies, indent=4))
+        #print(pprint.pformat(inline_policies, indent=4))
+        
+        for policy in attached_policies:
+            if policy['PolicyName'] == 'AdministratorAccess':
+                Status = False
+                Info = "IAM Role {} has AdministratorAccess policy".format(role_arn)
+        
         
         #print("attached_policies={} inline_policies={}".format(attached_policies, inline_policies))
         
-        
-        
-                
-        
-        
-    
+
         #print(pprint.pformat(instance_profile_arn, indent=4))
         
-        self.result = Result(status=True, resource_type="dedicated cluster role",info=Info)    
+        self.result = Result(status=Status, resource_type="dedicated cluster role",info=Info)    
     
     
     
