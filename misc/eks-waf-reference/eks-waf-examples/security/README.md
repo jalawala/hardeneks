@@ -1370,7 +1370,10 @@ aws iam create-instance-profile --instance-profile-name eks-cluster-creator-inst
 aws iam add-role-to-instance-profile --role-name $ROLE_NAME --instance-profile-name eks-cluster-creator-instance_profile
 
 
-eksdemo create cluster blue --os bottlerocket -i t3.xlarge -N 3 --dry-run
+
+
+eksdemo create cluster eksdemo --os bottlerocket -i t3.xlarge -N 3 --region us-east-1
+eksdemo create nodegroup br-mng --cluster eksdemo --os bottlerocket -i t3.xlarge -N 3 --region us-east-1
 
 
 ```

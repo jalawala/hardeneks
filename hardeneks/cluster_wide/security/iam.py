@@ -4,6 +4,7 @@ import kubernetes
 from hardeneks.rules import Rule, Result
 from ...resources import Resources
 import pprint
+import requests
 
 class disable_anonymous_access_for_cluster_roles(Rule):
     _type = "cluster_wide"
@@ -229,3 +230,62 @@ class do_not_assign_system_masters_for_normal_users(Rule):
     
     
     
+    
+class create_cluster_with_dedicated_iam_role(Rule):
+    
+    _type = "cluster_wide"
+    pillar = "security"
+    section = "iam"
+    message = "Create the cluster with a dedicated IAM role"
+    url = "https://aws.github.io/aws-eks-best-practices/security/docs/iam/#create-the-cluster-with-a-dedicated-iam-role"
+
+
+    def check(self, resources: Resources):
+
+        Status = True
+        Info = "system:masters does not exist in aws-auth config map"
+        
+        url = "http://169.254.169.254/latest/meta-data/instance-id"
+        response = requests.get(url)
+        instance_id = response.text
+        #print(pprint.pformat(response.text, indent=4))
+
+        ec2client = boto3.client("ec2", region_name=resources.region)                
+        response = ec2client.describe_instances(InstanceIds=[instance_id,])
+        instance = response["Reservations"][0]["Instances"][0]
+        instance_profile_arn = instance["IamInstanceProfile"]["Arn"]
+        
+        iamclient = boto3.client("iam")
+        
+        
+        
+        response = iamclient.get_instance_profile(InstanceProfileName='eksworkshop-admin')
+        #response = iamclient.get_instance_profile(InstanceProfileName=instance_profile_arn)
+    
+        role_name = response["InstanceProfile"]["Roles"][0]["RoleName"]
+        role_arn = response["InstanceProfile"]["Roles"][0]["Arn"]
+        print(role_arn)
+        
+        attached_policies = iamclient.list_attached_role_policies(
+            RoleName=role_name)["AttachedPolicies"]
+            
+        inline_policies = iamclient.list_role_policies(RoleName=role_name)["PolicyNames" ]
+        
+        print(pprint.pformat(attached_policies, indent=4))
+        print(pprint.pformat(inline_policies, indent=4))
+        
+        #print("attached_policies={} inline_policies={}".format(attached_policies, inline_policies))
+        
+        
+        
+                
+        
+        
+    
+        #print(pprint.pformat(instance_profile_arn, indent=4))
+        
+        self.result = Result(status=True, resource_type="dedicated cluster role",info=Info)    
+    
+    
+    
+        

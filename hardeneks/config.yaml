@@ -31,7 +31,7 @@ rules:
         - restrict_wildcard_for_cluster_roles
         - do_not_assign_system_masters_for_normal_users
         - use_iam_role_for_multiple_iam_users
-        - use_dedicated_iam_role_eks_cluster
+        - create_cluster_with_dedicated_iam_role
       multi_tenancy:
         - ensure_namespace_quotas_exist
       detective_controls:
