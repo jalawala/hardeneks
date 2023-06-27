@@ -107,6 +107,8 @@ rules:
         - schedule_replicas_across_nodes
         - run_multiple_replicas
         - avoid_running_singleton_pods
+        - check_readiness_probes
+        - check_liveness_probes
     networking:
       load-balancing:
         - use_ip_target_type_load_balancers

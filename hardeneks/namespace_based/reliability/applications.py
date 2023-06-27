@@ -138,17 +138,19 @@ class check_readiness_probes(Rule):
         for pod in namespaced_resources.pods:
             for container in pod.spec.containers:
                 if not container.readiness_probe:
-                    offenders.append(pod)
-
-        self.result = Result(status=True, resource_type="Pod", namespace=namespaced_resources.namespace)
+                    offenders.append(pod.metadata.name)
+                    
         if offenders:
+            resource = " ".join(offenders)
             self.result = Result(
                 status=False,
                 resource_type="Pod",
-                resources=[i.metadata.name for i in offenders],
+                resources=[resource],
                 namespace=namespaced_resources.namespace,
             )
-
+        else:
+            self.result = Result(status=True, resource_type="Pod", namespace=namespaced_resources.namespace)
+            
 
 class check_liveness_probes(Rule):
     _type = "namespace_based"
@@ -164,13 +166,17 @@ class check_liveness_probes(Rule):
         for pod in namespaced_resources.pods:
             for container in pod.spec.containers:
                 if not container.liveness_probe:
-                    offenders.append(pod)
+                    offenders.append(pod.metadata.name)
 
-        self.result = Result(status=True, resource_type="Pod", namespace=namespaced_resources.namespace)
+        
         if offenders:
+            resource = " ".join(offenders)
             self.result = Result(
                 status=False,
                 resource_type="Pod",
-                resources=[i.metadata.name for i in offenders],
+                resources=[resource],
                 namespace=namespaced_resources.namespace,
             )
+        else:
+            self.result = Result(status=True, resource_type="Pod", namespace=namespaced_resources.namespace)
+            
