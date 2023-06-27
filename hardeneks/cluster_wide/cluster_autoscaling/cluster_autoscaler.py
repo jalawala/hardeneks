@@ -4,7 +4,7 @@ import kubernetes
 from hardeneks.rules import Rule, Result
 from ...resources import Resources
 from hardeneks import helpers
-
+import pprint
 
 def _check_condition_strings_in_policy_statement(statement, clusterName):
     
@@ -416,4 +416,75 @@ class ensure_uniform_instance_types_in_nodegroups(Rule):
                 resources=uniformNodeGroups,
                 info = Info
             )
+
+class configure_node_groups_for_mixedinstances(Rule):
+    _type = "cluster_wide"
+    pillar = "cluster_autoscaling"
+    section = "cluster_autoscaler"
+    message = "Configuring your Node Groups for MixedInstancePolicy"
+    url = "https://aws.github.io/aws-eks-best-practices/cluster-autoscaling/#configuring-your-node-groups"
+
+    def check(self, resources):
+        
+        Status = True
+        offenders = []
+        
+        eksclient = boto3.client("eks", region_name=resources.region)
+        response = eksclient.list_nodegroups(clusterName=resources.cluster)
+        #print(pprint.pformat(response['nodegroups'], indent=4))
+        
+        Info = "MNGs with no diversification "
+        
+        for mng in response['nodegroups']:
+            mng_data = eksclient.describe_nodegroup(
+                clusterName=resources.cluster,
+                nodegroupName=mng
+            )
+            instance_types = mng_data['nodegroup']['instanceTypes']
+            #subnets = mng_data['nodegroup']['subnets']
             
+            if len(instance_types) == 1:
+                Status = False
+                Info += " {}".format(mng)
+                
+        self.result = Result(
+            status=Status,
+            resource_type="MNG",
+            info = Info
+        )
+                        
+class configure_node_groups_for_ha(Rule):
+    _type = "cluster_wide"
+    pillar = "cluster_autoscaling"
+    section = "cluster_autoscaler"
+    message = "Configuring Node Groups for HA"
+    url = "https://aws.github.io/aws-eks-best-practices/cluster-autoscaling/#configuring-your-node-groups"
+
+    def check(self, resources):
+        
+        Status = True
+        offenders = []
+        
+        eksclient = boto3.client("eks", region_name=resources.region)
+        response = eksclient.list_nodegroups(clusterName=resources.cluster)
+        #print(pprint.pformat(response['nodegroups'], indent=4))
+        
+        Info = "MNGs with less 3 Subnets"
+        
+        for mng in response['nodegroups']:
+            mng_data = eksclient.describe_nodegroup(
+                clusterName=resources.cluster,
+                nodegroupName=mng
+            )
+            #instance_types = mng_data['nodegroup']['instanceTypes']
+            subnets = mng_data['nodegroup']['subnets']
+            
+            if len(subnets) < 3:
+                Status = False
+                Info += " {}".format(mng)
+                
+        self.result = Result(
+            status=Status,
+            resource_type="MNG",
+            info = Info
+        )                        

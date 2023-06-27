@@ -72,6 +72,8 @@ rules:
         - use_managed_nodegroups
         - ensure_cluster_autoscaler_has_three_replicas
         - ensure_uniform_instance_types_in_nodegroups
+        - configure_node_groups_for_mixedinstances
+        - configure_node_groups_for_ha
     networking:
       vpc_subnets:
         - cluster_endpoint_public_and_private_mode
