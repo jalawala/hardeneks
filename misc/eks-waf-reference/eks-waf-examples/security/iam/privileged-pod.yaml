@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: privileged-pod
+spec:
+  containers:
+  - name: privileged-container
+    securityContext:
+      privileged: true  
+    image: ubuntu
+    resources:
+      requests:
+        cpu: "0.2"
+        memory: "256Mi"
+      limits:
+        cpu: "1"
+        memory: "1Gi"    
+    command: ["/bin/bash"]
+    args: ["-c", "echo 'This is a privileged pod'"]

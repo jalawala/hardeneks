@@ -94,6 +94,7 @@ rules:
         - restrict_wildcard_for_roles
         - disable_service_account_token_mounts
         - disable_run_as_root_user
+        - restrict_containers_run_as_privileged
         - use_dedicated_service_accounts_for_each_deployment
         - use_dedicated_service_accounts_for_each_stateful_set
         - use_dedicated_service_accounts_for_each_daemon_set

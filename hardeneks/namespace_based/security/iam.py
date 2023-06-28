@@ -140,6 +140,46 @@ class disable_run_as_root_user(Rule):
         else:
             self.result = Result(status=True, resource_type="Pod", namespace=namespaced_resources.namespace, info=Info)
 
+
+class restrict_containers_run_as_privileged(Rule):
+    
+    _type = "namespace_based"
+    pillar = "security"
+    section = "iam"
+    message = "Restrict the containers that can run as privileged"
+    url = "https://aws.github.io/aws-eks-best-practices/security/docs/pods/#restrict-the-containers-that-can-run-as-privileged"
+
+    def check(self, namespaced_resources: NamespacedResources):
+
+        offenders = []
+        Info = "All pods do not run as privielged"
+
+        for pod in namespaced_resources.pods:
+            security_context = pod.spec.security_context
+            containers = pod.spec.containers
+            for container in containers:
+                security_context = container.security_context
+                
+                if security_context:
+                    #print("pod={} security_context={}".format(pod.metadata.name, security_context))
+                    #print(type(security_context))                    
+                    
+                    if security_context.privileged == True:
+                        #print("privileged={}".format(security_context.privileged))
+                        offenders.append(pod.metadata.name)
+            
+        if offenders:
+            Info = "Pods running as privileged container : " + " ".join(offenders) 
+            self.result = Result(
+                status=False,
+                resource_type="Pod",
+                namespace=namespaced_resources.namespace,
+                info = Info
+            )
+        else:
+            self.result = Result(status=True, resource_type="Pod", namespace=namespaced_resources.namespace, info=Info)
+
+
 class use_dedicated_service_accounts_for_each_deployment(Rule):
     _type = "namespace_based"
     pillar = "security"
