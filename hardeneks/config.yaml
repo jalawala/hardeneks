@@ -53,6 +53,8 @@ rules:
         - use_OS_optimized_for_running_containers
       pod_security:
         - ensure_namespace_psa_exist
+      regulatory_compliance:
+        - policy_as_code        
       image_security:
         - use_immutable_tags_with_ecr
     reliability:

@@ -36,7 +36,10 @@ hardeneks --namespace default,kubecost --pillars reliability
 
 hardeneks --pillars scalability  --only_cluster_level_rules
 
-hardeneks --pillars security --sections iam --only_cluster_level_rules --rules restrict_access_to_instance_profile
+hardeneks --pillars security --sections regulatory_compliance --only_cluster_level_rules --rules policy_as_code
+
+
+
 
 hardeneks --pillars security --sections pod_security --namespace default --only_namespace_level_rules --rules disable_service_discovery
 
