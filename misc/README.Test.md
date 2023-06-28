@@ -34,18 +34,20 @@ hardeneks --only_namespace_level_rules
 
 hardeneks --namespace default,kubecost --pillars reliability
 
-hardeneks --pillars cluster_data 
+hardeneks --pillars scalability  --only_cluster_level_rules
 
 hardeneks --pillars cluster_data,networking --only_cluster_level_rules
 hardeneks --pillars security --only_cluster_level_rules
 
+hardeneks --pillars security --sections iam --only_cluster_level_rules
+
 hardeneks --pillars reliability --only_cluster_level_rules
 
-hardeneks --pillars scalability --only_cluster_level_rules
+hardeneks --pillars cluster_autoscaling --only_cluster_level_rules
 hardeneks --pillars networking --only_cluster_level_rules
 
 hardeneks --pillars security --only_namespace_level_rules
-hardeneks --pillars security --only_namespace_level_rules --namespace default
+hardeneks --pillars reliability --only_namespace_level_rules --namespace default
 
 hardeneks --pillars networking --only_namespace_level_rules --namespace default
 

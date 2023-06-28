@@ -12,7 +12,7 @@ def harden(resources, config, _type):
         #print("pillar={} _type={}".format(pillar, _type))
         if pillar in hardeneks.pillarsList:
             for section in config[pillar]:
-                if section in hardeneks.sectionsList[pillar]:
+                if section in hardeneks.sectionsMap[pillar]:
                     for rule in config[pillar][section]:
                         #print("Checking rule={} section={} pillar={} scope={}".format(rule, section, pillar, _type))
                         module = import_module(f"hardeneks.{_type}.{pillar}.{section}")

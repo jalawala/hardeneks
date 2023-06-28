@@ -27,8 +27,9 @@ console = Console(record=True)
 
 pillarsList = []
 ignoredNSList = []
+sectionsMap = {}
 
-sectionsList = {
+defaultSectionsMap = {
     'cluster_data': ['cluster_data'],
     #'security': ['iam', 'multi_tenancy', 'detective_controls', 'network_security', 'encryption_secrets', 'infrastructure_security', 'pod_security', 'image_security'],
     'security': ['infrastructure_security'],
@@ -157,6 +158,12 @@ def _get_cluster_name(context, region):
 def _get_default_pillars() -> list:
     return ["cluster_data", "security", "reliability", "cluster_autoscaling", "scalability"]
 
+def _get_default_sections() -> list:
+    return defaultSectionsMap
+
+
+
+
 def get_pillars_list() -> list:
     return pillarsList
     
@@ -282,6 +289,10 @@ def run_hardeneks(
         default=None,
         help="Specific pillars to harden. Default is all pillars.",
     ),
+    sections: str = typer.Option(
+        default=None,
+        help="Specific sections for a given pillar to harden. Default is all sections. --pillars option must be used specifying only one pillar",
+    ),    
     only_cluster_level_rules: bool = typer.Option(
         False,
         "--only_cluster_level_rules",
@@ -309,7 +320,7 @@ def run_hardeneks(
         None
 
     """
-    global pillarsList, ignoredNSList
+    global pillarsList, ignoredNSList, sectionsMap
     
     (context, cluster) = _get_cluster_context_and_name(context, cluster)
     
@@ -357,8 +368,23 @@ def run_hardeneks(
         pillarsList = _get_default_pillars()
     else:
         pillarsList = pillars.split(',')
-                
-    print("Running hardeneks for selected pillars list={} and namespaces={}".format(pillarsList, namespaces))
+        
+    if not sections:
+        sectionsMap = _get_default_sections()
+    else:
+        if not pillars:
+            print("--pillars option must be used specifying only one pillar, when using --sections option. Exiting...")
+            exit()
+        else:
+            if len(pillarsList) > 1:
+                print("Specify only one pillar with --pillar option when using --sections option. Exiting...")
+                exit()
+        pillar = pillarsList[0]
+        sectionsList = sections.split(',')
+        sectionsMap[pillar] = sectionsList
+        
+                    
+    print("Running hardeneks for selected pillars list={}, sectionsMap={} and namespaces={}".format(pillarsList, sectionsMap, namespaces))
     
     rules = config["rules"]
 
