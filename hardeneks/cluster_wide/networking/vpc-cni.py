@@ -35,8 +35,8 @@ class use_small_dedicated_cluster_subnets(Rule):
     _type = "cluster_wide"
     pillar = "networking"
     section = "vpc-cni"
-    message = "Use dedicated subnets of size /28 for Cluster"
-    url = "https://aws.github.io/aws-eks-best-practices/scalability/docs/control-plane/#use-eks-124-or-above"
+    message = "Plan for Growth"
+    url = "https://aws.github.io/aws-eks-best-practices/networking/vpc-cni/#plan-for-growth"
 
 
     def check(self, resources: Resources):

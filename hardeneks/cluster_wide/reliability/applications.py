@@ -8,7 +8,7 @@ class check_metrics_server_is_running(Rule):
     _type = "cluster_wide"
     pillar = "reliability"
     section = "applications"
-    message = "Metrics server is not deployed."
+    message = "Run Kubernetes Metrics Server"
     url = "https://aws.github.io/aws-eks-best-practices/reliability/docs/application/#run-kubernetes-metrics-server"
 
     def check(self, resources: Resources):

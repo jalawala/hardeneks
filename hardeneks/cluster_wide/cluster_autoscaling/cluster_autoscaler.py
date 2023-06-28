@@ -150,7 +150,7 @@ class ensure_cluster_autoscaler_has_autodiscovery_mode(Rule):
     _type = "cluster_wide"
     pillar = "cluster_autoscaling"
     section = "cluster_autoscaler"
-    message = "Ensure Auto discovery of Node groups enabled for K8s CA"
+    message = "Operating the Cluster Autoscaler"
     url = "https://aws.github.io/aws-eks-best-practices/cluster-autoscaling/#operating-the-cluster-autoscaler"
 
     def check(self, resources):
@@ -199,7 +199,7 @@ class employ_least_privileged_access_cluster_autoscaler_role(Rule):
     _type = "cluster_wide"
     pillar = "cluster_autoscaling"
     section = "cluster_autoscaler"
-    message = "Cluster autoscaler role has unnecessary actions assigned."
+    message = "Employ least privileged access to the IAM role"
     url = "https://aws.github.io/aws-eks-best-practices/cluster-autoscaling/#employ-least-privileged-access-to-the-iam-role"
 
     def check(self, resources):
@@ -308,7 +308,8 @@ class ensure_cluster_autoscaler_has_three_replicas(Rule):
     pillar = "cluster_autoscaling"
     section = "cluster_autoscaler"
     message = "Ensure Cluster Autoscaler has 3 replicas for HA"
-    url = "https://aws.github.io/aws-eks-best-practices/cluster-autoscaling/#configuring-your-node-groups"
+    url = "https://aws.github.io/aws-eks-best-practices/cluster-autoscaling/#operating-the-cluster-autoscaler"
+    
 
     def check(self, resources):
         Status = False
@@ -332,8 +333,8 @@ class ensure_uniform_instance_types_in_nodegroups(Rule):
     _type = "cluster_wide"
     pillar = "cluster_autoscaling"
     section = "cluster_autoscaler"
-    message = "Ensure Uniform Instance Types in Node groups"
-    url = "https://aws.github.io/aws-eks-best-practices/cluster-autoscaling/"
+    message = "Configuring your Node Groups"
+    url = "https://aws.github.io/aws-eks-best-practices/cluster-autoscaling/#configuring-your-node-groups"
 
     def check(self, resources):
         
@@ -421,7 +422,7 @@ class configure_node_groups_for_mixedinstances(Rule):
     _type = "cluster_wide"
     pillar = "cluster_autoscaling"
     section = "cluster_autoscaler"
-    message = "Configuring your Node Groups for MixedInstancePolicy"
+    message = "Configuring your Node Groups"
     url = "https://aws.github.io/aws-eks-best-practices/cluster-autoscaling/#configuring-your-node-groups"
 
     def check(self, resources):

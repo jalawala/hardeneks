@@ -6,7 +6,7 @@ class avoid_running_singleton_pods(Rule):
     _type = "namespace_based"
     pillar = "reliability"
     section = "applications"
-    message = "Avoid running pods without deployments."
+    message = "Avoid running singleton Pods"
     url = "https://aws.github.io/aws-eks-best-practices/reliability/docs/application/#avoid-running-singleton-pods"
 
     def check(self, namespaced_resources: NamespacedResources):
@@ -33,7 +33,7 @@ class run_multiple_replicas(Rule):
     _type = "namespace_based"
     pillar = "reliability"
     section = "applications"
-    message = "Avoid running single replica deployments."
+    message = "Run multiple replicas"
     url = "https://aws.github.io/aws-eks-best-practices/reliability/docs/application/#run-multiple-replicas"
 
     def check(self, namespaced_resources: NamespacedResources):
@@ -60,7 +60,7 @@ class schedule_replicas_across_nodes(Rule):
     _type = "namespace_based"
     pillar = "reliability"
     section = "applications"
-    message = "Spread replicas across AZs and Nodes."
+    message = "Schedule replicas across nodes"
     url = "https://aws.github.io/aws-eks-best-practices/reliability/docs/application/#schedule-replicas-across-nodes"
 
     def check(self, namespaced_resources: NamespacedResources):
