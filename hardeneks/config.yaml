@@ -57,6 +57,7 @@ rules:
         - policy_as_code        
       image_security:
         - use_immutable_tags_with_ecr
+        - scan_images_for_vulnerabilities
     reliability:
       applications:
         - check_metrics_server_is_running

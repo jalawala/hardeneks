@@ -36,7 +36,7 @@ hardeneks --namespace default,kubecost --pillars reliability
 
 hardeneks --pillars scalability  --only_cluster_level_rules
 
-hardeneks --pillars security --sections regulatory_compliance --only_cluster_level_rules --rules policy_as_code
+hardeneks --pillars security --sections image_security --only_cluster_level_rules --rules scan_images_for_vulnerabilities
 
 
 
