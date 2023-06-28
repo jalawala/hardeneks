@@ -38,7 +38,7 @@ hardeneks --pillars scalability  --only_cluster_level_rules
 
 hardeneks --pillars security --sections iam --only_cluster_level_rules --rules restrict_access_to_instance_profile
 
-hardeneks --pillars security --sections iam --namespaces default --only_namespace_level_rules --rules restrict_containers_run_as_privileged
+hardeneks --pillars security --sections pod_security --namespace default --only_namespace_level_rules --rules disable_service_discovery
 
 
 hardeneks --pillars cluster_data,networking --only_cluster_level_rules

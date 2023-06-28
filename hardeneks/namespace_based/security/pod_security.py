@@ -1,6 +1,6 @@
 from hardeneks.rules import Rule, Result
 from ...resources import NamespacedResources
-
+import pprint
 
 class disallow_container_socket_mount(Rule):
     _type = "namespace_based"
@@ -170,3 +170,36 @@ class check_read_only_root_file_system(Rule):
             )
         else:
             self.result = Result(status=True, resource_type="Pod", namespace=namespaced_resources.namespace)
+            
+class disable_service_discovery(Rule):
+    _type = "namespace_based"
+    pillar = "security"
+    section = "iam"
+    message = "Disable service discovery"
+    url = "https://aws.github.io/aws-eks-best-practices/security/docs/pods/#disable-service-discovery"
+
+    def check(self, namespaced_resources: NamespacedResources):
+
+        offenders = []
+        Info = "All pods don't use coreDNS for Service Discovery"
+
+        for pod in namespaced_resources.pods:
+            #print(pprint.pformat(pod, indent=4))
+            #print("pod = {} dnsPolicy = {} enable_service_links={}".format(pod.metadata.name, pod.spec.dns_policy, pod.spec.enable_service_links))
+            
+            if pod.spec.dns_policy != 'Default' and pod.spec.enable_service_links != False:
+                offenders.append(pod.metadata.name)
+            
+        if offenders:
+            Info = "Pods using coreDNS for Service Discovery : " + " ".join(offenders) 
+            self.result = Result(
+                status=False,
+                resource_type="Pod",
+                namespace=namespaced_resources.namespace,
+                info = Info
+            )
+        else:
+            self.result = Result(status=True, resource_type="Pod", namespace=namespaced_resources.namespace, info=Info)
+
+            
+            

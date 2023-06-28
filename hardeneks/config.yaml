@@ -104,6 +104,7 @@ rules:
         - set_requests_limits_for_containers
         - disallow_privilege_escalation
         - check_read_only_root_file_system
+        - disable_service_discovery
       network_security:
         - use_encryption_with_aws_load_balancers
       encryption_secrets:
