@@ -82,7 +82,7 @@ class disable_service_account_token_mounts(Rule):
     _type = "namespace_based"
     pillar = "security"
     section = "iam"
-    message = "Auto-mounting of Service Account tokens is not allowed."
+    message = "Disable auto-mounting of service account tokens"
     url = "https://aws.github.io/aws-eks-best-practices/security/docs/iam/#disable-auto-mounting-of-service-account-tokens"
 
     def check(self, namespaced_resources: NamespacedResources):

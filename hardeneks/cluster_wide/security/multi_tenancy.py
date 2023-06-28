@@ -7,7 +7,7 @@ class ensure_namespace_quotas_exist(Rule):
     pillar = "security"
     section = "multi_tenancy"
     message = "Namespaces should have quotas assigned."
-    url = "https://aws.github.io/aws-eks-best-practices/security/docs/multitenancy/#namespaces"
+    url = "https://aws.github.io/aws-eks-best-practices/security/docs/multitenancy/#quotas"
 
     def check(self, resources: Resources):
         offenders = resources.namespaces

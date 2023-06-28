@@ -6,7 +6,7 @@ class disallow_secrets_from_env_vars(Rule):
     _type = "namespace_based"
     pillar = "security"
     section = "encryption_secrets"
-    message = "Disallow secrets from env vars."
+    message = "Use volume mounts instead of environment variables"
     url = "https://aws.github.io/aws-eks-best-practices/security/docs/data/#use-volume-mounts-instead-of-environment-variables"
 
     def check(self, namespaced_resources: NamespacedResources):

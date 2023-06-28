@@ -129,12 +129,14 @@ class check_aws_node_daemonset_service_account(Rule):
         self.result = Result(status=Status, resource_type="IRSA for VPC CNI",info=Info)    
     
 
-class check_access_to_instance_profile(Rule):
+class use_imds_v2(Rule):
+    Use IMDS v2
+    
     _type = "cluster_wide"
     pillar = "security"
     section = "iam"
-    message = "Restrict access to the instance profile assigned to nodes."
-    url = "https://aws.github.io/aws-eks-best-practices/security/docs/iam/#when-your-application-needs-access-to-imds-use-imdsv2-and-increase-the-hop-limit-on-ec2-instances-to-2"
+    message = "When your application needs access to IMDS, use IMDSv2 and increase the hop limit on EC2 instances to 2"
+    url = "\https://aws.github.io/aws-eks-best-practices/security/docs/iam/#when-your-application-needs-access-to-imds-use-imdsv2-and-increase-the-hop-limit-on-ec2-instances-to-2"
 
     def check(self, resources: Resources):
         client = boto3.client("ec2", region_name=resources.region)

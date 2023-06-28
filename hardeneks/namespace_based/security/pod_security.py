@@ -6,7 +6,7 @@ class disallow_container_socket_mount(Rule):
     _type = "namespace_based"
     pillar = "security"
     section = "pod_security"
-    message = "Container socket mounts are not allowed."
+    message = "Never run Docker in Docker or mount the socket in the container"
     url = "https://aws.github.io/aws-eks-best-practices/security/docs/pods/#never-run-docker-in-docker-or-mount-the-socket-in-the-container"
 
     def check(self, namespaced_resources: NamespacedResources):
@@ -41,7 +41,7 @@ class disallow_host_path_or_make_it_read_only(Rule):
     _type = "namespace_based"
     pillar = "security"
     section = "pod_security"
-    message = "Restrict the use of hostpath."
+    message = "Restrict the use of hostPath or if hostPath is necessary restrict which prefixes can be used and configure the volume as read-only"
     url = "https://aws.github.io/aws-eks-best-practices/security/docs/pods/#restrict-the-use-of-hostpath-or-if-hostpath-is-necessary-restrict-which-prefixes-can-be-used-and-configure-the-volume-as-read-only"
 
     def check(self, namespaced_resources: NamespacedResources):
@@ -84,7 +84,7 @@ class set_requests_limits_for_containers(Rule):
     _type = "namespace_based"
     pillar = "security"
     section = "pod_security"
-    message = "Set requests and limits for each container."
+    message = "Set requests and limits for each container to avoid resource contention and DoS attacks"
     url = "https://aws.github.io/aws-eks-best-practices/security/docs/pods/#set-requests-and-limits-for-each-container-to-avoid-resource-contention-and-dos-attacks"
 
     def check(self, namespaced_resources: NamespacedResources):
@@ -114,7 +114,7 @@ class disallow_privilege_escalation(Rule):
     _type = "namespace_based"
     pillar = "security"
     section = "pod_security"
-    message = "Set allowPrivilegeEscalation in the pod spec to false."
+    message = "Do not allow privileged escalation"
     url = "https://aws.github.io/aws-eks-best-practices/security/docs/pods/#do-not-allow-privileged-escalation"
 
     def check(self, namespaced_resources: NamespacedResources):

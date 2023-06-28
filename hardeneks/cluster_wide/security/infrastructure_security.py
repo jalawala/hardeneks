@@ -10,7 +10,7 @@ class deploy_workers_onto_private_subnets(Result):
     _type = "cluster_wide"
     pillar = "security"
     section = "infrastructure_security"
-    message = "Place worker nodes on private subnets."
+    message = "Deploy workers onto private subnets"
     url = "https://aws.github.io/aws-eks-best-practices/security/docs/hosts/#deploy-workers-onto-private-subnets"
 
     def check(self, resources: Resources):
@@ -44,8 +44,8 @@ class make_sure_inspector_is_enabled(Rule):
     _type = "cluster_wide"
     pillar = "security"
     section = "infrastructure_security"
-    message = "Enable Amazon Inspector for ec2 and ecr."
-    url = "https://aws.github.io/aws-eks-best-practices/security/docs/hosts/#deploy-workers-onto-private-subnets"
+    message = "Run Amazon Inspector to assess hosts for exposure, vulnerabilities, and deviations from best practices"
+    url = "Run Amazon Inspector to assess hosts for exposure, vulnerabilities, and deviations from best practices"
 
     def check(self, resources: Resources):
         client = boto3.client("inspector2", region_name=resources.region)

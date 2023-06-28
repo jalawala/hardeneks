@@ -12,7 +12,7 @@ class check_vpc_flow_logs(Rule):
     _type = "cluster_wide"
     pillar = "security"
     section = "network_security"
-    message = "Enable flow logs for your VPC."
+    message = "Log network traffic metadata"
     url = "https://aws.github.io/aws-eks-best-practices/security/docs/network/#log-network-traffic-metadata"
 
     def check(self, resources: Resources):
@@ -66,7 +66,7 @@ class check_default_deny_policy_exists(Rule):
     _type = "cluster_wide"
     pillar = "security"
     section = "network_security"
-    message = "Namespaces that does not have default network deny policies."
+    message = "Create a default deny policy"
     url = "https://aws.github.io/aws-eks-best-practices/security/docs/network/#create-a-default-deny-policy"
 
     def check(self, resources: Resources):
