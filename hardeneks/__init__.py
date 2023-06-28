@@ -26,13 +26,13 @@ app = typer.Typer()
 console = Console(record=True)
 
 pillarsList = []
+rulesList = []
 ignoredNSList = []
 sectionsMap = {}
 
 defaultSectionsMap = {
     'cluster_data': ['cluster_data'],
-    #'security': ['iam', 'multi_tenancy', 'detective_controls', 'network_security', 'encryption_secrets', 'infrastructure_security', 'pod_security', 'image_security'],
-    'security': ['infrastructure_security'],
+    'security': ['iam', 'multi_tenancy', 'detective_controls', 'network_security', 'encryption_secrets', 'infrastructure_security', 'pod_security', 'image_security'],
     'reliability': ['applications'],
     'scalability': ['control_plane'],
     'cluster_autoscaling': ['cluster_autoscaler'],
@@ -292,6 +292,10 @@ def run_hardeneks(
     sections: str = typer.Option(
         default=None,
         help="Specific sections for a given pillar to harden. Default is all sections. --pillars option must be used specifying only one pillar",
+    ),
+    rules: str = typer.Option(
+        default=None,
+        help="Specific rulles to harden. Default is all rules. --pillars, --sections and one of options (--only_cluster_level_rules or --only_namespace_level_rules) must be set",
     ),    
     only_cluster_level_rules: bool = typer.Option(
         False,
@@ -320,7 +324,7 @@ def run_hardeneks(
         None
 
     """
-    global pillarsList, ignoredNSList, sectionsMap
+    global pillarsList, ignoredNSList, sectionsMap, rulesList
     
     (context, cluster) = _get_cluster_context_and_name(context, cluster)
     
@@ -377,16 +381,58 @@ def run_hardeneks(
             exit()
         else:
             if len(pillarsList) > 1:
-                print("Specify only one pillar with --pillar option when using --sections option. Exiting...")
+                print("Specify only one pillar with --pillars option when using --sections option. Exiting...")
                 exit()
         pillar = pillarsList[0]
         sectionsList = sections.split(',')
         sectionsMap[pillar] = sectionsList
+
+    rulesMap = config["rules"]
+    
+    if not rules:
+        rulesList = None
+    else:
+        if not pillars:
+            print("--pillars option must be used specifying only one pillar, when using --rules option. Exiting...")
+            exit()
+        else:
+            if len(pillarsList) > 1:
+                print("Specify only one pillar with --pillars option when using --rules option. Exiting...")
+                exit()
+            else:
+                pillar = pillarsList[0]
+                
+        if not sections:
+            print("--sections option must be used specifying only one section, when using --rules option. Exiting...")
+            exit()
+        else:
+            if len(sectionsList) > 1:
+                print("Specify only one section with --sections option when using --rules option. Exiting...")
+                exit()
+            else:
+                section = sectionsList[0]
+                
+        if not (only_namespace_level_rules or only_cluster_level_rules):
+            print("one of options (--only_cluster_level_rules or --only_namespace_level_rules) must be set when using --rules option. Exiting...")
+            exit()
+        elif only_namespace_level_rules:
+            _type = "namespace_based"
+        elif only_cluster_level_rules:
+            _type = "cluster_wide"
+            
+        rulesPerSectionPerPillarList = rulesMap[_type][pillar][section]
+        
+        rulesList = rules.split(',')
+        
+        for rule in rulesList:
+            if rule not in rulesPerSectionPerPillarList:
+                print("Given Rule {} does not exist in Section {} in Pillar {} at Scope {}. Please check config.yaml. Exiting...".format(rule, section, pillar, _type))
+                exit()
         
                     
-    print("Running hardeneks for selected pillars list={}, sectionsMap={} and namespaces={}".format(pillarsList, sectionsMap, namespaces))
+    print("Running hardeneks for selected pillars list={}, sectionsMap={} and namespaces={} rulesList={}".format(pillarsList, sectionsMap, namespaces, rulesList))
     
-    rules = config["rules"]
+    
 
     resources = Resources(region, context, cluster, namespaces)
     resources.set_resources()
@@ -396,7 +442,7 @@ def run_hardeneks(
     if not only_namespace_level_rules:
         console.rule("[b]Checking cluster wide rules", characters="- ")
         console.print()  
-        cluster_wide_results = harden(resources, rules, "cluster_wide")
+        cluster_wide_results = harden(resources, rulesMap, "cluster_wide")
         results = results + cluster_wide_results
     #print("results={}".format(results))
 
@@ -407,7 +453,7 @@ def run_hardeneks(
             resources = NamespacedResources(region, context, cluster, ns)
             resources.set_resources()
             #print("calling harden for ns={}".format(ns))
-            namespace_based_results = harden(resources, rules, "namespace_based")
+            namespace_based_results = harden(resources, rulesMap, "namespace_based")
             #print("ns={} namespace_based_results={}".format(ns, namespace_based_results))
             #print_consolidated_results(namespace_based_results)
             results = results + namespace_based_results

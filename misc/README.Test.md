@@ -36,10 +36,15 @@ hardeneks --namespace default,kubecost --pillars reliability
 
 hardeneks --pillars scalability  --only_cluster_level_rules
 
+hardeneks --pillars security --sections iam --only_cluster_level_rules --rules disable_anonymous_access_for_cluster_roles
+
+hardeneks --pillars security --sections iam --rules disable_anonymous_access_for_cluster_roles
+
+
 hardeneks --pillars cluster_data,networking --only_cluster_level_rules
 hardeneks --pillars security --only_cluster_level_rules
 
-hardeneks --pillars security --sections iam --only_cluster_level_rules
+hardeneks --pillars security --sections iam,multi_tenancy --only_cluster_level_rules
 
 hardeneks --pillars reliability --only_cluster_level_rules
 

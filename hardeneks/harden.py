@@ -2,8 +2,8 @@ from importlib import import_module
 import hardeneks
 
 
-def harden(resources, config, _type):
-    config = config[_type]
+def harden(resources, rulesMap, _type):
+    config = rulesMap[_type]
     results = []
     #pillarsList = get_pillars_list()
     #print("pillarsList={} in hardeneks".format(hardeneks.pillarsList))
@@ -13,7 +13,13 @@ def harden(resources, config, _type):
         if pillar in hardeneks.pillarsList:
             for section in config[pillar]:
                 if section in hardeneks.sectionsMap[pillar]:
-                    for rule in config[pillar][section]:
+                    
+                    if hardeneks.rulesList:
+                        selectedRulesList = hardeneks.rulesList
+                    else:
+                        selectedRulesList = config[pillar][section]    
+                    
+                    for rule in selectedRulesList:
                         #print("Checking rule={} section={} pillar={} scope={}".format(rule, section, pillar, _type))
                         module = import_module(f"hardeneks.{_type}.{pillar}.{section}")
                         try:
