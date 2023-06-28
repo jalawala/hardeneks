@@ -130,7 +130,7 @@ class check_aws_node_daemonset_service_account(Rule):
     
 
 class use_imds_v2(Rule):
-    Use IMDS v2
+    
     
     _type = "cluster_wide"
     pillar = "security"
@@ -198,6 +198,104 @@ class use_iam_role_for_multiple_iam_users(Rule):
         
         self.result = Result(status=Status, resource_type="iam users",info=Info)    
     
+
+
+class use_imds_v2(Rule):
+    
+    
+    _type = "cluster_wide"
+    pillar = "security"
+    section = "iam"
+    message = "When your application needs access to IMDS, use IMDSv2 and increase the hop limit on EC2 instances to 2"
+    url = "\https://aws.github.io/aws-eks-best-practices/security/docs/iam/#when-your-application-needs-access-to-imds-use-imdsv2-and-increase-the-hop-limit-on-ec2-instances-to-2"
+
+    def check(self, resources: Resources):
+        client = boto3.client("ec2", region_name=resources.region)
+        offenders = []
+        Status = False
+
+        instance_metadata = client.describe_instances(
+            Filters=[
+                {
+                    "Name": "tag:aws:eks:cluster-name",
+                    "Values": [
+                        resources.cluster,
+                    ],
+                },
+           ]
+        )
+
+        for instance in instance_metadata["Reservations"]:
+            
+            #print("MetadataOptions={}".format(instance["Instances"][0]["MetadataOptions"]))
+            HttpPutResponseHopLimit =  instance["Instances"][0]["MetadataOptions"]["HttpPutResponseHopLimit"]
+            HttpEndpoint = instance["Instances"][0]["MetadataOptions"]["HttpEndpoint"]
+            HttpTokens = instance["Instances"][0]["MetadataOptions"]["HttpTokens"]
+            Info = "HttpPutResponseHopLimit : {} HttpEndpoint : {} HttpTokens : {}".format(HttpPutResponseHopLimit, HttpEndpoint, HttpTokens)
+            
+            if HttpPutResponseHopLimit != 2 or HttpEndpoint != 'enabled' or HttpTokens != 'required':
+                offenders.append(instance["Instances"][0]["InstanceId"])
+                
+
+        if offenders:
+            self.result = Result(
+                status=False,
+                resource_type="Node",
+                resources=offenders,
+                info=Info
+            )
+        else:
+            self.result = Result(status=True, resource_type="Node",info=Info)
+    
+    
+    
+class restrict_access_to_instance_profile(Rule):
+
+
+    
+    _type = "cluster_wide"
+    pillar = "security"
+    section = "iam"
+    message = "Restrict access to the instance profile assigned to the worker node"
+    url = "https://aws.github.io/aws-eks-best-practices/security/docs/iam/#restrict-access-to-the-instance-profile-assigned-to-the-worker-node"
+
+    def check(self, resources: Resources):
+        client = boto3.client("ec2", region_name=resources.region)
+        offenders = []
+        Status = False
+
+        instance_metadata = client.describe_instances(
+            Filters=[
+                {
+                    "Name": "tag:aws:eks:cluster-name",
+                    "Values": [
+                        resources.cluster,
+                    ],
+                },
+          ]
+        )
+
+        for instance in instance_metadata["Reservations"]:
+            
+            #print("MetadataOptions={}".format(instance["Instances"][0]["MetadataOptions"]))
+            HttpPutResponseHopLimit =  instance["Instances"][0]["MetadataOptions"]["HttpPutResponseHopLimit"]
+            HttpEndpoint = instance["Instances"][0]["MetadataOptions"]["HttpEndpoint"]
+            HttpTokens = instance["Instances"][0]["MetadataOptions"]["HttpTokens"]
+            Info = "HttpPutResponseHopLimit : {} HttpEndpoint : {} HttpTokens : {}".format(HttpPutResponseHopLimit, HttpEndpoint, HttpTokens)
+            
+            if HttpPutResponseHopLimit != 1 and HttpTokens != 'required':
+                offenders.append(instance["Instances"][0]["InstanceId"])
+                
+
+        if offenders:
+            self.result = Result(
+                status=False,
+                resource_type="Node",
+                resources=offenders,
+                info=Info
+            )
+        else:
+            self.result = Result(status=True, resource_type="Node",info=Info)
     
     
     

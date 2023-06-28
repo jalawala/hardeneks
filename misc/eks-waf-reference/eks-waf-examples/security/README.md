@@ -295,6 +295,25 @@ jp:~/environment/jalawala/hardeneks/misc/eks-waf-reference/eks-waf-examples/secu
 2023-06-22 19:08:48 [ℹ]  checking security group configuration for all nodegroups
 ```
 
+###
+
+```bash
+
+eksctl create nodegroup -f disablePodIMDS.yaml
+
+p:~/environment/jalawala/hardeneks/misc/eks-waf-reference/eks-waf-examples/security/iam (main) $ eksctl create nodegroup -f disablePodIMDS.yaml
+2023-06-28 17:02:14 [ℹ]  nodegroup "disablePodIMDS1" will use "" [AmazonLinux2/1.26]
+2023-06-28 17:02:16 [ℹ]  6 existing nodegroup(s) (br-mng,disablePodIMDS,imdsv2,linux-ng,mng,windows-managed-ng-2022) will be excluded
+2023-06-28 17:02:16 [ℹ]  1 nodegroup (disablePodIMDS1) was included (based on the include/exclude rules)
+2023-06-28 17:02:16 [ℹ]  will create a CloudFormation stack for each of 1 managed nodegroups in cluster "eks126"
+2023-06-28 17:02:16 [ℹ]  
+2 sequential tasks: { fix cluster compatibility, 1 task: { 1 task: { create managed nodegroup "disablePodIMDS1" } } 
+}
+sing resources2023-06-28 17:02:18 [ℹ]  cluster stack has all required resources2023-06-28 17:02:19 [ℹ]  building managed nodegroup stack "eksctl-eks126-nodegroup-disablePodIMDS1"2023-06-28 17:02:20 [ℹ]  deploying stack "eksctl-eks126-nodegroup-disablePodIMDS1"2023-06-28 17:02:20 [ℹ]  waiting for CloudFormation stack "eksctl-eks126-nodegroup-disablePodIMDS1"2023-06-28 17:02:50 [ℹ]  waiting for CloudFormation stack "eksctl-eks126-nodegroup-disablePodIMDS1"2023-06-28 17:03:25 [ℹ]  waiting for CloudFormation stack "eksctl-eks126-nodegroup-disablePodIMDS1"2023-06-28 17:04:12 [ℹ]  waiting for CloudFormation stack "eksctl-eks126-nodegroup-disablePodIMDS1"2023-06-28 17:05:52 [ℹ]  waiting for CloudFormation stack "eksctl-eks126-nodegroup-disablePodIMDS1"2023-06-28 17:05:54 [ℹ]  no tasks
+2023-06-28 17:05:54 [✔]  created 0 nodegroup(s) in cluster "eks126"2023-06-28 17:05:54 [✔]  created 1 managed nodegroup(s) in cluster "eks126"2023-06-28 17:05:59 [ℹ]  checking security group configuration for all nodegroups2023-06-28 17:05:59 [ℹ]  all nodegroups have up-to-date cloudformation templates 
+
+```
+
 ## multi_tenancy
 
 ### ensure_namespace_quotas_exist

@@ -1,0 +1,53 @@
+apiVersion: eksctl.io/v1alpha5
+kind: ClusterConfig
+managedNodeGroups:
+- amiFamily: AmazonLinux2
+  desiredCapacity: 1
+  #disableIMDSv1: true
+  disablePodIMDS: true
+  iam:
+    withAddonPolicies:
+      albIngress: false
+      appMesh: false
+      appMeshPreview: false
+      autoScaler: false
+      certManager: false
+      cloudWatch: false
+      ebs: false
+      efs: false
+      externalDNS: false
+      fsx: false
+      imageBuilder: false
+      xRay: false
+  instanceTypes:
+  - m5.xlarge
+  labels:
+    alpha.eksctl.io/cluster-name: eks126
+    alpha.eksctl.io/nodegroup-name: disablePodIMDS1
+    appType: Compute
+    intent: apps
+  maxSize: 5
+  minSize: 0
+  name: disablePodIMDS1
+  privateNetworking: true
+  releaseVersion: ""
+  securityGroups:
+    withLocal: null
+    withShared: null
+  ssh:
+    allow: false
+    publicKeyPath: ""
+  tags:
+    alpha.eksctl.io/nodegroup-name: disablePodIMDS1
+    alpha.eksctl.io/nodegroup-type: managed
+  volumeIOPS: 3000
+  volumeSize: 80
+  volumeThroughput: 125
+  volumeType: gp3
+metadata:
+  name: eks126
+  region: us-east-1
+  tags:
+    k8s.io/cluster-autoscaler/node-template/label/appType: Compute
+    k8s.io/cluster-autoscaler/node-template/label/intent: apps
+  version: "1.26"
