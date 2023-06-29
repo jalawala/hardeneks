@@ -127,6 +127,8 @@ rules:
         - check_readiness_probes
         - check_liveness_probes
         - check_pod_disruption_budgets
+      data_plane:
+        - limit_container_resource_usage_within_namespace     
     networking:
       load-balancing:
         - use_ip_target_type_load_balancers
