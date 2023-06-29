@@ -36,12 +36,12 @@ hardeneks --namespace default,kubecost --pillars reliability
 
 hardeneks --pillars scalability  --only_cluster_level_rules
 
-hardeneks --pillars security --sections image_security --only_cluster_level_rules --rules check_pod_disruption_budgets
+hardeneks --pillars security --sections reliability --only_cluster_level_rules --rules use_nodeLocal_DNSCache
 
 
 
 
-hardeneks --pillars reliability --sections applications --namespace default --only_namespace_level_rules --rules check_pod_disruption_budgets
+hardeneks --pillars reliability --sections data_plane --namespace stars --only_namespace_level_rules --rules limit_container_resource_usage_within_namespace
 
 
 hardeneks --pillars cluster_data,networking --only_cluster_level_rules

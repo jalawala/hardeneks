@@ -26,9 +26,28 @@ kubectl apply -f topology.yaml
 cd jalawala/hardeneks/misc/eks-waf-reference/eks-waf-examples/reliability/applications
 
 ```
-text for the bash command
+### use_nodeLocal_DNSCache
 
 ```bash
+cd /home/ec2-user/environment/jalawala/hardeneks/misc/eks-waf-reference/eks-waf-examples/reliability/data_plane
+
+kubedns=`kubectl get svc kube-dns -n kube-system -o jsonpath={.spec.clusterIP}`
+domain=cluster.local
+localdns=169.254.20.10
+sed -i "s/__PILLAR__LOCAL__DNS__/$localdns/g; s/__PILLAR__DNS__DOMAIN__/$domain/g; s/__PILLAR__DNS__SERVER__/$kubedns/g" nodelocaldns.yaml
+
+
+jp:~/environment/jalawala/hardeneks/misc/eks-waf-reference/eks-waf-examples/reliability/data_plane (main) $ kubectl create -f nodelocaldns.yaml
+serviceaccount/node-local-dns created
+service/kube-dns-upstream created
+configmap/node-local-dns created
+daemonset.apps/node-local-dns created
+service/node-local-dns created
+
+
+
+
+
 
 ```
 text for the bash command

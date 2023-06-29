@@ -66,6 +66,8 @@ rules:
       applications:
         - check_metrics_server_is_running
         - check_vertical_pod_autoscaler_exists
+      data_plane:
+        - use_nodeLocal_DNSCache     
     scalability:
       control_plane:
         - check_EKS_version

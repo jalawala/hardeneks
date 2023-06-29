@@ -32,3 +32,4 @@ class limit_container_resource_usage_within_namespace(Rule):
             
         self.result = Result(status=Status, resource_type="LimitRange", namespace=namespaced_resources.namespace, info=Info)
             
+
