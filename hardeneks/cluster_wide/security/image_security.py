@@ -52,8 +52,8 @@ class scan_images_for_vulnerabilities(Rule):
         client = boto3.client("ecr", region_name=resources.region)
         repositories = client.describe_repositories()
         for repository in repositories["repositories"]:
-            #print(pprint.pformat(repository, indent=4))
-            #exit()
+            print(pprint.pformat(repository, indent=4))
+            exit()
             imageScanningConfiguration = repository['imageScanningConfiguration']
             
             if imageScanningConfiguration["scanOnPush"] != "False":
@@ -69,4 +69,46 @@ class scan_images_for_vulnerabilities(Rule):
         else:
             self.result = Result(status=True, resource_type="ECR Repository", info = Info)
                         
-            
+
+
+class check_iam_iam_policies_for_ecr_repositories(Rule):
+    
+    
+    _type = "cluster_wide"
+    pillar = "security"
+    section = "image_security"
+    message = "Create IAM policies for ECR repositories"
+    url = "https://aws.github.io/aws-eks-best-practices/security/docs/image/#create-iam-policies-for-ecr-repositories"
+
+    def check(self, resources: Resources):
+        offenders = []
+        
+        Info = "All ECR Repos have IAM Policies"
+
+        ecrclient = boto3.client("ecr", region_name=resources.region)
+        repositories = ecrclient.describe_repositories()
+        for repository in repositories["repositories"]:
+            #print(pprint.pformat(repository, indent=4))
+            try:
+                response = ecrclient.get_repository_policy(
+                    registryId=repository["registryId"],
+                    repositoryName=repository["repositoryName"]
+                )
+                #print("repositoryName={}".format(repository["repositoryName"]))
+                #print(pprint.pformat(response['policyText'], indent=4))                
+            except Exception as exc:
+                offenders.append(repository["repositoryName"])
+
+            #exit()
+
+        if offenders:
+            Info = "ECR Repos without IAM Policies " + " ".join(offenders)
+            self.result = Result(
+                status=False,
+                resource_type="ECR Repository",
+                info = Info
+            )
+        else:
+            self.result = Result(status=True, resource_type="ECR Repository", info = Info)
+                        
+                        

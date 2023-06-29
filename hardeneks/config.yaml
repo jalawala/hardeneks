@@ -58,6 +58,7 @@ rules:
       image_security:
         - use_immutable_tags_with_ecr
         - scan_images_for_vulnerabilities
+        - check_iam_iam_policies_for_ecr_repositories
     reliability:
       applications:
         - check_metrics_server_is_running
