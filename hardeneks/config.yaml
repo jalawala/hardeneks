@@ -60,6 +60,8 @@ rules:
         - scan_images_for_vulnerabilities
         - check_iam_iam_policies_for_ecr_repositories
         - consider_using_ecr_private_endpoints
+        - check_endpoint_policies_for_ecr
+        - implement_lifecycle_policies_for_ecr
     reliability:
       applications:
         - check_metrics_server_is_running

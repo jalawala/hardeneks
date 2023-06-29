@@ -85,13 +85,12 @@ class check_iam_iam_policies_for_ecr_repositories(Rule):
         
         Info = "All ECR Repos have IAM Policies"
         
-      
-
         ecrclient = boto3.client("ecr", region_name=resources.region)
         repositories = ecrclient.describe_repositories()
         for repository in repositories["repositories"]:
             
-            #print(pprint.pformat(repository, indent=4))
+            print(pprint.pformat(repository, indent=4))
+            exit()
             try:
                 response = ecrclient.get_repository_policy(
                     registryId=repository["registryId"],
@@ -130,7 +129,6 @@ class consider_using_ecr_private_endpoints(Rule):
         eksclient = boto3.client("eks", region_name=resources.region)
         cluster_metadata = eksclient.describe_cluster(name=resources.cluster)
         vpcId  = cluster_metadata["cluster"]["resourcesVpcConfig"]["vpcId"] 
-        
         ec2client = boto3.client("ec2", region_name=resources.region)
         
         serviceNames = [ "com.amazonaws." + resources.region + ".ecr.dkr", 
@@ -162,4 +160,101 @@ class consider_using_ecr_private_endpoints(Rule):
         
         self.result = Result(status=Status, resource_type="ECR Repository", info = Info)
                         
-                                                
+
+class check_endpoint_policies_for_ecr(Rule):
+    
+    _type = "cluster_wide"
+    pillar = "security"
+    section = "image_security"
+    message = "Implement endpoint policies for ECR"
+    url = "https://aws.github.io/aws-eks-best-practices/security/docs/image/#implement-endpoint-policies-for-ecr"
+
+    def check(self, resources: Resources):
+        offenders = []
+
+        eksclient = boto3.client("eks", region_name=resources.region)
+        cluster_metadata = eksclient.describe_cluster(name=resources.cluster)
+        vpcId  = cluster_metadata["cluster"]["resourcesVpcConfig"]["vpcId"] 
+        
+        ec2client = boto3.client("ec2", region_name=resources.region)
+        
+        serviceNames = [ "com.amazonaws." + resources.region + ".ecr.dkr", 
+                         "com.amazonaws." + resources.region + ".ecr.api"
+                       ] 
+        
+        response = ec2client.describe_vpc_endpoints(
+            Filters=[
+                {
+                    'Name': 'service-name',
+                    'Values': serviceNames
+                },
+                {
+                    'Name': 'vpc-id',
+                    'Values': [vpcId]
+                },                
+            ],
+        )
+
+        #print(pprint.pformat(response, indent=4))
+        vpc_endpoints = response['VpcEndpoints']
+        
+        if vpc_endpoints:
+            for endpoint in vpc_endpoints:
+                policy_document = endpoint['PolicyDocument']
+                #print(pprint.pformat(policy_document, indent=4))
+                if 'aws:PrincipalOrgID' in policy_document:
+                    Info = "VPC Endpoint policy contain aws:PrincipalOrgID"
+                    Status = True
+                else:
+                    Status = False
+                    Info = "VPC Endpoint policy does not contain aws:PrincipalOrgID"
+        else:
+            Status = False
+            Info = "VPC Endpoint for ECR does not exist in VPC : {}".format(vpcId)
+        
+        self.result = Result(status=Status, resource_type="ECR Repository", info = Info)
+                        
+
+class implement_lifecycle_policies_for_ecr(Rule):
+
+    _type = "cluster_wide"
+    pillar = "security"
+    section = "image_security"
+    message = "Implement lifecycle policies for ECR"
+    url = "https://aws.github.io/aws-eks-best-practices/security/docs/image/#implement-lifecycle-policies-for-ecr"
+
+    def check(self, resources: Resources):
+        offenders = []
+        
+        Info = "All ECR Repos have lifecycle Policies"
+        
+        ecrclient = boto3.client("ecr", region_name=resources.region)
+        repositories = ecrclient.describe_repositories()
+        for repository in repositories["repositories"]:
+            
+            #print(pprint.pformat(repository, indent=4))
+            #exit()
+            
+            try:
+                response = ecrclient.get_lifecycle_policy(
+                    registryId=repository["registryId"],
+                    repositoryName=repository["repositoryName"]
+                )
+                print("repositoryName={}".format(repository["repositoryName"]))
+                #print(pprint.pformat(response, indent=4))
+                print(pprint.pformat(response['lifecyclePolicyText'], indent=4))    
+            except Exception as exc:
+                offenders.append(repository["repositoryName"])
+
+            #exit()
+
+        if offenders:
+            Info = "ECR Repos without lifecycle Policies " + " ".join(offenders)
+            self.result = Result(
+                status=False,
+                resource_type="ECR Repository",
+                info = Info
+            )
+        else:
+            self.result = Result(status=True, resource_type="ECR Repository", info = Info)
+                        
