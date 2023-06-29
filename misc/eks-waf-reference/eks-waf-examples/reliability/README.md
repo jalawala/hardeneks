@@ -20,9 +20,10 @@ kubectl apply -f hpa1.yaml
 kubectl apply -f topology.yaml
 
 ```
-text for the bash command
+### check_pod_disruption_budgets
 
 ```bash
+cd jalawala/hardeneks/misc/eks-waf-reference/eks-waf-examples/reliability/applications
 
 ```
 text for the bash command

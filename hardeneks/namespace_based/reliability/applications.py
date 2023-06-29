@@ -1,6 +1,7 @@
 from ...resources import NamespacedResources
 from hardeneks.rules import Rule, Result
-
+import kubernetes
+import pprint
 
 class avoid_running_singleton_pods(Rule):
     _type = "namespace_based"
@@ -180,3 +181,52 @@ class check_liveness_probes(Rule):
         else:
             self.result = Result(status=True, resource_type="Pod", namespace=namespaced_resources.namespace)
             
+class check_pod_disruption_budgets(Rule):
+    _type = "namespace_based"
+    pillar = "reliability"
+    section = "applications"
+    message = "Protect critical workload with Pod Disruption Budgets"
+    url = "https://aws.github.io/aws-eks-best-practices/reliability/docs/application/#recommendations_2"
+
+    def check(self, namespaced_resources: NamespacedResources):
+
+        offenders = []
+
+
+        pod_disruption_budgets = kubernetes.client.PolicyV1Api().list_namespaced_pod_disruption_budget(namespace=namespaced_resources.namespace).items
+        #print(pprint.pformat(pod_disruption_budgets, indent=4)) 
+    
+        
+        pdb_labels_list = []
+       # Print the pod disruption budgets
+        for pdb in pod_disruption_budgets:
+            match_labels = pdb.spec.selector.match_labels
+            pdb_labels_list.append(match_labels)
+
+        
+        #print(pdb_labels_list)
+        for deployment in namespaced_resources.deployments:
+            match_labels = deployment.spec.selector.match_labels
+            if match_labels not in pdb_labels_list:
+                offenders.append(deployment.metadata.name)
+                #print("{} matches".format(match_labels))
+        
+            
+            #print(deployment.metadata.name, match_labels)
+        
+
+        
+        if offenders:
+            Info = "Deployments without PDB : " + " ".join(offenders)
+            resource = " ".join(offenders)
+            self.result = Result(
+                status=False,
+                resource_type="Pod",
+                resources=[resource],
+                namespace=namespaced_resources.namespace,
+                info = Info
+            )
+        else:
+            Info = "All deployments have PDBs "
+            self.result = Result(status=True, resource_type="Pod", namespace=namespaced_resources.namespace, info=Info)
+                        

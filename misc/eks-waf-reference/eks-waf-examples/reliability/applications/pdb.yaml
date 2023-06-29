@@ -1,0 +1,52 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pdb
+  labels:
+    app: pdb
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: pdb
+      env: dev
+  template:
+    metadata:
+      labels:
+        app: pdb
+        env: dev
+    spec:
+      containers:
+      - name: web-app
+        image: nginx:1.16-alpine
+        resources:
+          requests:
+            cpu: "0.2"
+            memory: "256Mi"
+          limits:
+            cpu: "1"
+            memory: "1Gi"          
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 80
+          initialDelaySeconds: 5
+          periodSeconds: 10        
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 80
+          initialDelaySeconds: 5
+          periodSeconds: 5
+---
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: pdb
+spec:
+  minAvailable: 1
+  selector:
+    matchLabels:
+      app: pdb
+      env: dev      

@@ -126,6 +126,7 @@ rules:
         - avoid_running_singleton_pods
         - check_readiness_probes
         - check_liveness_probes
+        - check_pod_disruption_budgets
     networking:
       load-balancing:
         - use_ip_target_type_load_balancers
