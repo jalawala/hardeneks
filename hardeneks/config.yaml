@@ -59,6 +59,7 @@ rules:
         - use_immutable_tags_with_ecr
         - scan_images_for_vulnerabilities
         - check_iam_iam_policies_for_ecr_repositories
+        - consider_using_ecr_private_endpoints
     reliability:
       applications:
         - check_metrics_server_is_running

@@ -1397,6 +1397,70 @@ eksdemo create nodegroup br-mng --cluster eksdemo --os bottlerocket -i t3.xlarge
 
 ```
 
+## image_security
+### consider_using_ecr_private_endpoints
+
+```bash
+aws ec2 create-vpc-endpoint --service-name com.amazonaws.us-east-1.ecr.dkr --vpc-id 'vpc-0e5d469b1b7d4ff75' --subnet-ids subnet-0abb1a33ded8a316a subnet-086b5ea0bbc810553 --vpc-endpoint-type Interface
+
+{
+    "VpcEndpoint": {
+        "VpcEndpointId": "vpce-067f6c41678456e58",
+        "VpcEndpointType": "Interface",
+        "VpcId": "vpc-0e5d469b1b7d4ff75",
+        "ServiceName": "com.amazonaws.us-east-1.ecr.dkr",
+        "State": "pending",
+        "RouteTableIds": [],
+        "SubnetIds": [
+            "subnet-0abb1a33ded8a316a",
+            "subnet-086b5ea0bbc810553"
+        ],
+        "Groups": [
+            {
+                "GroupId": "sg-068099c15e7539a11",
+                "GroupName": "default"
+            }
+        ],
+        "IpAddressType": "ipv4",
+        "DnsOptions": {
+            "DnsRecordIpType": "ipv4"
+        },
+        "PrivateDnsEnabled": true,
+        "RequesterManaged": false,
+        "NetworkInterfaceIds": [
+            "eni-01a121da4ce9ea365",
+            "eni-074389bec46a0242b"
+        ],
+        "DnsEntries": [
+            {
+                "DnsName": "vpce-067f6c41678456e58-zx4byjrh.dkr.ecr.us-east-1.vpce.amazonaws.com",
+                "HostedZoneId": "Z7HUB22UULQXV"
+            },
+            {
+                "DnsName": "vpce-067f6c41678456e58-zx4byjrh-us-east-1a.dkr.ecr.us-east-1.vpce.amazonaws.com",
+                "HostedZoneId": "Z7HUB22UULQXV"
+            },
+            {
+                "DnsName": "vpce-067f6c41678456e58-zx4byjrh-us-east-1b.dkr.ecr.us-east-1.vpce.amazonaws.com",
+                "HostedZoneId": "Z7HUB22UULQXV"
+            },
+            {
+                "DnsName": "dkr.ecr.us-east-1.amazonaws.com",
+                "HostedZoneId": "ZONEIDPENDING"
+            },
+            {
+                "DnsName": "*.dkr.ecr.us-east-1.amazonaws.com",
+                "HostedZoneId": "ZONEIDPENDING"
+            }
+        ],
+        "CreationTimestamp": "2023-06-29T03:06:14.320000+00:00",
+        "OwnerId": "000474600478"
+    }
+}
+
+
+```
+
 
 
 # namespace_based

@@ -84,10 +84,13 @@ class check_iam_iam_policies_for_ecr_repositories(Rule):
         offenders = []
         
         Info = "All ECR Repos have IAM Policies"
+        
+      
 
         ecrclient = boto3.client("ecr", region_name=resources.region)
         repositories = ecrclient.describe_repositories()
         for repository in repositories["repositories"]:
+            
             #print(pprint.pformat(repository, indent=4))
             try:
                 response = ecrclient.get_repository_policy(
@@ -111,4 +114,52 @@ class check_iam_iam_policies_for_ecr_repositories(Rule):
         else:
             self.result = Result(status=True, resource_type="ECR Repository", info = Info)
                         
+
+
+class consider_using_ecr_private_endpoints(Rule):
+    
+    _type = "cluster_wide"
+    pillar = "security"
+    section = "image_security"
+    message = "Consider using ECR private endpoints"
+    url = "https://aws.github.io/aws-eks-best-practices/security/docs/image/#consider-using-ecr-private-endpoints"
+
+    def check(self, resources: Resources):
+        offenders = []
+
+        eksclient = boto3.client("eks", region_name=resources.region)
+        cluster_metadata = eksclient.describe_cluster(name=resources.cluster)
+        vpcId  = cluster_metadata["cluster"]["resourcesVpcConfig"]["vpcId"] 
+        
+        ec2client = boto3.client("ec2", region_name=resources.region)
+        
+        serviceNames = [ "com.amazonaws." + resources.region + ".ecr.dkr", 
+                         "com.amazonaws." + resources.region + ".ecr.api"
+                       ] 
+        
+        response = ec2client.describe_vpc_endpoints(
+            Filters=[
+                {
+                    'Name': 'service-name',
+                    'Values': serviceNames
+                },
+                {
+                    'Name': 'vpc-id',
+                    'Values': [vpcId]
+                },                
+            ],
+        )
+
+        #print(pprint.pformat(response, indent=4))
+        vpc_endpoints = response['VpcEndpoints']
+        
+        if not vpc_endpoints:
+            Status = False
+            Info = "VPC Endpoint for ECR does not exist in VPC : {}".format(vpcId)
+        else:
+            Info = "VPC Endpoint for ECR does exist in VPC : {}".format(vpcId)
+            
+        
+        self.result = Result(status=Status, resource_type="ECR Repository", info = Info)
                         
+                                                
