@@ -20,8 +20,7 @@ class use_immutable_tags_with_ecr(Rule):
         client = boto3.client("ecr", region_name=resources.region)
         repositories = client.describe_repositories()
         for repository in repositories["repositories"]:
-            print(pprint.pformat(repository, indent=4))
-            exit()
+            #print(pprint.pformat(repository, indent=4))
             if repository["imageTagMutability"] != "IMMUTABLE":
                 offenders.append(repository["repositoryName"])
     
@@ -52,8 +51,7 @@ class scan_images_for_vulnerabilities(Rule):
         client = boto3.client("ecr", region_name=resources.region)
         repositories = client.describe_repositories()
         for repository in repositories["repositories"]:
-            print(pprint.pformat(repository, indent=4))
-            exit()
+            #print(pprint.pformat(repository, indent=4))
             imageScanningConfiguration = repository['imageScanningConfiguration']
             
             if imageScanningConfiguration["scanOnPush"] != "False":
@@ -89,8 +87,7 @@ class check_iam_iam_policies_for_ecr_repositories(Rule):
         repositories = ecrclient.describe_repositories()
         for repository in repositories["repositories"]:
             
-            print(pprint.pformat(repository, indent=4))
-            exit()
+            #print(pprint.pformat(repository, indent=4))
             try:
                 response = ecrclient.get_repository_policy(
                     registryId=repository["registryId"],
@@ -240,9 +237,9 @@ class implement_lifecycle_policies_for_ecr(Rule):
                     registryId=repository["registryId"],
                     repositoryName=repository["repositoryName"]
                 )
-                print("repositoryName={}".format(repository["repositoryName"]))
+                #print("repositoryName={}".format(repository["repositoryName"]))
                 #print(pprint.pformat(response, indent=4))
-                print(pprint.pformat(response['lifecyclePolicyText'], indent=4))    
+                #print(pprint.pformat(response['lifecyclePolicyText'], indent=4))    
             except Exception as exc:
                 offenders.append(repository["repositoryName"])
 
