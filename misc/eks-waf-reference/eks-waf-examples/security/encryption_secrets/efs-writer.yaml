@@ -6,7 +6,7 @@ metadata:
 spec:
   containers:
   - name: efs-writer
-    image: 000474600478.dkr.ecr.us-east-1.amazonaws.com/busybox:latest
+    image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/busybox:latest
     command: ["/bin/sh"]    
     args: ["-c", "while true; do echo $POD_NAME.$POD_NAMESPACE - $(date -u) >> /shared/out.txt; sleep 5; done"]
     env:

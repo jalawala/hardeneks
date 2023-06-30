@@ -1,6 +1,0 @@
-*  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  HARDENEKS *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * 
-You are operating at us-east-1
-You context is i-0d45e819f38a652ea@multi-region-blog-eks2.us-west-2.eksctl.io
-Your cluster name is multi-region-blog-eks2
-You are using ./hardeneks/config.yaml as your config file
-

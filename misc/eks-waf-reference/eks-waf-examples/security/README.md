@@ -224,7 +224,7 @@ pip install pip --upgrade
 pip install pyopenssl --upgrade
 
 export EKS_CLUSTER_NAME="eks126"
-python main.py --cluster-name $EKS_CLUSTER_NAME --role-name eks_cni_irsa_role  --region us-east-1 --account 000474600478
+python main.py --cluster-name $EKS_CLUSTER_NAME --role-name eks_cni_irsa_role  --region us-east-1 --account $AWS_ACCOUNT_ID
 
 Obtaining OIDC URL and thumbprint.
 Creating a OIDC provider. This is privileged operation. Do you want to proceed (yes/no)? yes
@@ -255,7 +255,7 @@ Labels:              app.kubernetes.io/instance=aws-vpc-cni
                      app.kubernetes.io/name=aws-node
                      app.kubernetes.io/version=v1.12.5
                      k8s-app=aws-node
-Annotations:         eks.amazonaws.com/role-arn: arn:aws:iam::000474600478:role/eks_cni_irsa_role
+Annotations:         eks.amazonaws.com/role-arn: arn:aws:iam::$AWS_ACCOUNT_ID:role/eks_cni_irsa_role
 Image pull secrets:  <none>
 Mountable secrets:   <none>
 Tokens:              <none>
@@ -387,7 +387,7 @@ aws ec2 create-flow-logs \
     --traffic-type ALL \
     --log-destination-type cloud-watch-logs \
     --log-group-name eks126-vpc-flow-logs \
-    --deliver-logs-permission-arn arn:aws:iam::000474600478:role/MulticastECSBlog-FlowLogsRole-7W92ZOIUX3GI
+    --deliver-logs-permission-arn arn:aws:iam::$AWS_ACCOUNT_ID:role/MulticastECSBlog-FlowLogsRole-7W92ZOIUX3GI
 
 {
     "ClientToken": "QJPAPX85N74936ZjhdUbBFmOyWn3USSAZxahDuhvDdk=",
@@ -401,7 +401,7 @@ aws ec2 create-flow-logs \
 ### check_awspca_exists
 
 ```bash
-export ACM_PCA_ARN="arn:aws:acm-pca:us-east-1:000474600478:certificate-authority/730a7d12-c910-4e9b-83b7-c61d0b4f7ce7"
+export ACM_PCA_ARN="arn:aws:acm-pca:us-east-1:$AWS_ACCOUNT_ID:certificate-authority/730a7d12-c910-4e9b-83b7-c61d0b4f7ce7"
 
 aws acm-pca get-certificate-authority-certificate --certificate-authority-arn $ACM_PCA_ARN --region us-east-1 --output text > cacert.pem
 
@@ -466,7 +466,7 @@ replicaCount: 1
 serviceAccount:
   name: cert-manager
   annotations:
-    eks.amazonaws.com/role-arn: arn:aws:iam::000474600478:role/eksdemo.eks126.cert-manager.cert-manager
+    eks.amazonaws.com/role-arn: arn:aws:iam::$AWS_ACCOUNT_ID:role/eksdemo.eks126.cert-manager.cert-manager
 image:
   tag: v1.12.1
 
@@ -1059,7 +1059,7 @@ aws ec2 authorize-security-group-ingress --group-id $MOUNT_TARGET_GROUP_ID --pro
         {
             "SecurityGroupRuleId": "sgr-06a90aac69d8f5ac2",
             "GroupId": "sg-00f5be698daec90ff",
-            "GroupOwnerId": "000474600478",
+            "GroupOwnerId": "$AWS_ACCOUNT_ID",
             "IsEgress": false,
             "IpProtocol": "tcp",
             "FromPort": 2049,
@@ -1078,10 +1078,10 @@ aws efs describe-file-systems --file-system-id $FILE_SYSTEM_ID
 {
     "FileSystems": [
         {
-            "OwnerId": "000474600478",
+            "OwnerId": "$AWS_ACCOUNT_ID",
             "CreationToken": "e65865fc-7e20-43e9-9f53-f655f4351fd2",
             "FileSystemId": "fs-0d8e0b886dfb5c77a",
-            "FileSystemArn": "arn:aws:elasticfilesystem:us-east-1:000474600478:file-system/fs-0d8e0b886dfb5c77a",
+            "FileSystemArn": "arn:aws:elasticfilesystem:us-east-1:$AWS_ACCOUNT_ID:file-system/fs-0d8e0b886dfb5c77a",
             "CreationTime": "2023-06-24T14:16:01+00:00",
             "LifeCycleState": "available",
             "NumberOfMountTargets": 0,
@@ -1112,7 +1112,7 @@ done
 
 reating mount target in  subnet-07393d3be7a4110b2
 {
-    "OwnerId": "000474600478",
+    "OwnerId": "$AWS_ACCOUNT_ID",
     "MountTargetId": "fsmt-0cc60b19941e45340",
     "FileSystemId": "fs-0d8e0b886dfb5c77a",
     "SubnetId": "subnet-07393d3be7a4110b2",
@@ -1125,7 +1125,7 @@ reating mount target in  subnet-07393d3be7a4110b2
 }
 creating mount target in  subnet-014dd53d0c2b6eb29
 {
-    "OwnerId": "000474600478",
+    "OwnerId": "$AWS_ACCOUNT_ID",
     "MountTargetId": "fsmt-061df2eb4f1382041",
     "FileSystemId": "fs-0d8e0b886dfb5c77a",
     "SubnetId": "subnet-014dd53d0c2b6eb29",
@@ -1281,7 +1281,7 @@ elif echo ${c9builder} | grep -q assumed-role; then
         echo Role ARN: ${rolearn}
 fi
 
-Role ARN: arn:aws:iam::000474600478:user/jp
+Role ARN: arn:aws:iam::$AWS_ACCOUNT_ID:user/jp
 
 eksctl create iamidentitymapping --cluster eks126 --arn ${rolearn} --group system:masters --username admin
 
@@ -1295,7 +1295,7 @@ TRUST="{ \"Version\": \"2012-10-17\", \"Statement\": [ { \"Effect\": \"Allow\", 
 ROLE_ARN=$(aws iam create-role --role-name eks-cluster-creator-role --assume-role-policy-document "$TRUST" --query 'Role.Arn')
 echo $ROLE_ARN
 export ROLE_NAME="eks-cluster-creator-role"
-arn:aws:iam::000474600478:role/eks-cluster-creator-role
+arn:aws:iam::$AWS_ACCOUNT_ID:role/eks-cluster-creator-role
 
 eks:CreateCluster
 eks:DeleteCluster
@@ -1355,14 +1355,14 @@ aws iam attach-role-policy --region=$AWS_REGION --role-name=$ROLE_NAME --policy-
 
 
 
-aws iam delete-policy --policy-arn arn:aws:iam::000474600478:policy/eks-cluster-creator-iam-policy
+aws iam delete-policy --policy-arn arn:aws:iam::$AWS_ACCOUNT_ID:policy/eks-cluster-creator-iam-policy
 
 
 {
     "Policy": {
         "PolicyName": "eks-cluster-creator-iam-policy",
         "PolicyId": "ANPAQAHCJ2QPFDK357KPS",
-        "Arn": "arn:aws:iam::000474600478:policy/eks-cluster-creator-iam-policy",
+        "Arn": "arn:aws:iam::$AWS_ACCOUNT_ID:policy/eks-cluster-creator-iam-policy",
         "Path": "/",
         "DefaultVersionId": "v1",
         "AttachmentCount": 0,
@@ -1380,7 +1380,7 @@ aws iam create-instance-profile --instance-profile-name eks-cluster-creator-inst
         "Path": "/",
         "InstanceProfileName": "eks-cluster-creator-instance_profile",
         "InstanceProfileId": "AIPAQAHCJ2QPPGDRATSR6",
-        "Arn": "arn:aws:iam::000474600478:instance-profile/eks-cluster-creator-instance_profile",
+        "Arn": "arn:aws:iam::$AWS_ACCOUNT_ID:instance-profile/eks-cluster-creator-instance_profile",
         "CreateDate": "2023-06-27T12:43:35+00:00",
         "Roles": []
     }
@@ -1454,7 +1454,7 @@ aws ec2 create-vpc-endpoint --service-name com.amazonaws.us-east-1.ecr.dkr --vpc
             }
         ],
         "CreationTimestamp": "2023-06-29T03:06:14.320000+00:00",
-        "OwnerId": "000474600478"
+        "OwnerId": "$AWS_ACCOUNT_ID"
     }
 }
 

@@ -36,7 +36,7 @@ hardeneks --namespace default,kubecost --pillars reliability
 
 hardeneks --pillars scalability  --only_cluster_level_rules
 
-hardeneks --pillars security --sections reliability --only_cluster_level_rules --rules use_nodeLocal_DNSCache
+hardeneks --pillars reliability --sections data_plane --only_cluster_level_rules --rules use_nodeLocal_DNSCache
 
 
 
@@ -66,7 +66,7 @@ hardeneks --pillars networking --only_namespace_level_rules --namespace default
 
 
 
-hardeneks --namespace default,kubecost --pillars reliability --context arn:aws:eks:us-east-1:000474600478:cluster/eksworkshop-eksctl
+hardeneks --namespace default,kubecost --pillars reliability --context arn:aws:eks:us-east-1:$AWS_ACCOUNT_ID:cluster/eksworkshop-eksctl
 
 hardeneks --namespace default,kubecost --pillars reliability --cluster eksworkshop-eksctl
 
@@ -173,7 +173,7 @@ aws iam list-attached-role-policies --role-name eksctl-eksworkshop-eksctl-addon-
   
 aws iam get-role-policy --role-name eksctl-eksworkshop-eksctl-addon-iamserviceac-Role1-1Q1U2KKFIT78C --policy-name k8s-asg-policy
 
-aws iam get-role-policy --role-name eksctl-eksworkshop-eksctl-addon-iamserviceac-Role1-1Q1U2KKFIT78C --policy-name arn:aws:iam::000474600478:policy/k8s-asg-policy
+aws iam get-role-policy --role-name eksctl-eksworkshop-eksctl-addon-iamserviceac-Role1-1Q1U2KKFIT78C --policy-name arn:aws:iam::$AWS_ACCOUNT_ID:policy/k8s-asg-policy
 
 
 
