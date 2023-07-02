@@ -246,7 +246,7 @@ def print_consolidated_results(rules: list):
                     style=color,
                 )
         
-        titleMessage=f"[cyan][bold] Report for {pillar} piller : {no_of_rules_passed}/{total_no_of_rules} rules passed"
+        titleMessage=f"[cyan][bold] Report for {pillar} pillar : {no_of_rules_passed}/{total_no_of_rules} rules passed"
         console.print(Panel(table, title=titleMessage, title_align="left"))
         console.print()
 
@@ -287,15 +287,15 @@ def run_hardeneks(
     ),
     pillars: str = typer.Option(
         default=None,
-        help="Specific pillars to harden. Default is all pillars.",
+        help="Specific list of pillars to harden. Default is all pillars.",
     ),
     sections: str = typer.Option(
         default=None,
-        help="Specific sections for a given pillar to harden. Default is all sections. --pillars option must be used specifying only one pillar",
+        help="Specific list of sections for a given pillar to harden. Default is all sections. --pillars option must be used specifying only one pillar",
     ),
     rules: str = typer.Option(
         default=None,
-        help="Specific rulles to harden. Default is all rules. --pillars, --sections and one of options (--only_cluster_level_rules or --only_namespace_level_rules) must be set",
+        help="Specific list of rules to harden. Default is all rules. --pillars, --sections and one of options (--only_cluster_level_rules or --only_namespace_level_rules) must be set",
     ),    
     only_cluster_level_rules: bool = typer.Option(
         False,
@@ -430,10 +430,8 @@ def run_hardeneks(
                 exit()
         
                     
-    print("Running hardeneks for selected pillars list={}, sectionsMap={} and namespaces={} rulesList={}".format(pillarsList, sectionsMap, namespaces, rulesList))
+    #print("Running hardeneks for selected pillars list={}, sectionsMap={} and namespaces={} rulesList={}".format(pillarsList, sectionsMap, namespaces, rulesList))
     
-    
-
     resources = Resources(region, context, cluster, namespaces)
     resources.set_resources()
 
