@@ -8,12 +8,19 @@
 
 Runs checks to see if an EKS cluster follows [EKS Best Practices](https://aws.github.io/aws-eks-best-practices/).
 
+**Pre-requisites**
+- Python 3.7+
+- Latest pip installation
+- An EKS cluster and the current kube-context should be set to a valid EKS cluster in your account
+
 **Quick Start**:
 
 ```
+git clone https://github.com/jalawala/hardeneks.git
+cd hardeneks
 python3 -m venv /tmp/.venv
 source /tmp/.venv/bin/activate
-pip install hardeneks
+pip install --editable .
 hardeneks
 ```
 
@@ -29,11 +36,17 @@ To check all rules for a specific cluster using context name
 
 ```console
 hardeneks --context <context name>
+
+## Example
+## hardeneks --context arn:aws:eks:eu-west-1:000000000000:cluster/eks127
 ```
 To check all rules for a specific cluster using cluster name 
 
 ```console
 hardeneks --cluster <cluster name>
+
+## Example
+## hardeneks --cluster eks127
 ```
 To check all rules at the cluster level
 
@@ -49,24 +62,36 @@ To check all rules for a specific list of pillars (valid values : cluster_data,s
 
 ```console
 hardeneks --pillars <pillar name1>,<pillar name2> ...
+
+## Example
+## hardeneks --pillars scalability,networking
 ```
 
 To check all rules for a specific list of secttions for a given pillar (for valid values of sections. refer to config.yaml)
 
 ```console
 hardeneks --pillars <pillar name1> --sections <section name1>,<section name2> ...
+
+## Example
+## hardeneks --pillars networking --sections vpc-cni,prefix_mode
 ```
 
-To check only a specific list of rules for a sectio and pillar (for valid values of rules. refer to config.yaml)
+To check only a specific list of rules for a section and pillar. While using this option, you would have to mention either `only_cluster_level_rules` or `only_namespace_level_rules` (Refer config.yaml for valid values of rules)
 
 ```console
 hardeneks --pillars <pillar name1> --sections <section name1> --rules <rule id1>,<rule id2> ...
+
+## Example
+
+## hardeneks --only_cluster_level_rules --pillars networking --sections vpc-cni --rules deploy_vpc_cni_managed_add_on,use_small_dedicated_cluster_subnets
+
+## hardeneks --only_namespace_level_rules --pillars networking --sections load-balancing --rules use_ip_target_type_ingresses
 ```
 
 To export output report to an html file
 
 ```console
-hardeneks --export_html <file_name>
+hardeneks --export-html <file_name>
 ```
 
 **Options**:
