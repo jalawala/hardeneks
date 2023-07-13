@@ -193,13 +193,27 @@ def _export_json(rules: list, json_path=str):
     json_blob = ndd()
 
     for rule in rules:
+        if rule.result.status:
+            rule_result = "PASS"
+        else:
+            rule_result = "FAIL"
+        
+        namespace = "Cluster Wide"
+        
+        if rule.result.namespace:
+            namespace = rule.result.namespace
+                
         result = {
-            "status": rule.result.status,
+            "Namespace" : namespace,
+            "Rule Description": rule.message,
+            "status": rule_result,
+            "Info": rule.result.info,
             "resources": rule.result.resources,
             "resource_type": rule.result.resource_type,
-            "namespace": rule.result.namespace,
+            "Resolution": rule.url,
         }
-        json_blob[rule._type][rule.pillar][rule.section][rule.message] = result
+        
+        json_blob[rule._type][rule.pillar][rule.section][rule.name] = result
     with open(json_path, "w", encoding="utf-8") as f:
         json.dump(json_blob, f, ensure_ascii=False, indent=4)
 

@@ -1,0 +1,113 @@
+{
+    "cluster_wide": {
+        "reliability": {
+            "applications": {
+                "check_metrics_server_is_running": {
+                    "Namespace": "Cluster Wide",
+                    "Rule Description": "Run Kubernetes Metrics Server",
+                    "status": "FAIL",
+                    "Info": null,
+                    "resources": [
+                        ""
+                    ],
+                    "resource_type": "Service",
+                    "Resolution": "https://aws.github.io/aws-eks-best-practices/reliability/docs/application/#run-kubernetes-metrics-server"
+                },
+                "check_vertical_pod_autoscaler_exists": {
+                    "Namespace": "Cluster Wide",
+                    "Rule Description": "Vertical pod autoscaler is not deployed.",
+                    "status": "FAIL",
+                    "Info": null,
+                    "resources": [
+                        ""
+                    ],
+                    "resource_type": "Deployment",
+                    "Resolution": "https://aws.github.io/aws-eks-best-practices/reliability/docs/application/#run-kubernetes-metrics-server"
+                }
+            }
+        }
+    },
+    "namespace_based": {
+        "reliability": {
+            "applications": {
+                "check_horizontal_pod_autoscaling_exists": {
+                    "Namespace": "cert-manager",
+                    "Rule Description": "Deploy horizontal pod autoscaler for deployments.",
+                    "status": "FAIL",
+                    "Info": null,
+                    "resources": [
+                        "cert-manager cert-manager-cainjector cert-manager-webhook"
+                    ],
+                    "resource_type": "Deployment",
+                    "Resolution": "https://aws.github.io/aws-eks-best-practices/reliability/docs/application/#horizontal-pod-autoscaler-hpa"
+                },
+                "schedule_replicas_across_nodes": {
+                    "Namespace": "cert-manager",
+                    "Rule Description": "Schedule replicas across nodes",
+                    "status": "FAIL",
+                    "Info": null,
+                    "resources": [
+                        "cert-manager cert-manager-cainjector cert-manager-webhook"
+                    ],
+                    "resource_type": "Deployment",
+                    "Resolution": "https://aws.github.io/aws-eks-best-practices/reliability/docs/application/#schedule-replicas-across-nodes"
+                },
+                "run_multiple_replicas": {
+                    "Namespace": "cert-manager",
+                    "Rule Description": "Run multiple replicas",
+                    "status": "FAIL",
+                    "Info": null,
+                    "resources": [
+                        "cert-manager cert-manager-cainjector cert-manager-webhook"
+                    ],
+                    "resource_type": "Deployment",
+                    "Resolution": "https://aws.github.io/aws-eks-best-practices/reliability/docs/application/#run-multiple-replicas"
+                },
+                "avoid_running_singleton_pods": {
+                    "Namespace": "cert-manager",
+                    "Rule Description": "Avoid running singleton Pods",
+                    "status": "PASS",
+                    "Info": null,
+                    "resources": [
+                        ""
+                    ],
+                    "resource_type": "Pod",
+                    "Resolution": "https://aws.github.io/aws-eks-best-practices/reliability/docs/application/#avoid-running-singleton-pods"
+                },
+                "check_readiness_probes": {
+                    "Namespace": "cert-manager",
+                    "Rule Description": "Define readiness probes for pods.",
+                    "status": "PASS",
+                    "Info": null,
+                    "resources": [
+                        ""
+                    ],
+                    "resource_type": "Pod",
+                    "Resolution": "https://aws.github.io/aws-eks-best-practices/reliability/docs/application/#use-readiness-probe-to-detect-partial-unavailability"
+                },
+                "check_liveness_probes": {
+                    "Namespace": "cert-manager",
+                    "Rule Description": "Define liveness probes for pods.",
+                    "status": "PASS",
+                    "Info": null,
+                    "resources": [
+                        ""
+                    ],
+                    "resource_type": "Pod",
+                    "Resolution": "https://aws.github.io/aws-eks-best-practices/reliability/docs/application/#use-liveness-probe-to-remove-unhealthy-pods"
+                },
+                "check_pod_disruption_budgets": {
+                    "Namespace": "cert-manager",
+                    "Rule Description": "Protect critical workload with Pod Disruption Budgets",
+                    "status": "FAIL",
+                    "Info": "Deployments without PDB : cert-manager cert-manager-cainjector cert-manager-webhook",
+                    "resources": [
+                        "cert-manager cert-manager-cainjector cert-manager-webhook"
+                    ],
+                    "resource_type": "Pod",
+                    "Resolution": "https://aws.github.io/aws-eks-best-practices/reliability/docs/application/#recommendations_2"
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,890 @@
+{
+    "cluster_wide": {
+        "cluster_data": {
+            "control_plane": {
+                "get_EKS_version": {
+                    "Namespace": "Cluster Wide",
+                    "Rule Description": "Get EKS Cluster Version",
+                    "status": "PASS",
+                    "Info": "EKS Cluster Version 1.26",
+                    "resources": [
+                        ""
+                    ],
+                    "resource_type": "EKS Cluster Version",
+                    "Resolution": "https://aws.github.io/aws-eks-best-practices/scalability/docs/control-plane/#use-eks-124-or-above"
+                },
+                "get_EKS_cluster_endpoint_url": {
+                    "Namespace": "Cluster Wide",
+                    "Rule Description": "Get EKS Cluster Endpoint URL",
+                    "status": "PASS",
+                    "Info": null,
+                    "resources": [
+                        "public: True, private: True https://BF03E35320602DCC0874D4B837FB9FE4.gr7.us-east-1.eks.amazonaws.com"
+                    ],
+                    "resource_type": "EKS Cluster Endpoint URL",
+                    "Resolution": "https://aws.github.io/aws-eks-best-practices/scalability/docs/control-plane/#use-eks-124-or-above"
+                }
+            },
+            "data_plane": {
+                "get_cluster_vpc_subnets": {
+                    "Namespace": "Cluster Wide",
+                    "Rule Description": "Get EKS Cluster VPC & Subnets",
+                    "status": "PASS",
+                    "Info": null,
+                    "resources": [
+                        "vpcId vpc-03103b5e0fe171706 subnetIds subnet-014dd53d0c2b6eb29 subnet-07393d3be7a4110b2 subnet-02522ec5528032b04 subnet-0189d5a82d2226d67"
+                    ],
+                    "resource_type": "EKS Cluster VPC & Subnet Ids",
+                    "Resolution": "https://aws.github.io/aws-eks-best-practices/scalability/docs/control-plane/#use-eks-124-or-above"
+                },
+                "get_available_free_ips_in_vpc": {
+                    "Namespace": "Cluster Wide",
+                    "Rule Description": "Check Available Free IPs in EKS VPC",
+                    "status": "PASS",
+                    "Info": null,
+                    "resources": [
+                        "Availablle Free IPs 32538"
+                    ],
+                    "resource_type": "Available Free IPs in EKS VPC",
+                    "Resolution": "https://aws.github.io/aws-eks-best-practices/scalability/docs/control-plane/#use-eks-124-or-above"
+                },
+                "get_cluster_size_details": {
+                    "Namespace": "Cluster Wide",
+                    "Rule Description": "Get Cluster Size Details",
+                    "status": "PASS",
+                    "Info": null,
+                    "resources": [
+                        "Services : 43 Deployments : 43 Pods: 111 Nodes: 5"
+                    ],
+                    "resource_type": "Size of the Cluster",
+                    "Resolution": "https://aws.github.io/aws-eks-best-practices/scalability/docs/control-plane/#use-eks-124-or-above"
+                },
+                "get_nodegroups_provisioners": {
+                    "Namespace": "Cluster Wide",
+                    "Rule Description": "Get Node groups and Provisioners",
+                    "status": "PASS",
+                    "Info": null,
+                    "resources": [
+                        "EKS MNG : 2 Self MNG : 0 Provisioners: 0 Linux NGs: imdsv2 disablePodIMDS1 Windows NGs: "
+                    ],
+                    "resource_type": "Node groups and Provisioners",
+                    "Resolution": "https://aws.github.io/aws-eks-best-practices/scalability/docs/control-plane/#use-eks-124-or-above"
+                },
+                "get_fargate_profiles": {
+                    "Namespace": "Cluster Wide",
+                    "Rule Description": "Get EKS Fargate Profiles",
+                    "status": "PASS",
+                    "Info": "EKS Fargate Profiles: ",
+                    "resources": [
+                        ""
+                    ],
+                    "resource_type": "EKS Fargate Profiles",
+                    "Resolution": "https://aws.github.io/aws-eks-best-practices/scalability/docs/control-plane/#use-eks-124-or-above"
+                }
+            }
+        },
+        "security": {
+            "iam": {
+                "disable_anonymous_access_for_cluster_roles": {
+                    "Namespace": "Cluster Wide",
+                    "Rule Description": "Review and revoke unnecessary anonymous access",
+                    "status": "PASS",
+                    "Info": null,
+                    "resources": [
+                        ""
+                    ],
+                    "resource_type": "ClusterRoleBinding",
+                    "Resolution": "https://aws.github.io/aws-eks-best-practices/security/docs/iam/#review-and-revoke-unnecessary-anonymous-access"
+                },
+                "cluster_endpoint_public_and_private_mode": {
+                    "Namespace": "Cluster Wide",
+                    "Rule Description": "Make the EKS Cluster Endpoint private",
+                    "status": "FAIL",
+                    "Info": "EKS Cluster Endpoint is Public and Open to Internet Access ['0.0.0.0/0']",
+                    "resources": [
+                        ""
+                    ],
+                    "resource_type": "EKS Cluster Endpoint Mode",
+                    "Resolution": "https://aws.github.io/aws-eks-best-practices/security/docs/iam/#make-the-eks-cluster-endpoint-private"
+                },
+                "check_aws_node_daemonset_service_account": {
+                    "Namespace": "Cluster Wide",
+                    "Rule Description": "Update the aws-node daemonset to use IRSA.",
+                    "status": "PASS",
+                    "Info": "VPC CNI uses separate IAM Role (IRSA)",
+                    "resources": [
+                        ""
+                    ],
+                    "resource_type": "IRSA for VPC CNI",
+                    "Resolution": "https://aws.github.io/aws-eks-best-practices/security/docs/iam/#update-the-aws-node-daemonset-to-use-irsa"
+                },
+                "use_imds_v2": {
+                    "Namespace": "Cluster Wide",
+                    "Rule Description": "When your application needs access to IMDS, use IMDSv2 and increase the hop limit on EC2 instances to 2",
+                    "status": "FAIL",
+                    "Info": "HttpPutResponseHopLimit : 1 HttpEndpoint : enabled HttpTokens : required",
+                    "resources": [
+                        "i-09dd1a0cef86f9ffa"
+                    ],
+                    "resource_type": "Node",
+                    "Resolution": "\\https://aws.github.io/aws-eks-best-practices/security/docs/iam/#when-your-application-needs-access-to-imds-use-imdsv2-and-increase-the-hop-limit-on-ec2-instances-to-2"
+                },
+                "restrict_access_to_instance_profile": {
+                    "Namespace": "Cluster Wide",
+                    "Rule Description": "Restrict access to the instance profile assigned to the worker node",
+                    "status": "PASS",
+                    "Info": "HttpPutResponseHopLimit : 1 HttpEndpoint : enabled HttpTokens : required",
+                    "resources": [
+                        ""
+                    ],
+                    "resource_type": "Node",
+                    "Resolution": "https://aws.github.io/aws-eks-best-practices/security/docs/iam/#restrict-access-to-the-instance-profile-assigned-to-the-worker-node"
+                },
+                "restrict_wildcard_for_cluster_roles": {
+                    "Namespace": "Cluster Wide",
+                    "Rule Description": "Employ least privileged access when creating RoleBindings and ClusterRoleBindings",
+                    "status": "FAIL",
+                    "Info": null,
+                    "resources": [
+                        "eks:service-operations",
+                        "eks:service-operations",
+                        "eks:service-operations",
+                        "eks:service-operations",
+                        "eks:service-operations",
+                        "eks:service-operations",
+                        "eks:service-operations",
+                        "eks:service-operations",
+                        "eks:service-operations",
+                        "eks:service-operations",
+                        "eks:service-operations",
+                        "eks:service-operations",
+                        "eks:service-operations",
+                        "eks:service-operations",
+                        "eks:service-operations",
+                        "eks:service-operations",
+                        "eks:service-operations",
+                        "gatekeeper-manager-role",
+                        "gatekeeper-manager-role",
+                        "gatekeeper-manager-role",
+                        "gatekeeper-manager-role",
+                        "kyverno:admission-controller",
+                        "kyverno:admission-controller:core",
+                        "kyverno:background-controller",
+                        "kyverno:background-controller:core",
+                        "kyverno:reports-controller",
+                        "kyverno:reports-controller:core",
+                        "tigera-operator"
+                    ],
+                    "resource_type": "Cluster Role",
+                    "Resolution": "https://aws.github.io/aws-eks-best-practices/security/docs/iam/#employ-least-privileged-access-when-creating-rolebindings-and-clusterrolebindings"
+                },
+                "do_not_assign_system_masters_for_normal_users": {
+                    "Namespace": "Cluster Wide",
+                    "Rule Description": "Do not assign system:masters group to normal users",
+                    "status": "FAIL",
+                    "Info": "system:masters exist in aws-auth config map",
+                    "resources": [
+                        ""
+                    ],
+                    "resource_type": "least privileged rbac role",
+                    "Resolution": "https://aws.github.io/aws-eks-best-practices/security/docs/iam/#employ-least-privileged-access-when-creating-rolebindings-and-clusterrolebindings"
+                },
+                "use_iam_role_for_multiple_iam_users": {
+                    "Namespace": "Cluster Wide",
+                    "Rule Description": "Use IAM Roles when multiple users need identical access to the cluster¶",
+                    "status": "FAIL",
+                    "Info": "mapUsers exist in aws-auth config map",
+                    "resources": [
+                        ""
+                    ],
+                    "resource_type": "iam users",
+                    "Resolution": "https://aws.github.io/aws-eks-best-practices/security/docs/iam/#use-iam-roles-when-multiple-users-need-identical-access-to-the-cluster"
+                },
+                "create_cluster_with_dedicated_iam_role": {
+                    "Namespace": "Cluster Wide",
+                    "Rule Description": "Create the cluster with a dedicated IAM role",
+                    "status": "FAIL",
+                    "Info": "IAM Role arn:aws:iam::000474600478:role/eksworkshop-admin has AdministratorAccess policy",
+                    "resources": [
+                        ""
+                    ],
+                    "resource_type": "dedicated cluster role",
+                    "Resolution": "https://aws.github.io/aws-eks-best-practices/security/docs/iam/#create-the-cluster-with-a-dedicated-iam-role"
+                }
+            },
+            "multi_tenancy": {
+                "ensure_namespace_quotas_exist": {
+                    "Namespace": "Cluster Wide",
+                    "Rule Description": "Namespaces should have quotas assigned.",
+                    "status": "FAIL",
+                    "Info": "Resource Quots does not exist for namespaces : kyverno management-ui calico-apiserver orders tigera-operator aws-pca-issuer kyverno-notation-aws client checkout calico-system carts test-notation ui catalog storage assets rabbitmq lb other stars",
+                    "resources": [
+                        ""
+                    ],
+                    "resource_type": "Namepsace",
+                    "Resolution": "https://aws.github.io/aws-eks-best-practices/security/docs/multitenancy/#quotas"
+                }
+            },
+            "detective_controls": {
+                "check_logs_are_enabled": {
+                    "Namespace": "Cluster Wide",
+                    "Rule Description": "Enable audit logs",
+                    "status": "PASS",
+                    "Info": " Logs Enabled : api audit Logs Disabled : authenticator controllerManager scheduler guardDutyEKSAudiLogStatus = ENABLED",
+                    "resources": [
+                        ""
+                    ],
+                    "resource_type": "Log Configuration",
+                    "Resolution": "https://aws.github.io/aws-eks-best-practices/security/docs/detective/#enable-audit-logs"
+                }
+            },
+            "network_security": {
+                "check_vpc_flow_logs": {
+                    "Namespace": "Cluster Wide",
+                    "Rule Description": "Log network traffic metadata",
+                    "status": "PASS",
+                    "Info": null,
+                    "resources": [
+                        ""
+                    ],
+                    "resource_type": "VPC Configuration",
+                    "Resolution": "https://aws.github.io/aws-eks-best-practices/security/docs/network/#log-network-traffic-metadata"
+                },
+                "check_awspca_exists": {
+                    "Namespace": "Cluster Wide",
+                    "Rule Description": "Install aws privateca issuer for your certificates.",
+                    "status": "PASS",
+                    "Info": null,
+                    "resources": [
+                        "aws-privateca-issuer"
+                    ],
+                    "resource_type": "Service",
+                    "Resolution": "https://aws.github.io/aws-eks-best-practices/security/docs/network/#acm-private-ca-with-cert-manager"
+                },
+                "check_default_deny_policy_exists": {
+                    "Namespace": "Cluster Wide",
+                    "Rule Description": "Create a default deny policy",
+                    "status": "FAIL",
+                    "Info": "default deny policy doesn't exist for namespaces : kyverno management-ui calico-apiserver orders tigera-operator aws-pca-issuer kyverno-notation-aws gatekeeper-system client checkout prometheus calico-system carts default test-notation ui catalog storage assets opentelemetry-operator-system windows rabbitmq lb other amazon-guardduty sample cert-manager",
+                    "resources": [
+                        ""
+                    ],
+                    "resource_type": "Namespace",
+                    "Resolution": "https://aws.github.io/aws-eks-best-practices/security/docs/network/#create-a-default-deny-policy"
+                }
+            },
+            "encryption_secrets": {
+                "use_encryption_with_ebs": {
+                    "Namespace": "Cluster Wide",
+                    "Rule Description": "Encrypt data at rest",
+                    "status": "FAIL",
+                    "Info": null,
+                    "resources": [
+                        "gp3"
+                    ],
+                    "resource_type": "StorageClass",
+                    "Resolution": "https://aws.github.io/aws-eks-best-practices/security/docs/data/#encryption-at-rest"
+                },
+                "use_encryption_with_efs": {
+                    "Namespace": "Cluster Wide",
+                    "Rule Description": "EFS Persistent volumes should have tls mount option.",
+                    "status": "FAIL",
+                    "Info": "EFS PVs without tls in the mount option efs-pvc efs-pvc-shared pvc-c7bc663d-f3e9-498e-938a-ed1782360b06",
+                    "resources": [
+                        "efs-pvc",
+                        "efs-pvc-shared",
+                        "pvc-c7bc663d-f3e9-498e-938a-ed1782360b06"
+                    ],
+                    "resource_type": "PersistentVolume",
+                    "Resolution": "https://aws.github.io/aws-eks-best-practices/security/docs/data/#encryption-at-rest"
+                },
+                "use_efs_access_points": {
+                    "Namespace": "Cluster Wide",
+                    "Rule Description": "Use EFS access points to simplify access to shared datasets",
+                    "status": "FAIL",
+                    "Info": "EFS PVs without access points efs-pvc efs-pvc1",
+                    "resources": [
+                        "efs-pvc",
+                        "efs-pvc1"
+                    ],
+                    "resource_type": "PersistentVolume",
+                    "Resolution": "https://aws.github.io/aws-eks-best-practices/security/docs/data/#use-efs-access-points-to-simplify-access-to-shared-datasets"
+                },
+                "rotate_cmk_for_eks_envelope_encryption": {
+                    "Namespace": "Cluster Wide",
+                    "Rule Description": "Rotate KMS CMK for KMS Envelope Encryption of K8s Secrets",
+                    "status": "FAIL",
+                    "Info": "EKS Envelope Encryption is Enabled but Key Rotaion is Disabled",
+                    "resources": [
+                        ""
+                    ],
+                    "resource_type": "EKS Envelope Encryption",
+                    "Resolution": "https://aws.github.io/aws-eks-best-practices/security/docs/data/#use-efs-access-points-to-simplify-access-to-shared-datasets"
+                },
+                "use_external_secret_provider_with_aws_secret_manager": {
+                    "Namespace": "Cluster Wide",
+                    "Rule Description": "Use an external secrets provider",
+                    "status": "PASS",
+                    "Info": "ASCP is deployed Secrets CSI Driver is deployed",
+                    "resources": [
+                        ""
+                    ],
+                    "resource_type": "Service",
+                    "Resolution": "https://aws.github.io/aws-eks-best-practices/security/docs/data/#use-an-external-secrets-provider"
+                }
+            },
+            "infrastructure_security": {
+                "deploy_workers_onto_private_subnets": {
+                    "Namespace": "Cluster Wide",
+                    "Rule Description": "Deploy workers onto private subnets",
+                    "status": "PASS",
+                    "Info": null,
+                    "resources": [
+                        ""
+                    ],
+                    "resource_type": "Node",
+                    "Resolution": "https://aws.github.io/aws-eks-best-practices/security/docs/hosts/#deploy-workers-onto-private-subnets"
+                },
+                "make_sure_inspector_is_enabled": {
+                    "Namespace": "Cluster Wide",
+                    "Rule Description": "Run Amazon Inspector to assess hosts for exposure, vulnerabilities, and deviations from best practices",
+                    "status": "PASS",
+                    "Info": null,
+                    "resources": [
+                        ""
+                    ],
+                    "resource_type": "Inspector Configuration",
+                    "Resolution": "Run Amazon Inspector to assess hosts for exposure, vulnerabilities, and deviations from best practices"
+                },
+                "use_OS_optimized_for_running_containers": {
+                    "Namespace": "Cluster Wide",
+                    "Rule Description": "Use an OS optimized for running containers",
+                    "status": "FAIL",
+                    "Info": "Node OS is not optimized for containers ",
+                    "resources": [
+                        "Amazon Linux 2"
+                    ],
+                    "resource_type": "Node OS",
+                    "Resolution": "https://aws.github.io/aws-eks-best-practices/security/docs/hosts/#use-an-os-optimized-for-running-containers"
+                }
+            },
+            "pod_security": {
+                "ensure_namespace_psa_exist": {
+                    "Namespace": "Cluster Wide",
+                    "Rule Description": "Use multiple Pod Security Admission (PSA) modes for a better user experience",
+                    "status": "FAIL",
+                    "Info": "Namespaces without PSA labels amazon-guardduty assets aws-pca-issuer carts catalog cert-manager checkout client default gatekeeper-system kyverno kyverno-notation-aws lb management-ui opentelemetry-operator-system orders other prometheus rabbitmq sample stars storage test-notation tigera-operator ui windows",
+                    "resources": [
+                        ""
+                    ],
+                    "resource_type": "Namespace",
+                    "Resolution": "https://aws.github.io/aws-eks-best-practices/security/docs/pods/#pod-security-standards-pss-and-pod-security-admission-psa"
+                }
+            },
+            "image_security": {
+                "use_immutable_tags_with_ecr": {
+                    "Namespace": "Cluster Wide",
+                    "Rule Description": "Make image tags immutable.",
+                    "status": "FAIL",
+                    "Info": "ECR Repos without Immutable Tags eksws-codepipeline-ecrdockerrepository-nvr3yckurryv zstd aws-spring-boot-optimization/spring-native-soci busybox ecr-demo-scan/web yelb-appserver-soci docker-compose/yelb-appserver-soci ec2spotcustomscheduler node ecs-spot-workshop/web-soci java-generic-0623693b0cd1-soci eks-workshop-x-ray-sample-front inspector-blog-images-soci k8s/kube-bench-soci eks-microservice-demo/test-soci eks-app-mesh-demo/catalog_detail-soci flask-cb-demo-soci docker-compose/yelb-ui bottlerocket-admin-container-amd64 my-app/my-svc artifact-test k8s/kube-bench helm-test-chart pet-payforadoption-soci k8s-cloudwatch-controller-soci custom-fluent-bit-soci custom-kube-scheduler-webhook/custom-kube-scheduler-webhook-soci java-generic-0623693b0cd1 sample-microservice-with-spinnaker-soci ecrrepo-pb2vm9zuxgk0 hello-world pet-trafficgenerator-soci custom-kube-scheduler-webhook scanrepo-test-soci websockets-test-soci awscli bottlerocket-cis-bootstrap-image bottlerocket-cis-bootstrap-image-soci ecsmulticastsender-soci fluent-bit-demo sample-microservice-with-spinnaker custom-kube-scheduler-webhook-soci artifact-test-soci nginx ec2spotcustomscheduler-soci author-service ephemeral-storage-demo/exec-service scanrepo-test aws-spring-boot-optimization/custom-jre-java-optimizations redis aws-spring-boot-optimization/baseline-arm colorteller-soci sidecar-injector/sidecar-injector howto-k8s-mtls-sds-based/colorapp-soci my-app/my-svc-soci guestbook aws-spring-boot-optimization/spring-native-distroless app ecsmulticastreceiver monte-carlo-sim eksvpccnitestapp-soci colorteller-envoy-soci example-app/joker-soci aws-spring-boot-optimization/baseline-test4 eksvpccnitestapp postgres scanrepo-prod-soci sample-ui-soci app-soci graviton2-aspnet-lab-soci appmesh-workshop-nodejs-wipsirgkpivv docker-compose/yelb-db-soci eks-example-soci colorteller-envoy docker-compose/redis author-service-soci example-app/joker3-soci aws-spring-boot-optimization/baseline-test3 eks-microservice-demo/test apprunnerworkshop-app-soci ecr-demo test route-guide cdkstackalbeksbg-ecrrepobb83a592-edvofyeww8kx helloworld-grpc howto-k8s-mtls-sds-based/feapp-soci bluegreenusingecsstack-demoappecrrepof335e680-cmwgaq0mnurz-soci pet-listadoptions-soci pet-payforadoption appmesh-workshop-crystal-qwkkiv3lunp8-soci helloworld-grpc-soci simple-express-repository-soci bluegreenusingecsstack-demoappecrrepof335e680-cmwgaq0mnurz graviton2-aspnet-lab zstd-soci std/reverse awscli-soci",
+                    "resources": [
+                        ""
+                    ],
+                    "resource_type": "ECR Repository",
+                    "Resolution": "https://aws.github.io/aws-eks-best-practices/security/docs/image/#use-immutable-tags-with-ecr"
+                },
+                "scan_images_for_vulnerabilities": {
+                    "Namespace": "Cluster Wide",
+                    "Rule Description": "Scan images for vulnerabilities regularly",
+                    "status": "FAIL",
+                    "Info": "ECR Repos with scanOnPush Disabled eksws-codepipeline-ecrdockerrepository-nvr3yckurryv zstd aws-spring-boot-optimization/spring-native-soci busybox ecr-demo-scan/web yelb-appserver-soci docker-compose/yelb-appserver-soci ec2spotcustomscheduler node ecs-spot-workshop/web-soci java-generic-0623693b0cd1-soci eks-workshop-x-ray-sample-front inspector-blog-images-soci k8s/kube-bench-soci eks-microservice-demo/test-soci eks-app-mesh-demo/catalog_detail-soci flask-cb-demo-soci docker-compose/yelb-ui bottlerocket-admin-container-amd64 my-app/my-svc artifact-test k8s/kube-bench helm-test-chart pet-payforadoption-soci k8s-cloudwatch-controller-soci custom-fluent-bit-soci custom-kube-scheduler-webhook/custom-kube-scheduler-webhook-soci java-generic-0623693b0cd1 sample-microservice-with-spinnaker-soci monolith-service ecrrepo-pb2vm9zuxgk0 hello-world pet-trafficgenerator-soci custom-kube-scheduler-webhook scanrepo-test-soci websockets-test-soci awscli bottlerocket-cis-bootstrap-image bottlerocket-cis-bootstrap-image-soci ecsmulticastsender-soci fluent-bit-demo sample-microservice-with-spinnaker custom-kube-scheduler-webhook-soci artifact-test-soci nginx ec2spotcustomscheduler-soci author-service ephemeral-storage-demo/exec-service scanrepo-test aws-spring-boot-optimization/custom-jre-java-optimizations redis aws-spring-boot-optimization/baseline-arm colorteller-soci sidecar-injector/sidecar-injector howto-k8s-mtls-sds-based/colorapp-soci my-app/my-svc-soci guestbook aws-spring-boot-optimization/spring-native-distroless app ecsmulticastreceiver monte-carlo-sim eksvpccnitestapp-soci colorteller-envoy-soci example-app/joker-soci aws-spring-boot-optimization/baseline-test4 eksvpccnitestapp postgres scanrepo-prod-soci sample-ui-soci app-soci graviton2-aspnet-lab-soci appmesh-workshop-nodejs-wipsirgkpivv docker-compose/yelb-db-soci eks-example-soci colorteller-envoy docker-compose/redis author-service-soci example-app/joker3-soci aws-spring-boot-optimization/baseline-test3 eks-microservice-demo/test apprunnerworkshop-app-soci ecr-demo test route-guide cdkstackalbeksbg-ecrrepobb83a592-edvofyeww8kx helloworld-grpc howto-k8s-mtls-sds-based/feapp-soci cdk-hnb659fds-container-assets-000474600478-us-east-1 monolith-service1 bluegreenusingecsstack-demoappecrrepof335e680-cmwgaq0mnurz-soci pet-listadoptions-soci pet-payforadoption appmesh-workshop-crystal-qwkkiv3lunp8-soci helloworld-grpc-soci simple-express-repository-soci bluegreenusingecsstack-demoappecrrepof335e680-cmwgaq0mnurz graviton2-aspnet-lab zstd-soci std/reverse awscli-soci",
+                    "resources": [
+                        ""
+                    ],
+                    "resource_type": "ECR Repository",
+                    "Resolution": "https://aws.github.io/aws-eks-best-practices/security/docs/image/#scan-images-for-vulnerabilities-regularly"
+                },
+                "check_iam_iam_policies_for_ecr_repositories": {
+                    "Namespace": "Cluster Wide",
+                    "Rule Description": "Create IAM policies for ECR repositories",
+                    "status": "FAIL",
+                    "Info": "ECR Repos without IAM Policies eksws-codepipeline-ecrdockerrepository-nvr3yckurryv zstd aws-spring-boot-optimization/spring-native-soci busybox yelb-appserver-soci docker-compose/yelb-appserver-soci ec2spotcustomscheduler node ecs-spot-workshop/web-soci java-generic-0623693b0cd1-soci eks-workshop-x-ray-sample-front inspector-blog-images-soci k8s/kube-bench-soci eks-microservice-demo/test-soci eks-app-mesh-demo/catalog_detail-soci flask-cb-demo-soci docker-compose/yelb-ui bottlerocket-admin-container-amd64 artifact-test k8s/kube-bench helm-test-chart pet-payforadoption-soci k8s-cloudwatch-controller-soci custom-fluent-bit-soci custom-kube-scheduler-webhook/custom-kube-scheduler-webhook-soci java-generic-0623693b0cd1 sample-microservice-with-spinnaker-soci monolith-service ecrrepo-pb2vm9zuxgk0 hello-world pet-trafficgenerator-soci custom-kube-scheduler-webhook scanrepo-test-soci websockets-test-soci awscli bottlerocket-cis-bootstrap-image bottlerocket-cis-bootstrap-image-soci ecsmulticastsender-soci fluent-bit-demo sample-microservice-with-spinnaker custom-kube-scheduler-webhook-soci artifact-test-soci nginx ec2spotcustomscheduler-soci author-service scanrepo-test aws-spring-boot-optimization/custom-jre-java-optimizations redis aws-spring-boot-optimization/baseline-arm colorteller-soci sidecar-injector/sidecar-injector howto-k8s-mtls-sds-based/colorapp-soci my-app/my-svc-soci guestbook aws-spring-boot-optimization/spring-native-distroless app ecsmulticastreceiver monte-carlo-sim eksvpccnitestapp-soci colorteller-envoy-soci example-app/joker-soci aws-spring-boot-optimization/baseline-test4 eksvpccnitestapp postgres scanrepo-prod-soci sample-ui-soci app-soci graviton2-aspnet-lab-soci appmesh-workshop-nodejs-wipsirgkpivv docker-compose/yelb-db-soci eks-example-soci colorteller-envoy docker-compose/redis author-service-soci example-app/joker3-soci aws-spring-boot-optimization/baseline-test3 eks-microservice-demo/test apprunnerworkshop-app-soci ecr-demo test route-guide cdkstackalbeksbg-ecrrepobb83a592-edvofyeww8kx helloworld-grpc howto-k8s-mtls-sds-based/feapp-soci monolith-service1 bluegreenusingecsstack-demoappecrrepof335e680-cmwgaq0mnurz-soci pet-listadoptions-soci pet-payforadoption appmesh-workshop-crystal-qwkkiv3lunp8-soci helloworld-grpc-soci simple-express-repository-soci bluegreenusingecsstack-demoappecrrepof335e680-cmwgaq0mnurz graviton2-aspnet-lab zstd-soci awscli-soci",
+                    "resources": [
+                        ""
+                    ],
+                    "resource_type": "ECR Repository",
+                    "Resolution": "https://aws.github.io/aws-eks-best-practices/security/docs/image/#create-iam-policies-for-ecr-repositories"
+                },
+                "consider_using_ecr_private_endpoints": {
+                    "Namespace": "Cluster Wide",
+                    "Rule Description": "Consider using ECR private endpoints",
+                    "status": "FAIL",
+                    "Info": "VPC Endpoint for ECR does not exist in VPC : vpc-03103b5e0fe171706",
+                    "resources": [
+                        ""
+                    ],
+                    "resource_type": "ECR Repository",
+                    "Resolution": "https://aws.github.io/aws-eks-best-practices/security/docs/image/#consider-using-ecr-private-endpoints"
+                },
+                "check_endpoint_policies_for_ecr": {
+                    "Namespace": "Cluster Wide",
+                    "Rule Description": "Implement endpoint policies for ECR",
+                    "status": "FAIL",
+                    "Info": "VPC Endpoint for ECR does not exist in VPC : vpc-03103b5e0fe171706",
+                    "resources": [
+                        ""
+                    ],
+                    "resource_type": "ECR Repository",
+                    "Resolution": "https://aws.github.io/aws-eks-best-practices/security/docs/image/#implement-endpoint-policies-for-ecr"
+                },
+                "implement_lifecycle_policies_for_ecr": {
+                    "Namespace": "Cluster Wide",
+                    "Rule Description": "Implement lifecycle policies for ECR",
+                    "status": "FAIL",
+                    "Info": "ECR Repos without lifecycle Policies eksws-codepipeline-ecrdockerrepository-nvr3yckurryv zstd aws-spring-boot-optimization/spring-native-soci busybox ecr-demo-scan/web yelb-appserver-soci docker-compose/yelb-appserver-soci ec2spotcustomscheduler node ecs-spot-workshop/web-soci java-generic-0623693b0cd1-soci eks-workshop-x-ray-sample-front inspector-blog-images-soci k8s/kube-bench-soci eks-microservice-demo/test-soci eks-app-mesh-demo/catalog_detail-soci flask-cb-demo-soci docker-compose/yelb-ui bottlerocket-admin-container-amd64 my-app/my-svc artifact-test k8s/kube-bench helm-test-chart pet-payforadoption-soci k8s-cloudwatch-controller-soci custom-fluent-bit-soci custom-kube-scheduler-webhook/custom-kube-scheduler-webhook-soci java-generic-0623693b0cd1 sample-microservice-with-spinnaker-soci monolith-service ecrrepo-pb2vm9zuxgk0 hello-world pet-trafficgenerator-soci custom-kube-scheduler-webhook scanrepo-test-soci websockets-test-soci awscli bottlerocket-cis-bootstrap-image bottlerocket-cis-bootstrap-image-soci ecsmulticastsender-soci fluent-bit-demo sample-microservice-with-spinnaker custom-kube-scheduler-webhook-soci artifact-test-soci nginx ec2spotcustomscheduler-soci author-service ephemeral-storage-demo/exec-service scanrepo-test aws-spring-boot-optimization/custom-jre-java-optimizations redis aws-spring-boot-optimization/baseline-arm colorteller-soci sidecar-injector/sidecar-injector howto-k8s-mtls-sds-based/colorapp-soci my-app/my-svc-soci guestbook aws-spring-boot-optimization/spring-native-distroless app ecsmulticastreceiver monte-carlo-sim eksvpccnitestapp-soci colorteller-envoy-soci example-app/joker-soci aws-spring-boot-optimization/baseline-test4 eksvpccnitestapp postgres scanrepo-prod-soci sample-ui-soci app-soci graviton2-aspnet-lab-soci appmesh-workshop-nodejs-wipsirgkpivv docker-compose/yelb-db-soci eks-example-soci colorteller-envoy docker-compose/redis author-service-soci example-app/joker3-soci aws-spring-boot-optimization/baseline-test3 eks-microservice-demo/test apprunnerworkshop-app-soci ecr-demo test route-guide cdkstackalbeksbg-ecrrepobb83a592-edvofyeww8kx helloworld-grpc howto-k8s-mtls-sds-based/feapp-soci monolith-service1 bluegreenusingecsstack-demoappecrrepof335e680-cmwgaq0mnurz-soci pet-listadoptions-soci pet-payforadoption appmesh-workshop-crystal-qwkkiv3lunp8-soci helloworld-grpc-soci simple-express-repository-soci bluegreenusingecsstack-demoappecrrepof335e680-cmwgaq0mnurz graviton2-aspnet-lab zstd-soci std/reverse awscli-soci",
+                    "resources": [
+                        ""
+                    ],
+                    "resource_type": "ECR Repository",
+                    "Resolution": "https://aws.github.io/aws-eks-best-practices/security/docs/image/#implement-lifecycle-policies-for-ecr"
+                }
+            }
+        },
+        "reliability": {
+            "applications": {
+                "check_metrics_server_is_running": {
+                    "Namespace": "Cluster Wide",
+                    "Rule Description": "Run Kubernetes Metrics Server",
+                    "status": "FAIL",
+                    "Info": null,
+                    "resources": [
+                        ""
+                    ],
+                    "resource_type": "Service",
+                    "Resolution": "https://aws.github.io/aws-eks-best-practices/reliability/docs/application/#run-kubernetes-metrics-server"
+                },
+                "check_vertical_pod_autoscaler_exists": {
+                    "Namespace": "Cluster Wide",
+                    "Rule Description": "Vertical pod autoscaler is not deployed.",
+                    "status": "FAIL",
+                    "Info": null,
+                    "resources": [
+                        ""
+                    ],
+                    "resource_type": "Deployment",
+                    "Resolution": "https://aws.github.io/aws-eks-best-practices/reliability/docs/application/#run-kubernetes-metrics-server"
+                }
+            }
+        },
+        "scalability": {
+            "control_plane": {
+                "check_EKS_version": {
+                    "Namespace": "Cluster Wide",
+                    "Rule Description": "EKS Version should be 1.27",
+                    "status": "FAIL",
+                    "Info": "EKS Cluster Version 1.26. Upgrade to Latest Version 1.27",
+                    "resources": [
+                        ""
+                    ],
+                    "resource_type": "EKS Cluster Version",
+                    "Resolution": "https://aws.github.io/aws-eks-best-practices/scalability/docs/control-plane/#use-eks-124-or-above"
+                },
+                "check_kubectl_compression": {
+                    "Namespace": "Cluster Wide",
+                    "Rule Description": "`disable-compression` in kubeconfig should equal True",
+                    "status": "PASS",
+                    "Info": null,
+                    "resources": [
+                        ""
+                    ],
+                    "resource_type": "Compression Setting",
+                    "Resolution": "https://aws.github.io/aws-eks-best-practices/scalability/docs/control-plane/#disable-kubectl-compression"
+                }
+            }
+        },
+        "cluster_autoscaling": {
+            "cluster_autoscaler": {
+                "check_any_cluster_autoscaler_exists": {
+                    "Namespace": "Cluster Wide",
+                    "Rule Description": "Deploy either K8s Cluster Autoscaler or Karpenter",
+                    "status": "PASS",
+                    "Info": "Deployment Status for CA : False and Karpenter : True",
+                    "resources": [
+                        ""
+                    ],
+                    "resource_type": "Deployment",
+                    "Resolution": "https://aws.github.io/aws-eks-best-practices/cluster-autoscaling/"
+                },
+                "ensure_cluster_autoscaler_and_cluster_versions_match": {
+                    "Namespace": "Cluster Wide",
+                    "Rule Description": "Ensure K8s and CA Versions match",
+                    "status": "FAIL",
+                    "Info": "Kubernetes Cluster Autoscaler is not deployed in the cluster",
+                    "resources": [
+                        ""
+                    ],
+                    "resource_type": "Deployment",
+                    "Resolution": "https://aws.github.io/aws-eks-best-practices/cluster-autoscaling/#operating-the-cluster-autoscaler"
+                },
+                "ensure_cluster_autoscaler_has_autodiscovery_mode": {
+                    "Namespace": "Cluster Wide",
+                    "Rule Description": "Operating the Cluster Autoscaler",
+                    "status": "FAIL",
+                    "Info": "Kubernetes Cluster Autoscaler is not deployed in the cluster",
+                    "resources": [
+                        ""
+                    ],
+                    "resource_type": "Deployment",
+                    "Resolution": "https://aws.github.io/aws-eks-best-practices/cluster-autoscaling/#operating-the-cluster-autoscaler"
+                },
+                "use_separate_iam_role_for_cluster_autoscaler": {
+                    "Namespace": "Cluster Wide",
+                    "Rule Description": "Ensure K8s CA Uses dedicated IAM Role (IRSA).",
+                    "status": "FAIL",
+                    "Info": "Kubernetes Cluster Autoscaler is not deployed in the cluster",
+                    "resources": [
+                        ""
+                    ],
+                    "resource_type": "IRSA for K8s CA",
+                    "Resolution": "https://aws.github.io/aws-eks-best-practices/cluster-autoscaling/#employ-least-privileged-access-to-the-iam-role"
+                },
+                "employ_least_privileged_access_cluster_autoscaler_role": {
+                    "Namespace": "Cluster Wide",
+                    "Rule Description": "Employ least privileged access to the IAM role",
+                    "status": "FAIL",
+                    "Info": "Kubernetes Cluster Autoscaler is not deployed in the cluster",
+                    "resources": [
+                        ""
+                    ],
+                    "resource_type": "K8s CA IAM Role least privileged access",
+                    "Resolution": "https://aws.github.io/aws-eks-best-practices/cluster-autoscaling/#employ-least-privileged-access-to-the-iam-role"
+                },
+                "use_managed_nodegroups": {
+                    "Namespace": "Cluster Wide",
+                    "Rule Description": "Nodes are recommended to be part of a managed node group.",
+                    "status": "PASS",
+                    "Info": "All are EKS Managed Node groups",
+                    "resources": [
+                        ""
+                    ],
+                    "resource_type": "Node",
+                    "Resolution": "https://aws.github.io/aws-eks-best-practices/cluster-autoscaling/#configuring-your-node-groups"
+                },
+                "ensure_cluster_autoscaler_has_three_replicas": {
+                    "Namespace": "Cluster Wide",
+                    "Rule Description": "Ensure Cluster Autoscaler has 3 replicas for HA",
+                    "status": "FAIL",
+                    "Info": "Kubernetes Cluster Autoscaler is not deployed in the cluster",
+                    "resources": [
+                        ""
+                    ],
+                    "resource_type": "K8s CA Replica Count",
+                    "Resolution": "https://aws.github.io/aws-eks-best-practices/cluster-autoscaling/#operating-the-cluster-autoscaler"
+                },
+                "ensure_uniform_instance_types_in_nodegroups": {
+                    "Namespace": "Cluster Wide",
+                    "Rule Description": "Configuring your Node Groups",
+                    "status": "PASS",
+                    "Info": "Node group has uniform Instance Types",
+                    "resources": [
+                        "imdsv2",
+                        "disablePodIMDS1"
+                    ],
+                    "resource_type": "Uniform Instance Types in Node group",
+                    "Resolution": "https://aws.github.io/aws-eks-best-practices/cluster-autoscaling/#configuring-your-node-groups"
+                },
+                "configure_node_groups_for_mixedinstances": {
+                    "Namespace": "Cluster Wide",
+                    "Rule Description": "Configuring your Node Groups",
+                    "status": "FAIL",
+                    "Info": "MNGs with no diversification  br-mng disablePodIMDS1 imdsv2 linux-ng mng windows-managed-ng-2022",
+                    "resources": [
+                        ""
+                    ],
+                    "resource_type": "MNG",
+                    "Resolution": "https://aws.github.io/aws-eks-best-practices/cluster-autoscaling/#configuring-your-node-groups"
+                },
+                "configure_node_groups_for_ha": {
+                    "Namespace": "Cluster Wide",
+                    "Rule Description": "Configuring Node Groups for HA",
+                    "status": "FAIL",
+                    "Info": "MNGs with less 3 Subnets br-mng disablePodIMDS1 imdsv2 linux-ng mng windows-managed-ng-2022",
+                    "resources": [
+                        ""
+                    ],
+                    "resource_type": "MNG",
+                    "Resolution": "https://aws.github.io/aws-eks-best-practices/cluster-autoscaling/#configuring-your-node-groups"
+                }
+            }
+        }
+    },
+    "namespace_based": {
+        "security": {
+            "iam": {
+                "disable_anonymous_access_for_roles": {
+                    "Namespace": "stars",
+                    "Rule Description": "Don't bind roles to anonymous or unauthenticated groups.",
+                    "status": "PASS",
+                    "Info": "None of the roles bound to anonymous or unauthenticated groups.",
+                    "resources": [
+                        ""
+                    ],
+                    "resource_type": "RoleBinding",
+                    "Resolution": "https://aws.github.io/aws-eks-best-practices/security/docs/iam/#review-and-revoke-unnecessary-anonymous-access"
+                },
+                "restrict_wildcard_for_roles": {
+                    "Namespace": "stars",
+                    "Rule Description": "Roles should not have '*' in Verbs or Resources.",
+                    "status": "PASS",
+                    "Info": "None of the roles have '*' in Verbs or Resources.",
+                    "resources": [
+                        ""
+                    ],
+                    "resource_type": "Role",
+                    "Resolution": "https://aws.github.io/aws-eks-best-practices/security/docs/iam/#employ-least-privileged-access-when-creating-rolebindings-and-clusterrolebindings"
+                },
+                "disable_service_account_token_mounts": {
+                    "Namespace": "stars",
+                    "Rule Description": "Disable auto-mounting of service account tokens",
+                    "status": "FAIL",
+                    "Info": "Pods with auto mounted SA : backend-5p4rx frontend-j6hmh",
+                    "resources": [
+                        ""
+                    ],
+                    "resource_type": "Pod",
+                    "Resolution": "https://aws.github.io/aws-eks-best-practices/security/docs/iam/#disable-auto-mounting-of-service-account-tokens"
+                },
+                "disable_run_as_root_user": {
+                    "Namespace": "stars",
+                    "Rule Description": "Running as root is not allowed.",
+                    "status": "FAIL",
+                    "Info": "Pods running as root : backend-5p4rx frontend-j6hmh",
+                    "resources": [
+                        ""
+                    ],
+                    "resource_type": "Pod",
+                    "Resolution": "https://aws.github.io/aws-eks-best-practices/security/docs/iam/#run-the-application-as-a-non-root-user"
+                },
+                "restrict_containers_run_as_privileged": {
+                    "Namespace": "stars",
+                    "Rule Description": "Restrict the containers that can run as privileged",
+                    "status": "PASS",
+                    "Info": "All pods do not run as privielged",
+                    "resources": [
+                        ""
+                    ],
+                    "resource_type": "Pod",
+                    "Resolution": "https://aws.github.io/aws-eks-best-practices/security/docs/pods/#restrict-the-containers-that-can-run-as-privileged"
+                },
+                "use_dedicated_service_accounts_for_each_deployment": {
+                    "Namespace": "stars",
+                    "Rule Description": "Don't share service accounts between Deployments.",
+                    "status": "PASS",
+                    "Info": "There are no Deployments in the Namespace",
+                    "resources": [
+                        ""
+                    ],
+                    "resource_type": "Deployment",
+                    "Resolution": "https://aws.github.io/aws-eks-best-practices/security/docs/iam/#use-dedicated-service-accounts-for-each-application"
+                },
+                "use_dedicated_service_accounts_for_each_stateful_set": {
+                    "Namespace": "stars",
+                    "Rule Description": "Don't share service accounts between StatefulSets.",
+                    "status": "PASS",
+                    "Info": "There are no StatefulSets in the Namespace",
+                    "resources": [
+                        ""
+                    ],
+                    "resource_type": "StatefulSet",
+                    "Resolution": "https://aws.github.io/aws-eks-best-practices/security/docs/iam/#use-dedicated-service-accounts-for-each-application"
+                },
+                "use_dedicated_service_accounts_for_each_daemon_set": {
+                    "Namespace": "stars",
+                    "Rule Description": "Don't share service accounts between DaemonSets.",
+                    "status": "PASS",
+                    "Info": "There are no DaemonSets in the Namespace",
+                    "resources": [
+                        ""
+                    ],
+                    "resource_type": "DaemonSet",
+                    "Resolution": "https://aws.github.io/aws-eks-best-practices/security/docs/iam/#use-dedicated-service-accounts-for-each-application"
+                },
+                "disable_service_discovery": {
+                    "Namespace": "stars",
+                    "Rule Description": "Disable service discovery",
+                    "status": "FAIL",
+                    "Info": "Pods using coreDNS for Service Discovery : backend-5p4rx frontend-j6hmh",
+                    "resources": [
+                        ""
+                    ],
+                    "resource_type": "Pod",
+                    "Resolution": "https://aws.github.io/aws-eks-best-practices/security/docs/pods/#disable-service-discovery"
+                }
+            },
+            "pod_security": {
+                "disallow_container_socket_mount": {
+                    "Namespace": "stars",
+                    "Rule Description": "Never run Docker in Docker or mount the socket in the container",
+                    "status": "PASS",
+                    "Info": "None of the Pods have socket mounts",
+                    "resources": [
+                        ""
+                    ],
+                    "resource_type": "Pod",
+                    "Resolution": "https://aws.github.io/aws-eks-best-practices/security/docs/pods/#never-run-docker-in-docker-or-mount-the-socket-in-the-container"
+                },
+                "disallow_host_path_or_make_it_read_only": {
+                    "Namespace": "stars",
+                    "Rule Description": "Restrict the use of hostPath or if hostPath is necessary restrict which prefixes can be used and configure the volume as read-only",
+                    "status": "PASS",
+                    "Info": "None of the Pods have Restrict hostpath",
+                    "resources": [
+                        ""
+                    ],
+                    "resource_type": "Pod",
+                    "Resolution": "https://aws.github.io/aws-eks-best-practices/security/docs/pods/#restrict-the-use-of-hostpath-or-if-hostpath-is-necessary-restrict-which-prefixes-can-be-used-and-configure-the-volume-as-read-only"
+                },
+                "set_requests_limits_for_containers": {
+                    "Namespace": "stars",
+                    "Rule Description": "Set requests and limits for each container to avoid resource contention and DoS attacks",
+                    "status": "FAIL",
+                    "Info": null,
+                    "resources": [
+                        "backend-5p4rx frontend-j6hmh"
+                    ],
+                    "resource_type": "Pod",
+                    "Resolution": "https://aws.github.io/aws-eks-best-practices/security/docs/pods/#set-requests-and-limits-for-each-container-to-avoid-resource-contention-and-dos-attacks"
+                },
+                "disallow_privilege_escalation": {
+                    "Namespace": "stars",
+                    "Rule Description": "Do not allow privileged escalation",
+                    "status": "PASS",
+                    "Info": null,
+                    "resources": [
+                        ""
+                    ],
+                    "resource_type": "Pod",
+                    "Resolution": "https://aws.github.io/aws-eks-best-practices/security/docs/pods/#do-not-allow-privileged-escalation"
+                },
+                "check_read_only_root_file_system": {
+                    "Namespace": "stars",
+                    "Rule Description": "Configure your images with a read-only root file system.",
+                    "status": "PASS",
+                    "Info": null,
+                    "resources": [
+                        ""
+                    ],
+                    "resource_type": "Pod",
+                    "Resolution": "https://aws.github.io/aws-eks-best-practices/security/docs/pods/#configure-your-images-with-read-only-root-file-system"
+                }
+            },
+            "network_security": {
+                "use_encryption_with_aws_load_balancers": {
+                    "Namespace": "stars",
+                    "Rule Description": "Use encryption with AWS load balancers",
+                    "status": "FAIL",
+                    "Info": null,
+                    "resources": [
+                        "backend frontend"
+                    ],
+                    "resource_type": "Service",
+                    "Resolution": "https://aws.github.io/aws-eks-best-practices/security/docs/network/#use-encryption-with-aws-load-balancers"
+                }
+            },
+            "encryption_secrets": {
+                "disallow_secrets_from_env_vars": {
+                    "Namespace": "stars",
+                    "Rule Description": "Use volume mounts instead of environment variables",
+                    "status": "PASS",
+                    "Info": null,
+                    "resources": [
+                        ""
+                    ],
+                    "resource_type": "Pod",
+                    "Resolution": "https://aws.github.io/aws-eks-best-practices/security/docs/data/#use-volume-mounts-instead-of-environment-variables"
+                }
+            }
+        },
+        "reliability": {
+            "applications": {
+                "check_horizontal_pod_autoscaling_exists": {
+                    "Namespace": "stars",
+                    "Rule Description": "Deploy horizontal pod autoscaler for deployments.",
+                    "status": "PASS",
+                    "Info": null,
+                    "resources": [
+                        ""
+                    ],
+                    "resource_type": "Deployment",
+                    "Resolution": "https://aws.github.io/aws-eks-best-practices/reliability/docs/application/#horizontal-pod-autoscaler-hpa"
+                },
+                "schedule_replicas_across_nodes": {
+                    "Namespace": "stars",
+                    "Rule Description": "Schedule replicas across nodes",
+                    "status": "PASS",
+                    "Info": null,
+                    "resources": [
+                        ""
+                    ],
+                    "resource_type": "Deployment",
+                    "Resolution": "https://aws.github.io/aws-eks-best-practices/reliability/docs/application/#schedule-replicas-across-nodes"
+                },
+                "run_multiple_replicas": {
+                    "Namespace": "stars",
+                    "Rule Description": "Run multiple replicas",
+                    "status": "PASS",
+                    "Info": null,
+                    "resources": [
+                        ""
+                    ],
+                    "resource_type": "Deployment",
+                    "Resolution": "https://aws.github.io/aws-eks-best-practices/reliability/docs/application/#run-multiple-replicas"
+                },
+                "avoid_running_singleton_pods": {
+                    "Namespace": "stars",
+                    "Rule Description": "Avoid running singleton Pods",
+                    "status": "PASS",
+                    "Info": null,
+                    "resources": [
+                        ""
+                    ],
+                    "resource_type": "Pod",
+                    "Resolution": "https://aws.github.io/aws-eks-best-practices/reliability/docs/application/#avoid-running-singleton-pods"
+                },
+                "check_readiness_probes": {
+                    "Namespace": "stars",
+                    "Rule Description": "Define readiness probes for pods.",
+                    "status": "FAIL",
+                    "Info": null,
+                    "resources": [
+                        "backend-5p4rx frontend-j6hmh"
+                    ],
+                    "resource_type": "Pod",
+                    "Resolution": "https://aws.github.io/aws-eks-best-practices/reliability/docs/application/#use-readiness-probe-to-detect-partial-unavailability"
+                },
+                "check_liveness_probes": {
+                    "Namespace": "stars",
+                    "Rule Description": "Define liveness probes for pods.",
+                    "status": "FAIL",
+                    "Info": null,
+                    "resources": [
+                        "backend-5p4rx frontend-j6hmh"
+                    ],
+                    "resource_type": "Pod",
+                    "Resolution": "https://aws.github.io/aws-eks-best-practices/reliability/docs/application/#use-liveness-probe-to-remove-unhealthy-pods"
+                },
+                "check_pod_disruption_budgets": {
+                    "Namespace": "stars",
+                    "Rule Description": "Protect critical workload with Pod Disruption Budgets",
+                    "status": "PASS",
+                    "Info": "All deployments have PDBs ",
+                    "resources": [
+                        ""
+                    ],
+                    "resource_type": "Pod",
+                    "Resolution": "https://aws.github.io/aws-eks-best-practices/reliability/docs/application/#recommendations_2"
+                }
+            }
+        }
+    }
+}
