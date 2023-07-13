@@ -1,5 +1,5 @@
-import os
 from pathlib import Path
+import os
 from pkg_resources import resource_filename
 import tempfile
 import yaml
@@ -118,8 +118,6 @@ def _get_current_context(context):
     return active_context["name"]
 
 
-
-
 def _get_filtered_namespaces(ignored_ns: list, selected_namespaces: str) -> list:
     v1 = kubernetes.client.CoreV1Api()
     all_namespaces_in_cluster = [i.metadata.name for i in v1.list_namespace().items]
@@ -161,9 +159,6 @@ def _get_default_pillars() -> list:
 def _get_default_sections() -> list:
     return defaultSectionsMap
 
-
-
-
 def get_pillars_list() -> list:
     return pillarsList
     
@@ -202,7 +197,7 @@ def _export_json(rules: list, json_path=str):
         json.dump(json_blob, f, ensure_ascii=False, indent=4)
 
 
-def print_consolidated_results(rules: list):
+def print_consolidated_results(rules: list, show_rules_status_color: str):
 
     pillars = set([i.pillar for i in rules])
 
@@ -233,20 +228,38 @@ def print_consolidated_results(rules: list):
             #print("rule.result.namespace={} namespace={} rule.result.resources={}".format(rule.result.namespace, namespace, rule.result.resources))
             
             for resource in rule.result.resources:
-                #print("namespace={} rule.name={} adding a row in table for {}".format(namespace, rule.name, resource))
-                table.add_row(
-                    rule.section,
-                    namespace,
-                    rule.name,
-                    rule.message,
-                    rule.result.info,
-                    resource,
-                    rule.result.resource_type,
-                    f"[link={rule.url}]Link[/link]",
-                    style=color,
-                )
+                if not show_rules_status_color:
+                    #print("namespace={} rule.name={} adding a row in table for {}".format(namespace, rule.name, resource))
+                    table.add_row(
+                        rule.section,
+                        namespace,
+                        rule.name,
+                        rule.message,
+                        rule.result.info,
+                        resource,
+                        rule.result.resource_type,
+                        f"[link={rule.url}]Link[/link]",
+                        style=color,
+                    )
+                else:
+                    if show_rules_status_color == color:
+                        table.add_row(
+                            rule.section,
+                            namespace,
+                            rule.name,
+                            rule.message,
+                            rule.result.info,
+                            resource,
+                            rule.result.resource_type,
+                            f"[link={rule.url}]Link[/link]",
+                            style=color,
+                        )                        
         
-        titleMessage=f"[cyan][bold] Report for {pillar} pillar : {no_of_rules_passed}/{total_no_of_rules} rules passed"
+        
+        if show_rules_status_color == "red":
+            titleMessage=f"[cyan][bold] Report for {pillar} pillar : {total_no_of_rules-no_of_rules_passed}/{total_no_of_rules} rules failed"
+        else:
+            titleMessage=f"[cyan][bold] Report for {pillar} pillar : {no_of_rules_passed}/{total_no_of_rules} rules passed"
         console.print(Panel(table, title=titleMessage, title_align="left"))
         console.print()
 
@@ -304,7 +317,16 @@ def run_hardeneks(
     only_namespace_level_rules: bool = typer.Option(
         False,
         "--only_namespace_level_rules",
-    ),     
+    ),
+    only_show_passed_rules_report: bool = typer.Option(
+        False,
+        "--only_show_passed_rules_report",
+    ),
+    only_show_failed_rules_report: bool = typer.Option(
+        False,
+        "--only_show_failed_rules_report",
+    ),
+    
 ):
     """
     Main entry point to hardeneks.
@@ -428,8 +450,17 @@ def run_hardeneks(
             if rule not in rulesPerSectionPerPillarList:
                 print("Given Rule {} does not exist in Section {} in Pillar {} at Scope {}. Please check config.yaml. Exiting...".format(rule, section, pillar, _type))
                 exit()
+
+            
+    
+    if only_show_passed_rules_report:
+        show_rules_status_color = "green"
+    elif only_show_failed_rules_report:
+        show_rules_status_color = "red"
+    else:
+        show_rules_status_color = None
         
-                    
+        
     #print("Running hardeneks for selected pillars list={}, sectionsMap={} and namespaces={} rulesList={}".format(pillarsList, sectionsMap, namespaces, rulesList))
     
     resources = Resources(region, context, cluster, namespaces)
@@ -459,11 +490,16 @@ def run_hardeneks(
     console.rule("[b]Generating the Consolidated Report", characters="- ")
     console.print()
     
-    print_consolidated_results(results)
+    print_consolidated_results(results, show_rules_status_color)
+    
+    #print("export_txt={} export_html={} export_json={}".format(export_txt, export_html, export_json))
 
     if export_txt:
         console.save_text(export_txt)
     if export_html:
+        #print("results={}".format(results))
         console.save_html(export_html)
     if export_json:
         _export_json(results, export_json)
+
+    console.print()
