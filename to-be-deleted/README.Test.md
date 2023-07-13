@@ -15,6 +15,8 @@ pip install hardeneks
 hardeneks
 
 
+hardeneks --export-html report.html
+
 
 python3 -m venv /tmp/.venv1
 
@@ -26,7 +28,11 @@ hardeneks
 
 hardeneks
 hardeneks  --pillars cluster_data,security  --export-html report.html
-hardeneks  --pillars cluster_data,security  --export-html report.html
+hardeneks  --pillars reliability  --export-html report.html --only_show_failed_rules_report
+
+hardeneks  --pillars cluster_data --region us-east-2
+
+
 
 hardeneks --only_cluster_level_rules
 
@@ -41,7 +47,7 @@ hardeneks --pillars reliability --sections data_plane --only_cluster_level_rules
 
 
 
-hardeneks --pillars reliability --sections data_plane --namespace stars --only_namespace_level_rules --rules limit_container_resource_usage_within_namespace
+hardeneks --pillars reliability --sections data_plane --namespace stars --only_cluster_level_rules --rules ensure_namespace_quotas_exist
 
 
 hardeneks --pillars cluster_data,networking --only_cluster_level_rules

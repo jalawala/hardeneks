@@ -1,0 +1,939 @@
+*  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  HARDENEKS *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  
+You are operating at us-east-1
+Your context used is arn:aws:eks:us-east-1:000474600478:cluster/eks126
+Your cluster name is eks126
+You are using /home/ec2-user/environment/jalawala/hardeneks/hardeneks/config.yaml as your config file
+
+- - - - - - - - - - - - - - - - - - - - - -  Checking cluster wide rules - - - - - - - - - - - - - - - - - - - - - - -
+
+Exception for rule ensure_namespace_quotas_exist in Section multi_tenancy for Pillar security for scope cluster_wide: [bold][red]list.remove(x): x not in list
+- - - - - - - - - - - - - - - - - - - - - - Checking Namespace wide rules - - - - - - - - - - - - - - - - - - - - - - 
+
+- - - - - - - - - - - - - - - - - - - - - Generating the Consolidated Report - - - - - - - - - - - - - - - - - - - - -
+
+╭─  Report for security pillar : 11/28 rules passed ─────────────────────────────────────────────────────────────────╮
+│ ┏━━━━━━━━━━━━━┳━━━━━━━━━━━━━┳━━━━━━━━━━━━━┳━━━━━━━━━━━━━━┳━━━━━━━━━━━━━┳━━━━━━━━━━━━━━┳━━━━━━━━━━━━━┳━━━━━━━━━━━━┓ │
+│ ┃             ┃             ┃             ┃ Rule         ┃             ┃              ┃ Resource    ┃            ┃ │
+│ ┃ Section     ┃ Namespace   ┃ Rule Name   ┃ Description  ┃ Info        ┃ Resource     ┃ Type        ┃ Resolution ┃ │
+│ ┡━━━━━━━━━━━━━╇━━━━━━━━━━━━━╇━━━━━━━━━━━━━╇━━━━━━━━━━━━━━╇━━━━━━━━━━━━━╇━━━━━━━━━━━━━━╇━━━━━━━━━━━━━╇━━━━━━━━━━━━┩ │
+│ │ iam         │ Cluster     │ disable_an… │ Review and   │             │              │ ClusterRol… │ Link       │ │
+│ │             │ Wide        │             │ revoke       │             │              │             │            │ │
+│ │             │             │             │ unnecessary  │             │              │             │            │ │
+│ │             │             │             │ anonymous    │             │              │             │            │ │
+│ │             │             │             │ access       │             │              │             │            │ │
+│ │ iam         │ Cluster     │ cluster_en… │ Make the EKS │ EKS Cluster │              │ EKS Cluster │ Link       │ │
+│ │             │ Wide        │             │ Cluster      │ Endpoint is │              │ Endpoint    │            │ │
+│ │             │             │             │ Endpoint     │ Public and  │              │ Mode        │            │ │
+│ │             │             │             │ private      │ Open to     │              │             │            │ │
+│ │             │             │             │              │ Internet    │              │             │            │ │
+│ │             │             │             │              │ Access      │              │             │            │ │
+│ │             │             │             │              │ ['0.0.0.0/… │              │             │            │ │
+│ │ iam         │ Cluster     │ check_aws_… │ Update the   │ VPC CNI     │              │ IRSA for    │ Link       │ │
+│ │             │ Wide        │             │ aws-node     │ uses        │              │ VPC CNI     │            │ │
+│ │             │             │             │ daemonset to │ separate    │              │             │            │ │
+│ │             │             │             │ use IRSA.    │ IAM Role    │              │             │            │ │
+│ │             │             │             │              │ (IRSA)      │              │             │            │ │
+│ │ iam         │ Cluster     │ use_imds_v2 │ When your    │ HttpPutRes… │ i-09dd1a0ce… │ Node        │ Link       │ │
+│ │             │ Wide        │             │ application  │ : 1         │              │             │            │ │
+│ │             │             │             │ needs access │ HttpEndpoi… │              │             │            │ │
+│ │             │             │             │ to IMDS, use │ : enabled   │              │             │            │ │
+│ │             │             │             │ IMDSv2 and   │ HttpTokens  │              │             │            │ │
+│ │             │             │             │ increase the │ : required  │              │             │            │ │
+│ │             │             │             │ hop limit on │             │              │             │            │ │
+│ │             │             │             │ EC2          │             │              │             │            │ │
+│ │             │             │             │ instances to │             │              │             │            │ │
+│ │             │             │             │ 2            │             │              │             │            │ │
+│ │ iam         │ Cluster     │ restrict_a… │ Restrict     │ HttpPutRes… │              │ Node        │ Link       │ │
+│ │             │ Wide        │             │ access to    │ : 1         │              │             │            │ │
+│ │             │             │             │ the instance │ HttpEndpoi… │              │             │            │ │
+│ │             │             │             │ profile      │ : enabled   │              │             │            │ │
+│ │             │             │             │ assigned to  │ HttpTokens  │              │             │            │ │
+│ │             │             │             │ the worker   │ : required  │              │             │            │ │
+│ │             │             │             │ node         │             │              │             │            │ │
+│ │ iam         │ Cluster     │ restrict_w… │ Employ least │             │ eks:service… │ Cluster     │ Link       │ │
+│ │             │ Wide        │             │ privileged   │             │              │ Role        │            │ │
+│ │             │             │             │ access when  │             │              │             │            │ │
+│ │             │             │             │ creating     │             │              │             │            │ │
+│ │             │             │             │ RoleBindings │             │              │             │            │ │
+│ │             │             │             │ and          │             │              │             │            │ │
+│ │             │             │             │ ClusterRole… │             │              │             │            │ │
+│ │ iam         │ Cluster     │ restrict_w… │ Employ least │             │ eks:service… │ Cluster     │ Link       │ │
+│ │             │ Wide        │             │ privileged   │             │              │ Role        │            │ │
+│ │             │             │             │ access when  │             │              │             │            │ │
+│ │             │             │             │ creating     │             │              │             │            │ │
+│ │             │             │             │ RoleBindings │             │              │             │            │ │
+│ │             │             │             │ and          │             │              │             │            │ │
+│ │             │             │             │ ClusterRole… │             │              │             │            │ │
+│ │ iam         │ Cluster     │ restrict_w… │ Employ least │             │ eks:service… │ Cluster     │ Link       │ │
+│ │             │ Wide        │             │ privileged   │             │              │ Role        │            │ │
+│ │             │             │             │ access when  │             │              │             │            │ │
+│ │             │             │             │ creating     │             │              │             │            │ │
+│ │             │             │             │ RoleBindings │             │              │             │            │ │
+│ │             │             │             │ and          │             │              │             │            │ │
+│ │             │             │             │ ClusterRole… │             │              │             │            │ │
+│ │ iam         │ Cluster     │ restrict_w… │ Employ least │             │ eks:service… │ Cluster     │ Link       │ │
+│ │             │ Wide        │             │ privileged   │             │              │ Role        │            │ │
+│ │             │             │             │ access when  │             │              │             │            │ │
+│ │             │             │             │ creating     │             │              │             │            │ │
+│ │             │             │             │ RoleBindings │             │              │             │            │ │
+│ │             │             │             │ and          │             │              │             │            │ │
+│ │             │             │             │ ClusterRole… │             │              │             │            │ │
+│ │ iam         │ Cluster     │ restrict_w… │ Employ least │             │ eks:service… │ Cluster     │ Link       │ │
+│ │             │ Wide        │             │ privileged   │             │              │ Role        │            │ │
+│ │             │             │             │ access when  │             │              │             │            │ │
+│ │             │             │             │ creating     │             │              │             │            │ │
+│ │             │             │             │ RoleBindings │             │              │             │            │ │
+│ │             │             │             │ and          │             │              │             │            │ │
+│ │             │             │             │ ClusterRole… │             │              │             │            │ │
+│ │ iam         │ Cluster     │ restrict_w… │ Employ least │             │ eks:service… │ Cluster     │ Link       │ │
+│ │             │ Wide        │             │ privileged   │             │              │ Role        │            │ │
+│ │             │             │             │ access when  │             │              │             │            │ │
+│ │             │             │             │ creating     │             │              │             │            │ │
+│ │             │             │             │ RoleBindings │             │              │             │            │ │
+│ │             │             │             │ and          │             │              │             │            │ │
+│ │             │             │             │ ClusterRole… │             │              │             │            │ │
+│ │ iam         │ Cluster     │ restrict_w… │ Employ least │             │ eks:service… │ Cluster     │ Link       │ │
+│ │             │ Wide        │             │ privileged   │             │              │ Role        │            │ │
+│ │             │             │             │ access when  │             │              │             │            │ │
+│ │             │             │             │ creating     │             │              │             │            │ │
+│ │             │             │             │ RoleBindings │             │              │             │            │ │
+│ │             │             │             │ and          │             │              │             │            │ │
+│ │             │             │             │ ClusterRole… │             │              │             │            │ │
+│ │ iam         │ Cluster     │ restrict_w… │ Employ least │             │ eks:service… │ Cluster     │ Link       │ │
+│ │             │ Wide        │             │ privileged   │             │              │ Role        │            │ │
+│ │             │             │             │ access when  │             │              │             │            │ │
+│ │             │             │             │ creating     │             │              │             │            │ │
+│ │             │             │             │ RoleBindings │             │              │             │            │ │
+│ │             │             │             │ and          │             │              │             │            │ │
+│ │             │             │             │ ClusterRole… │             │              │             │            │ │
+│ │ iam         │ Cluster     │ restrict_w… │ Employ least │             │ eks:service… │ Cluster     │ Link       │ │
+│ │             │ Wide        │             │ privileged   │             │              │ Role        │            │ │
+│ │             │             │             │ access when  │             │              │             │            │ │
+│ │             │             │             │ creating     │             │              │             │            │ │
+│ │             │             │             │ RoleBindings │             │              │             │            │ │
+│ │             │             │             │ and          │             │              │             │            │ │
+│ │             │             │             │ ClusterRole… │             │              │             │            │ │
+│ │ iam         │ Cluster     │ restrict_w… │ Employ least │             │ eks:service… │ Cluster     │ Link       │ │
+│ │             │ Wide        │             │ privileged   │             │              │ Role        │            │ │
+│ │             │             │             │ access when  │             │              │             │            │ │
+│ │             │             │             │ creating     │             │              │             │            │ │
+│ │             │             │             │ RoleBindings │             │              │             │            │ │
+│ │             │             │             │ and          │             │              │             │            │ │
+│ │             │             │             │ ClusterRole… │             │              │             │            │ │
+│ │ iam         │ Cluster     │ restrict_w… │ Employ least │             │ eks:service… │ Cluster     │ Link       │ │
+│ │             │ Wide        │             │ privileged   │             │              │ Role        │            │ │
+│ │             │             │             │ access when  │             │              │             │            │ │
+│ │             │             │             │ creating     │             │              │             │            │ │
+│ │             │             │             │ RoleBindings │             │              │             │            │ │
+│ │             │             │             │ and          │             │              │             │            │ │
+│ │             │             │             │ ClusterRole… │             │              │             │            │ │
+│ │ iam         │ Cluster     │ restrict_w… │ Employ least │             │ eks:service… │ Cluster     │ Link       │ │
+│ │             │ Wide        │             │ privileged   │             │              │ Role        │            │ │
+│ │             │             │             │ access when  │             │              │             │            │ │
+│ │             │             │             │ creating     │             │              │             │            │ │
+│ │             │             │             │ RoleBindings │             │              │             │            │ │
+│ │             │             │             │ and          │             │              │             │            │ │
+│ │             │             │             │ ClusterRole… │             │              │             │            │ │
+│ │ iam         │ Cluster     │ restrict_w… │ Employ least │             │ eks:service… │ Cluster     │ Link       │ │
+│ │             │ Wide        │             │ privileged   │             │              │ Role        │            │ │
+│ │             │             │             │ access when  │             │              │             │            │ │
+│ │             │             │             │ creating     │             │              │             │            │ │
+│ │             │             │             │ RoleBindings │             │              │             │            │ │
+│ │             │             │             │ and          │             │              │             │            │ │
+│ │             │             │             │ ClusterRole… │             │              │             │            │ │
+│ │ iam         │ Cluster     │ restrict_w… │ Employ least │             │ eks:service… │ Cluster     │ Link       │ │
+│ │             │ Wide        │             │ privileged   │             │              │ Role        │            │ │
+│ │             │             │             │ access when  │             │              │             │            │ │
+│ │             │             │             │ creating     │             │              │             │            │ │
+│ │             │             │             │ RoleBindings │             │              │             │            │ │
+│ │             │             │             │ and          │             │              │             │            │ │
+│ │             │             │             │ ClusterRole… │             │              │             │            │ │
+│ │ iam         │ Cluster     │ restrict_w… │ Employ least │             │ eks:service… │ Cluster     │ Link       │ │
+│ │             │ Wide        │             │ privileged   │             │              │ Role        │            │ │
+│ │             │             │             │ access when  │             │              │             │            │ │
+│ │             │             │             │ creating     │             │              │             │            │ │
+│ │             │             │             │ RoleBindings │             │              │             │            │ │
+│ │             │             │             │ and          │             │              │             │            │ │
+│ │             │             │             │ ClusterRole… │             │              │             │            │ │
+│ │ iam         │ Cluster     │ restrict_w… │ Employ least │             │ eks:service… │ Cluster     │ Link       │ │
+│ │             │ Wide        │             │ privileged   │             │              │ Role        │            │ │
+│ │             │             │             │ access when  │             │              │             │            │ │
+│ │             │             │             │ creating     │             │              │             │            │ │
+│ │             │             │             │ RoleBindings │             │              │             │            │ │
+│ │             │             │             │ and          │             │              │             │            │ │
+│ │             │             │             │ ClusterRole… │             │              │             │            │ │
+│ │ iam         │ Cluster     │ restrict_w… │ Employ least │             │ eks:service… │ Cluster     │ Link       │ │
+│ │             │ Wide        │             │ privileged   │             │              │ Role        │            │ │
+│ │             │             │             │ access when  │             │              │             │            │ │
+│ │             │             │             │ creating     │             │              │             │            │ │
+│ │             │             │             │ RoleBindings │             │              │             │            │ │
+│ │             │             │             │ and          │             │              │             │            │ │
+│ │             │             │             │ ClusterRole… │             │              │             │            │ │
+│ │ iam         │ Cluster     │ restrict_w… │ Employ least │             │ gatekeeper-… │ Cluster     │ Link       │ │
+│ │             │ Wide        │             │ privileged   │             │              │ Role        │            │ │
+│ │             │             │             │ access when  │             │              │             │            │ │
+│ │             │             │             │ creating     │             │              │             │            │ │
+│ │             │             │             │ RoleBindings │             │              │             │            │ │
+│ │             │             │             │ and          │             │              │             │            │ │
+│ │             │             │             │ ClusterRole… │             │              │             │            │ │
+│ │ iam         │ Cluster     │ restrict_w… │ Employ least │             │ gatekeeper-… │ Cluster     │ Link       │ │
+│ │             │ Wide        │             │ privileged   │             │              │ Role        │            │ │
+│ │             │             │             │ access when  │             │              │             │            │ │
+│ │             │             │             │ creating     │             │              │             │            │ │
+│ │             │             │             │ RoleBindings │             │              │             │            │ │
+│ │             │             │             │ and          │             │              │             │            │ │
+│ │             │             │             │ ClusterRole… │             │              │             │            │ │
+│ │ iam         │ Cluster     │ restrict_w… │ Employ least │             │ gatekeeper-… │ Cluster     │ Link       │ │
+│ │             │ Wide        │             │ privileged   │             │              │ Role        │            │ │
+│ │             │             │             │ access when  │             │              │             │            │ │
+│ │             │             │             │ creating     │             │              │             │            │ │
+│ │             │             │             │ RoleBindings │             │              │             │            │ │
+│ │             │             │             │ and          │             │              │             │            │ │
+│ │             │             │             │ ClusterRole… │             │              │             │            │ │
+│ │ iam         │ Cluster     │ restrict_w… │ Employ least │             │ gatekeeper-… │ Cluster     │ Link       │ │
+│ │             │ Wide        │             │ privileged   │             │              │ Role        │            │ │
+│ │             │             │             │ access when  │             │              │             │            │ │
+│ │             │             │             │ creating     │             │              │             │            │ │
+│ │             │             │             │ RoleBindings │             │              │             │            │ │
+│ │             │             │             │ and          │             │              │             │            │ │
+│ │             │             │             │ ClusterRole… │             │              │             │            │ │
+│ │ iam         │ Cluster     │ restrict_w… │ Employ least │             │ kyverno:adm… │ Cluster     │ Link       │ │
+│ │             │ Wide        │             │ privileged   │             │              │ Role        │            │ │
+│ │             │             │             │ access when  │             │              │             │            │ │
+│ │             │             │             │ creating     │             │              │             │            │ │
+│ │             │             │             │ RoleBindings │             │              │             │            │ │
+│ │             │             │             │ and          │             │              │             │            │ │
+│ │             │             │             │ ClusterRole… │             │              │             │            │ │
+│ │ iam         │ Cluster     │ restrict_w… │ Employ least │             │ kyverno:adm… │ Cluster     │ Link       │ │
+│ │             │ Wide        │             │ privileged   │             │              │ Role        │            │ │
+│ │             │             │             │ access when  │             │              │             │            │ │
+│ │             │             │             │ creating     │             │              │             │            │ │
+│ │             │             │             │ RoleBindings │             │              │             │            │ │
+│ │             │             │             │ and          │             │              │             │            │ │
+│ │             │             │             │ ClusterRole… │             │              │             │            │ │
+│ │ iam         │ Cluster     │ restrict_w… │ Employ least │             │ kyverno:bac… │ Cluster     │ Link       │ │
+│ │             │ Wide        │             │ privileged   │             │              │ Role        │            │ │
+│ │             │             │             │ access when  │             │              │             │            │ │
+│ │             │             │             │ creating     │             │              │             │            │ │
+│ │             │             │             │ RoleBindings │             │              │             │            │ │
+│ │             │             │             │ and          │             │              │             │            │ │
+│ │             │             │             │ ClusterRole… │             │              │             │            │ │
+│ │ iam         │ Cluster     │ restrict_w… │ Employ least │             │ kyverno:bac… │ Cluster     │ Link       │ │
+│ │             │ Wide        │             │ privileged   │             │              │ Role        │            │ │
+│ │             │             │             │ access when  │             │              │             │            │ │
+│ │             │             │             │ creating     │             │              │             │            │ │
+│ │             │             │             │ RoleBindings │             │              │             │            │ │
+│ │             │             │             │ and          │             │              │             │            │ │
+│ │             │             │             │ ClusterRole… │             │              │             │            │ │
+│ │ iam         │ Cluster     │ restrict_w… │ Employ least │             │ kyverno:rep… │ Cluster     │ Link       │ │
+│ │             │ Wide        │             │ privileged   │             │              │ Role        │            │ │
+│ │             │             │             │ access when  │             │              │             │            │ │
+│ │             │             │             │ creating     │             │              │             │            │ │
+│ │             │             │             │ RoleBindings │             │              │             │            │ │
+│ │             │             │             │ and          │             │              │             │            │ │
+│ │             │             │             │ ClusterRole… │             │              │             │            │ │
+│ │ iam         │ Cluster     │ restrict_w… │ Employ least │             │ kyverno:rep… │ Cluster     │ Link       │ │
+│ │             │ Wide        │             │ privileged   │             │              │ Role        │            │ │
+│ │             │             │             │ access when  │             │              │             │            │ │
+│ │             │             │             │ creating     │             │              │             │            │ │
+│ │             │             │             │ RoleBindings │             │              │             │            │ │
+│ │             │             │             │ and          │             │              │             │            │ │
+│ │             │             │             │ ClusterRole… │             │              │             │            │ │
+│ │ iam         │ Cluster     │ restrict_w… │ Employ least │             │ tigera-oper… │ Cluster     │ Link       │ │
+│ │             │ Wide        │             │ privileged   │             │              │ Role        │            │ │
+│ │             │             │             │ access when  │             │              │             │            │ │
+│ │             │             │             │ creating     │             │              │             │            │ │
+│ │             │             │             │ RoleBindings │             │              │             │            │ │
+│ │             │             │             │ and          │             │              │             │            │ │
+│ │             │             │             │ ClusterRole… │             │              │             │            │ │
+│ │ iam         │ Cluster     │ do_not_ass… │ Do not       │ system:mas… │              │ least       │ Link       │ │
+│ │             │ Wide        │             │ assign       │ exist in    │              │ privileged  │            │ │
+│ │             │             │             │ system:mast… │ aws-auth    │              │ rbac role   │            │ │
+│ │             │             │             │ group to     │ config map  │              │             │            │ │
+│ │             │             │             │ normal users │             │              │             │            │ │
+│ │ iam         │ Cluster     │ use_iam_ro… │ Use IAM      │ mapUsers    │              │ iam users   │ Link       │ │
+│ │             │ Wide        │             │ Roles when   │ exist in    │              │             │            │ │
+│ │             │             │             │ multiple     │ aws-auth    │              │             │            │ │
+│ │             │             │             │ users need   │ config map  │              │             │            │ │
+│ │             │             │             │ identical    │             │              │             │            │ │
+│ │             │             │             │ access to    │             │              │             │            │ │
+│ │             │             │             │ the cluster¶ │             │              │             │            │ │
+│ │ iam         │ Cluster     │ create_clu… │ Create the   │ IAM Role    │              │ dedicated   │ Link       │ │
+│ │             │ Wide        │             │ cluster with │ arn:aws:ia… │              │ cluster     │            │ │
+│ │             │             │             │ a dedicated  │ has         │              │ role        │            │ │
+│ │             │             │             │ IAM role     │ Administra… │              │             │            │ │
+│ │             │             │             │              │ policy      │              │             │            │ │
+│ │ detective_… │ Cluster     │ check_logs… │ Enable audit │  Logs       │              │ Log         │ Link       │ │
+│ │             │ Wide        │             │ logs         │ Enabled :   │              │ Configurat… │            │ │
+│ │             │             │             │              │ api audit   │              │             │            │ │
+│ │             │             │             │              │ Logs        │              │             │            │ │
+│ │             │             │             │              │ Disabled :  │              │             │            │ │
+│ │             │             │             │              │ authentica… │              │             │            │ │
+│ │             │             │             │              │ controller… │              │             │            │ │
+│ │             │             │             │              │ scheduler   │              │             │            │ │
+│ │             │             │             │              │ guardDutyE… │              │             │            │ │
+│ │             │             │             │              │ = ENABLED   │              │             │            │ │
+│ │ network_se… │ Cluster     │ check_vpc_… │ Log network  │             │              │ VPC         │ Link       │ │
+│ │             │ Wide        │             │ traffic      │             │              │ Configurat… │            │ │
+│ │             │             │             │ metadata     │             │              │             │            │ │
+│ │ network_se… │ Cluster     │ check_awsp… │ Install aws  │             │ aws-private… │ Service     │ Link       │ │
+│ │             │ Wide        │             │ privateca    │             │              │             │            │ │
+│ │             │             │             │ issuer for   │             │              │             │            │ │
+│ │             │             │             │ your         │             │              │             │            │ │
+│ │             │             │             │ certificate… │             │              │             │            │ │
+│ │ network_se… │ Cluster     │ check_defa… │ Create a     │ default     │              │ Namespace   │ Link       │ │
+│ │             │ Wide        │             │ default deny │ deny policy │              │             │            │ │
+│ │             │             │             │ policy       │ exist for   │              │             │            │ │
+│ │             │             │             │              │ all         │              │             │            │ │
+│ │             │             │             │              │ namespaces  │              │             │            │ │
+│ │ encryption… │ Cluster     │ use_encryp… │ Encrypt data │             │ gp3          │ StorageCla… │ Link       │ │
+│ │             │ Wide        │             │ at rest      │             │              │             │            │ │
+│ │ encryption… │ Cluster     │ use_encryp… │ EFS          │ EFS PVs     │ efs-pvc      │ Persistent… │ Link       │ │
+│ │             │ Wide        │             │ Persistent   │ without tls │              │             │            │ │
+│ │             │             │             │ volumes      │ in the      │              │             │            │ │
+│ │             │             │             │ should have  │ mount       │              │             │            │ │
+│ │             │             │             │ tls mount    │ option      │              │             │            │ │
+│ │             │             │             │ option.      │ efs-pvc     │              │             │            │ │
+│ │             │             │             │              │ efs-pvc-sh… │              │             │            │ │
+│ │             │             │             │              │ pvc-c7bc66… │              │             │            │ │
+│ │ encryption… │ Cluster     │ use_encryp… │ EFS          │ EFS PVs     │ efs-pvc-sha… │ Persistent… │ Link       │ │
+│ │             │ Wide        │             │ Persistent   │ without tls │              │             │            │ │
+│ │             │             │             │ volumes      │ in the      │              │             │            │ │
+│ │             │             │             │ should have  │ mount       │              │             │            │ │
+│ │             │             │             │ tls mount    │ option      │              │             │            │ │
+│ │             │             │             │ option.      │ efs-pvc     │              │             │            │ │
+│ │             │             │             │              │ efs-pvc-sh… │              │             │            │ │
+│ │             │             │             │              │ pvc-c7bc66… │              │             │            │ │
+│ │ encryption… │ Cluster     │ use_encryp… │ EFS          │ EFS PVs     │ pvc-c7bc663… │ Persistent… │ Link       │ │
+│ │             │ Wide        │             │ Persistent   │ without tls │              │             │            │ │
+│ │             │             │             │ volumes      │ in the      │              │             │            │ │
+│ │             │             │             │ should have  │ mount       │              │             │            │ │
+│ │             │             │             │ tls mount    │ option      │              │             │            │ │
+│ │             │             │             │ option.      │ efs-pvc     │              │             │            │ │
+│ │             │             │             │              │ efs-pvc-sh… │              │             │            │ │
+│ │             │             │             │              │ pvc-c7bc66… │              │             │            │ │
+│ │ encryption… │ Cluster     │ use_efs_ac… │ Use EFS      │ EFS PVs     │ efs-pvc      │ Persistent… │ Link       │ │
+│ │             │ Wide        │             │ access       │ without     │              │             │            │ │
+│ │             │             │             │ points to    │ access      │              │             │            │ │
+│ │             │             │             │ simplify     │ points      │              │             │            │ │
+│ │             │             │             │ access to    │ efs-pvc     │              │             │            │ │
+│ │             │             │             │ shared       │ efs-pvc1    │              │             │            │ │
+│ │             │             │             │ datasets     │             │              │             │            │ │
+│ │ encryption… │ Cluster     │ use_efs_ac… │ Use EFS      │ EFS PVs     │ efs-pvc1     │ Persistent… │ Link       │ │
+│ │             │ Wide        │             │ access       │ without     │              │             │            │ │
+│ │             │             │             │ points to    │ access      │              │             │            │ │
+│ │             │             │             │ simplify     │ points      │              │             │            │ │
+│ │             │             │             │ access to    │ efs-pvc     │              │             │            │ │
+│ │             │             │             │ shared       │ efs-pvc1    │              │             │            │ │
+│ │             │             │             │ datasets     │             │              │             │            │ │
+│ │ encryption… │ Cluster     │ rotate_cmk… │ Rotate KMS   │ EKS         │              │ EKS         │ Link       │ │
+│ │             │ Wide        │             │ CMK for KMS  │ Envelope    │              │ Envelope    │            │ │
+│ │             │             │             │ Envelope     │ Encryption  │              │ Encryption  │            │ │
+│ │             │             │             │ Encryption   │ is Enabled  │              │             │            │ │
+│ │             │             │             │ of K8s       │ but Key     │              │             │            │ │
+│ │             │             │             │ Secrets      │ Rotaion is  │              │             │            │ │
+│ │             │             │             │              │ Disabled    │              │             │            │ │
+│ │ encryption… │ Cluster     │ use_extern… │ Use an       │ ASCP is     │              │ Service     │ Link       │ │
+│ │             │ Wide        │             │ external     │ deployed    │              │             │            │ │
+│ │             │             │             │ secrets      │ Secrets CSI │              │             │            │ │
+│ │             │             │             │ provider     │ Driver is   │              │             │            │ │
+│ │             │             │             │              │ deployed    │              │             │            │ │
+│ │ infrastruc… │ Cluster     │ deploy_wor… │ Deploy       │             │              │ Node        │ Link       │ │
+│ │             │ Wide        │             │ workers onto │             │              │             │            │ │
+│ │             │             │             │ private      │             │              │             │            │ │
+│ │             │             │             │ subnets      │             │              │             │            │ │
+│ │ infrastruc… │ Cluster     │ make_sure_… │ Run Amazon   │             │              │ Inspector   │ Link       │ │
+│ │             │ Wide        │             │ Inspector to │             │              │ Configurat… │            │ │
+│ │             │             │             │ assess hosts │             │              │             │            │ │
+│ │             │             │             │ for          │             │              │             │            │ │
+│ │             │             │             │ exposure,    │             │              │             │            │ │
+│ │             │             │             │ vulnerabili… │             │              │             │            │ │
+│ │             │             │             │ and          │             │              │             │            │ │
+│ │             │             │             │ deviations   │             │              │             │            │ │
+│ │             │             │             │ from best    │             │              │             │            │ │
+│ │             │             │             │ practices    │             │              │             │            │ │
+│ │ infrastruc… │ Cluster     │ use_OS_opt… │ Use an OS    │ Node OS is  │ Amazon Linux │ Node OS     │ Link       │ │
+│ │             │ Wide        │             │ optimized    │ not         │ 2            │             │            │ │
+│ │             │             │             │ for running  │ optimized   │              │             │            │ │
+│ │             │             │             │ containers   │ for         │              │             │            │ │
+│ │             │             │             │              │ containers  │              │             │            │ │
+│ │ pod_securi… │ Cluster     │ ensure_nam… │ Use multiple │ All         │              │ Namespace   │ Link       │ │
+│ │             │ Wide        │             │ Pod Security │ Namespaces  │              │             │            │ │
+│ │             │             │             │ Admission    │ have PSA    │              │             │            │ │
+│ │             │             │             │ (PSA) modes  │ labels      │              │             │            │ │
+│ │             │             │             │ for a better │             │              │             │            │ │
+│ │             │             │             │ user         │             │              │             │            │ │
+│ │             │             │             │ experience   │             │              │             │            │ │
+│ │ image_secu… │ Cluster     │ use_immuta… │ Make image   │ ECR Repos   │              │ ECR         │ Link       │ │
+│ │             │ Wide        │             │ tags         │ without     │              │ Repository  │            │ │
+│ │             │             │             │ immutable.   │ Immutable   │              │             │            │ │
+│ │             │             │             │              │ Tags        │              │             │            │ │
+│ │             │             │             │              │ eksws-code… │              │             │            │ │
+│ │             │             │             │              │ zstd        │              │             │            │ │
+│ │             │             │             │              │ aws-spring… │              │             │            │ │
+│ │             │             │             │              │ busybox     │              │             │            │ │
+│ │             │             │             │              │ ecr-demo-s… │              │             │            │ │
+│ │             │             │             │              │ yelb-appse… │              │             │            │ │
+│ │             │             │             │              │ docker-com… │              │             │            │ │
+│ │             │             │             │              │ ec2spotcus… │              │             │            │ │
+│ │             │             │             │              │ node        │              │             │            │ │
+│ │             │             │             │              │ ecs-spot-w… │              │             │            │ │
+│ │             │             │             │              │ java-gener… │              │             │            │ │
+│ │             │             │             │              │ eks-worksh… │              │             │            │ │
+│ │             │             │             │              │ inspector-… │              │             │            │ │
+│ │             │             │             │              │ k8s/kube-b… │              │             │            │ │
+│ │             │             │             │              │ eks-micros… │              │             │            │ │
+│ │             │             │             │              │ eks-app-me… │              │             │            │ │
+│ │             │             │             │              │ flask-cb-d… │              │             │            │ │
+│ │             │             │             │              │ docker-com… │              │             │            │ │
+│ │             │             │             │              │ bottlerock… │              │             │            │ │
+│ │             │             │             │              │ my-app/my-… │              │             │            │ │
+│ │             │             │             │              │ artifact-t… │              │             │            │ │
+│ │             │             │             │              │ k8s/kube-b… │              │             │            │ │
+│ │             │             │             │              │ helm-test-… │              │             │            │ │
+│ │             │             │             │              │ pet-payfor… │              │             │            │ │
+│ │             │             │             │              │ k8s-cloudw… │              │             │            │ │
+│ │             │             │             │              │ custom-flu… │              │             │            │ │
+│ │             │             │             │              │ custom-kub… │              │             │            │ │
+│ │             │             │             │              │ java-gener… │              │             │            │ │
+│ │             │             │             │              │ sample-mic… │              │             │            │ │
+│ │             │             │             │              │ ecrrepo-pb… │              │             │            │ │
+│ │             │             │             │              │ hello-world │              │             │            │ │
+│ │             │             │             │              │ pet-traffi… │              │             │            │ │
+│ │             │             │             │              │ custom-kub… │              │             │            │ │
+│ │             │             │             │              │ scanrepo-t… │              │             │            │ │
+│ │             │             │             │              │ websockets… │              │             │            │ │
+│ │             │             │             │              │ awscli      │              │             │            │ │
+│ │             │             │             │              │ bottlerock… │              │             │            │ │
+│ │             │             │             │              │ bottlerock… │              │             │            │ │
+│ │             │             │             │              │ ecsmultica… │              │             │            │ │
+│ │             │             │             │              │ fluent-bit… │              │             │            │ │
+│ │             │             │             │              │ sample-mic… │              │             │            │ │
+│ │             │             │             │              │ custom-kub… │              │             │            │ │
+│ │             │             │             │              │ artifact-t… │              │             │            │ │
+│ │             │             │             │              │ nginx       │              │             │            │ │
+│ │             │             │             │              │ ec2spotcus… │              │             │            │ │
+│ │             │             │             │              │ author-ser… │              │             │            │ │
+│ │             │             │             │              │ ephemeral-… │              │             │            │ │
+│ │             │             │             │              │ scanrepo-t… │              │             │            │ │
+│ │             │             │             │              │ aws-spring… │              │             │            │ │
+│ │             │             │             │              │ redis       │              │             │            │ │
+│ │             │             │             │              │ aws-spring… │              │             │            │ │
+│ │             │             │             │              │ colortelle… │              │             │            │ │
+│ │             │             │             │              │ sidecar-in… │              │             │            │ │
+│ │             │             │             │              │ howto-k8s-… │              │             │            │ │
+│ │             │             │             │              │ my-app/my-… │              │             │            │ │
+│ │             │             │             │              │ guestbook   │              │             │            │ │
+│ │             │             │             │              │ aws-spring… │              │             │            │ │
+│ │             │             │             │              │ app         │              │             │            │ │
+│ │             │             │             │              │ ecsmultica… │              │             │            │ │
+│ │             │             │             │              │ monte-carl… │              │             │            │ │
+│ │             │             │             │              │ eksvpccnit… │              │             │            │ │
+│ │             │             │             │              │ colortelle… │              │             │            │ │
+│ │             │             │             │              │ example-ap… │              │             │            │ │
+│ │             │             │             │              │ aws-spring… │              │             │            │ │
+│ │             │             │             │              │ eksvpccnit… │              │             │            │ │
+│ │             │             │             │              │ postgres    │              │             │            │ │
+│ │             │             │             │              │ scanrepo-p… │              │             │            │ │
+│ │             │             │             │              │ sample-ui-… │              │             │            │ │
+│ │             │             │             │              │ app-soci    │              │             │            │ │
+│ │             │             │             │              │ graviton2-… │              │             │            │ │
+│ │             │             │             │              │ appmesh-wo… │              │             │            │ │
+│ │             │             │             │              │ docker-com… │              │             │            │ │
+│ │             │             │             │              │ eks-exampl… │              │             │            │ │
+│ │             │             │             │              │ colortelle… │              │             │            │ │
+│ │             │             │             │              │ docker-com… │              │             │            │ │
+│ │             │             │             │              │ author-ser… │              │             │            │ │
+│ │             │             │             │              │ example-ap… │              │             │            │ │
+│ │             │             │             │              │ aws-spring… │              │             │            │ │
+│ │             │             │             │              │ eks-micros… │              │             │            │ │
+│ │             │             │             │              │ apprunnerw… │              │             │            │ │
+│ │             │             │             │              │ ecr-demo    │              │             │            │ │
+│ │             │             │             │              │ test        │              │             │            │ │
+│ │             │             │             │              │ route-guide │              │             │            │ │
+│ │             │             │             │              │ cdkstackal… │              │             │            │ │
+│ │             │             │             │              │ helloworld… │              │             │            │ │
+│ │             │             │             │              │ howto-k8s-… │              │             │            │ │
+│ │             │             │             │              │ bluegreenu… │              │             │            │ │
+│ │             │             │             │              │ pet-listad… │              │             │            │ │
+│ │             │             │             │              │ pet-payfor… │              │             │            │ │
+│ │             │             │             │              │ appmesh-wo… │              │             │            │ │
+│ │             │             │             │              │ helloworld… │              │             │            │ │
+│ │             │             │             │              │ simple-exp… │              │             │            │ │
+│ │             │             │             │              │ bluegreenu… │              │             │            │ │
+│ │             │             │             │              │ graviton2-… │              │             │            │ │
+│ │             │             │             │              │ zstd-soci   │              │             │            │ │
+│ │             │             │             │              │ std/reverse │              │             │            │ │
+│ │             │             │             │              │ awscli-soci │              │             │            │ │
+│ │ image_secu… │ Cluster     │ scan_image… │ Scan images  │ ECR Repos   │              │ ECR         │ Link       │ │
+│ │             │ Wide        │             │ for          │ with        │              │ Repository  │            │ │
+│ │             │             │             │ vulnerabili… │ scanOnPush  │              │             │            │ │
+│ │             │             │             │ regularly    │ Disabled    │              │             │            │ │
+│ │             │             │             │              │ eksws-code… │              │             │            │ │
+│ │             │             │             │              │ zstd        │              │             │            │ │
+│ │             │             │             │              │ aws-spring… │              │             │            │ │
+│ │             │             │             │              │ busybox     │              │             │            │ │
+│ │             │             │             │              │ ecr-demo-s… │              │             │            │ │
+│ │             │             │             │              │ yelb-appse… │              │             │            │ │
+│ │             │             │             │              │ docker-com… │              │             │            │ │
+│ │             │             │             │              │ ec2spotcus… │              │             │            │ │
+│ │             │             │             │              │ node        │              │             │            │ │
+│ │             │             │             │              │ ecs-spot-w… │              │             │            │ │
+│ │             │             │             │              │ java-gener… │              │             │            │ │
+│ │             │             │             │              │ eks-worksh… │              │             │            │ │
+│ │             │             │             │              │ inspector-… │              │             │            │ │
+│ │             │             │             │              │ k8s/kube-b… │              │             │            │ │
+│ │             │             │             │              │ eks-micros… │              │             │            │ │
+│ │             │             │             │              │ eks-app-me… │              │             │            │ │
+│ │             │             │             │              │ flask-cb-d… │              │             │            │ │
+│ │             │             │             │              │ docker-com… │              │             │            │ │
+│ │             │             │             │              │ bottlerock… │              │             │            │ │
+│ │             │             │             │              │ my-app/my-… │              │             │            │ │
+│ │             │             │             │              │ artifact-t… │              │             │            │ │
+│ │             │             │             │              │ k8s/kube-b… │              │             │            │ │
+│ │             │             │             │              │ helm-test-… │              │             │            │ │
+│ │             │             │             │              │ pet-payfor… │              │             │            │ │
+│ │             │             │             │              │ k8s-cloudw… │              │             │            │ │
+│ │             │             │             │              │ custom-flu… │              │             │            │ │
+│ │             │             │             │              │ custom-kub… │              │             │            │ │
+│ │             │             │             │              │ java-gener… │              │             │            │ │
+│ │             │             │             │              │ sample-mic… │              │             │            │ │
+│ │             │             │             │              │ monolith-s… │              │             │            │ │
+│ │             │             │             │              │ ecrrepo-pb… │              │             │            │ │
+│ │             │             │             │              │ hello-world │              │             │            │ │
+│ │             │             │             │              │ pet-traffi… │              │             │            │ │
+│ │             │             │             │              │ custom-kub… │              │             │            │ │
+│ │             │             │             │              │ scanrepo-t… │              │             │            │ │
+│ │             │             │             │              │ websockets… │              │             │            │ │
+│ │             │             │             │              │ awscli      │              │             │            │ │
+│ │             │             │             │              │ bottlerock… │              │             │            │ │
+│ │             │             │             │              │ bottlerock… │              │             │            │ │
+│ │             │             │             │              │ ecsmultica… │              │             │            │ │
+│ │             │             │             │              │ fluent-bit… │              │             │            │ │
+│ │             │             │             │              │ sample-mic… │              │             │            │ │
+│ │             │             │             │              │ custom-kub… │              │             │            │ │
+│ │             │             │             │              │ artifact-t… │              │             │            │ │
+│ │             │             │             │              │ nginx       │              │             │            │ │
+│ │             │             │             │              │ ec2spotcus… │              │             │            │ │
+│ │             │             │             │              │ author-ser… │              │             │            │ │
+│ │             │             │             │              │ ephemeral-… │              │             │            │ │
+│ │             │             │             │              │ scanrepo-t… │              │             │            │ │
+│ │             │             │             │              │ aws-spring… │              │             │            │ │
+│ │             │             │             │              │ redis       │              │             │            │ │
+│ │             │             │             │              │ aws-spring… │              │             │            │ │
+│ │             │             │             │              │ colortelle… │              │             │            │ │
+│ │             │             │             │              │ sidecar-in… │              │             │            │ │
+│ │             │             │             │              │ howto-k8s-… │              │             │            │ │
+│ │             │             │             │              │ my-app/my-… │              │             │            │ │
+│ │             │             │             │              │ guestbook   │              │             │            │ │
+│ │             │             │             │              │ aws-spring… │              │             │            │ │
+│ │             │             │             │              │ app         │              │             │            │ │
+│ │             │             │             │              │ ecsmultica… │              │             │            │ │
+│ │             │             │             │              │ monte-carl… │              │             │            │ │
+│ │             │             │             │              │ eksvpccnit… │              │             │            │ │
+│ │             │             │             │              │ colortelle… │              │             │            │ │
+│ │             │             │             │              │ example-ap… │              │             │            │ │
+│ │             │             │             │              │ aws-spring… │              │             │            │ │
+│ │             │             │             │              │ eksvpccnit… │              │             │            │ │
+│ │             │             │             │              │ postgres    │              │             │            │ │
+│ │             │             │             │              │ scanrepo-p… │              │             │            │ │
+│ │             │             │             │              │ sample-ui-… │              │             │            │ │
+│ │             │             │             │              │ app-soci    │              │             │            │ │
+│ │             │             │             │              │ graviton2-… │              │             │            │ │
+│ │             │             │             │              │ appmesh-wo… │              │             │            │ │
+│ │             │             │             │              │ docker-com… │              │             │            │ │
+│ │             │             │             │              │ eks-exampl… │              │             │            │ │
+│ │             │             │             │              │ colortelle… │              │             │            │ │
+│ │             │             │             │              │ docker-com… │              │             │            │ │
+│ │             │             │             │              │ author-ser… │              │             │            │ │
+│ │             │             │             │              │ example-ap… │              │             │            │ │
+│ │             │             │             │              │ aws-spring… │              │             │            │ │
+│ │             │             │             │              │ eks-micros… │              │             │            │ │
+│ │             │             │             │              │ apprunnerw… │              │             │            │ │
+│ │             │             │             │              │ ecr-demo    │              │             │            │ │
+│ │             │             │             │              │ test        │              │             │            │ │
+│ │             │             │             │              │ route-guide │              │             │            │ │
+│ │             │             │             │              │ cdkstackal… │              │             │            │ │
+│ │             │             │             │              │ helloworld… │              │             │            │ │
+│ │             │             │             │              │ howto-k8s-… │              │             │            │ │
+│ │             │             │             │              │ cdk-hnb659… │              │             │            │ │
+│ │             │             │             │              │ monolith-s… │              │             │            │ │
+│ │             │             │             │              │ bluegreenu… │              │             │            │ │
+│ │             │             │             │              │ pet-listad… │              │             │            │ │
+│ │             │             │             │              │ pet-payfor… │              │             │            │ │
+│ │             │             │             │              │ appmesh-wo… │              │             │            │ │
+│ │             │             │             │              │ helloworld… │              │             │            │ │
+│ │             │             │             │              │ simple-exp… │              │             │            │ │
+│ │             │             │             │              │ bluegreenu… │              │             │            │ │
+│ │             │             │             │              │ graviton2-… │              │             │            │ │
+│ │             │             │             │              │ zstd-soci   │              │             │            │ │
+│ │             │             │             │              │ std/reverse │              │             │            │ │
+│ │             │             │             │              │ awscli-soci │              │             │            │ │
+│ │ image_secu… │ Cluster     │ check_iam_… │ Create IAM   │ ECR Repos   │              │ ECR         │ Link       │ │
+│ │             │ Wide        │             │ policies for │ without IAM │              │ Repository  │            │ │
+│ │             │             │             │ ECR          │ Policies    │              │             │            │ │
+│ │             │             │             │ repositories │ eksws-code… │              │             │            │ │
+│ │             │             │             │              │ zstd        │              │             │            │ │
+│ │             │             │             │              │ aws-spring… │              │             │            │ │
+│ │             │             │             │              │ busybox     │              │             │            │ │
+│ │             │             │             │              │ yelb-appse… │              │             │            │ │
+│ │             │             │             │              │ docker-com… │              │             │            │ │
+│ │             │             │             │              │ ec2spotcus… │              │             │            │ │
+│ │             │             │             │              │ node        │              │             │            │ │
+│ │             │             │             │              │ ecs-spot-w… │              │             │            │ │
+│ │             │             │             │              │ java-gener… │              │             │            │ │
+│ │             │             │             │              │ eks-worksh… │              │             │            │ │
+│ │             │             │             │              │ inspector-… │              │             │            │ │
+│ │             │             │             │              │ k8s/kube-b… │              │             │            │ │
+│ │             │             │             │              │ eks-micros… │              │             │            │ │
+│ │             │             │             │              │ eks-app-me… │              │             │            │ │
+│ │             │             │             │              │ flask-cb-d… │              │             │            │ │
+│ │             │             │             │              │ docker-com… │              │             │            │ │
+│ │             │             │             │              │ bottlerock… │              │             │            │ │
+│ │             │             │             │              │ artifact-t… │              │             │            │ │
+│ │             │             │             │              │ k8s/kube-b… │              │             │            │ │
+│ │             │             │             │              │ helm-test-… │              │             │            │ │
+│ │             │             │             │              │ pet-payfor… │              │             │            │ │
+│ │             │             │             │              │ k8s-cloudw… │              │             │            │ │
+│ │             │             │             │              │ custom-flu… │              │             │            │ │
+│ │             │             │             │              │ custom-kub… │              │             │            │ │
+│ │             │             │             │              │ java-gener… │              │             │            │ │
+│ │             │             │             │              │ sample-mic… │              │             │            │ │
+│ │             │             │             │              │ monolith-s… │              │             │            │ │
+│ │             │             │             │              │ ecrrepo-pb… │              │             │            │ │
+│ │             │             │             │              │ hello-world │              │             │            │ │
+│ │             │             │             │              │ pet-traffi… │              │             │            │ │
+│ │             │             │             │              │ custom-kub… │              │             │            │ │
+│ │             │             │             │              │ scanrepo-t… │              │             │            │ │
+│ │             │             │             │              │ websockets… │              │             │            │ │
+│ │             │             │             │              │ awscli      │              │             │            │ │
+│ │             │             │             │              │ bottlerock… │              │             │            │ │
+│ │             │             │             │              │ bottlerock… │              │             │            │ │
+│ │             │             │             │              │ ecsmultica… │              │             │            │ │
+│ │             │             │             │              │ fluent-bit… │              │             │            │ │
+│ │             │             │             │              │ sample-mic… │              │             │            │ │
+│ │             │             │             │              │ custom-kub… │              │             │            │ │
+│ │             │             │             │              │ artifact-t… │              │             │            │ │
+│ │             │             │             │              │ nginx       │              │             │            │ │
+│ │             │             │             │              │ ec2spotcus… │              │             │            │ │
+│ │             │             │             │              │ author-ser… │              │             │            │ │
+│ │             │             │             │              │ scanrepo-t… │              │             │            │ │
+│ │             │             │             │              │ aws-spring… │              │             │            │ │
+│ │             │             │             │              │ redis       │              │             │            │ │
+│ │             │             │             │              │ aws-spring… │              │             │            │ │
+│ │             │             │             │              │ colortelle… │              │             │            │ │
+│ │             │             │             │              │ sidecar-in… │              │             │            │ │
+│ │             │             │             │              │ howto-k8s-… │              │             │            │ │
+│ │             │             │             │              │ my-app/my-… │              │             │            │ │
+│ │             │             │             │              │ guestbook   │              │             │            │ │
+│ │             │             │             │              │ aws-spring… │              │             │            │ │
+│ │             │             │             │              │ app         │              │             │            │ │
+│ │             │             │             │              │ ecsmultica… │              │             │            │ │
+│ │             │             │             │              │ monte-carl… │              │             │            │ │
+│ │             │             │             │              │ eksvpccnit… │              │             │            │ │
+│ │             │             │             │              │ colortelle… │              │             │            │ │
+│ │             │             │             │              │ example-ap… │              │             │            │ │
+│ │             │             │             │              │ aws-spring… │              │             │            │ │
+│ │             │             │             │              │ eksvpccnit… │              │             │            │ │
+│ │             │             │             │              │ postgres    │              │             │            │ │
+│ │             │             │             │              │ scanrepo-p… │              │             │            │ │
+│ │             │             │             │              │ sample-ui-… │              │             │            │ │
+│ │             │             │             │              │ app-soci    │              │             │            │ │
+│ │             │             │             │              │ graviton2-… │              │             │            │ │
+│ │             │             │             │              │ appmesh-wo… │              │             │            │ │
+│ │             │             │             │              │ docker-com… │              │             │            │ │
+│ │             │             │             │              │ eks-exampl… │              │             │            │ │
+│ │             │             │             │              │ colortelle… │              │             │            │ │
+│ │             │             │             │              │ docker-com… │              │             │            │ │
+│ │             │             │             │              │ author-ser… │              │             │            │ │
+│ │             │             │             │              │ example-ap… │              │             │            │ │
+│ │             │             │             │              │ aws-spring… │              │             │            │ │
+│ │             │             │             │              │ eks-micros… │              │             │            │ │
+│ │             │             │             │              │ apprunnerw… │              │             │            │ │
+│ │             │             │             │              │ ecr-demo    │              │             │            │ │
+│ │             │             │             │              │ test        │              │             │            │ │
+│ │             │             │             │              │ route-guide │              │             │            │ │
+│ │             │             │             │              │ cdkstackal… │              │             │            │ │
+│ │             │             │             │              │ helloworld… │              │             │            │ │
+│ │             │             │             │              │ howto-k8s-… │              │             │            │ │
+│ │             │             │             │              │ monolith-s… │              │             │            │ │
+│ │             │             │             │              │ bluegreenu… │              │             │            │ │
+│ │             │             │             │              │ pet-listad… │              │             │            │ │
+│ │             │             │             │              │ pet-payfor… │              │             │            │ │
+│ │             │             │             │              │ appmesh-wo… │              │             │            │ │
+│ │             │             │             │              │ helloworld… │              │             │            │ │
+│ │             │             │             │              │ simple-exp… │              │             │            │ │
+│ │             │             │             │              │ bluegreenu… │              │             │            │ │
+│ │             │             │             │              │ graviton2-… │              │             │            │ │
+│ │             │             │             │              │ zstd-soci   │              │             │            │ │
+│ │             │             │             │              │ awscli-soci │              │             │            │ │
+│ │ image_secu… │ Cluster     │ consider_u… │ Consider     │ VPC         │              │ ECR         │ Link       │ │
+│ │             │ Wide        │             │ using ECR    │ Endpoint    │              │ Repository  │            │ │
+│ │             │             │             │ private      │ for ECR     │              │             │            │ │
+│ │             │             │             │ endpoints    │ does not    │              │             │            │ │
+│ │             │             │             │              │ exist in    │              │             │            │ │
+│ │             │             │             │              │ VPC :       │              │             │            │ │
+│ │             │             │             │              │ vpc-03103b… │              │             │            │ │
+│ │ image_secu… │ Cluster     │ check_endp… │ Implement    │ VPC         │              │ ECR         │ Link       │ │
+│ │             │ Wide        │             │ endpoint     │ Endpoint    │              │ Repository  │            │ │
+│ │             │             │             │ policies for │ for ECR     │              │             │            │ │
+│ │             │             │             │ ECR          │ does not    │              │             │            │ │
+│ │             │             │             │              │ exist in    │              │             │            │ │
+│ │             │             │             │              │ VPC :       │              │             │            │ │
+│ │             │             │             │              │ vpc-03103b… │              │             │            │ │
+│ │ image_secu… │ Cluster     │ implement_… │ Implement    │ ECR Repos   │              │ ECR         │ Link       │ │
+│ │             │ Wide        │             │ lifecycle    │ without     │              │ Repository  │            │ │
+│ │             │             │             │ policies for │ lifecycle   │              │             │            │ │
+│ │             │             │             │ ECR          │ Policies    │              │             │            │ │
+│ │             │             │             │              │ eksws-code… │              │             │            │ │
+│ │             │             │             │              │ zstd        │              │             │            │ │
+│ │             │             │             │              │ aws-spring… │              │             │            │ │
+│ │             │             │             │              │ busybox     │              │             │            │ │
+│ │             │             │             │              │ ecr-demo-s… │              │             │            │ │
+│ │             │             │             │              │ yelb-appse… │              │             │            │ │
+│ │             │             │             │              │ docker-com… │              │             │            │ │
+│ │             │             │             │              │ ec2spotcus… │              │             │            │ │
+│ │             │             │             │              │ node        │              │             │            │ │
+│ │             │             │             │              │ ecs-spot-w… │              │             │            │ │
+│ │             │             │             │              │ java-gener… │              │             │            │ │
+│ │             │             │             │              │ eks-worksh… │              │             │            │ │
+│ │             │             │             │              │ inspector-… │              │             │            │ │
+│ │             │             │             │              │ k8s/kube-b… │              │             │            │ │
+│ │             │             │             │              │ eks-micros… │              │             │            │ │
+│ │             │             │             │              │ eks-app-me… │              │             │            │ │
+│ │             │             │             │              │ flask-cb-d… │              │             │            │ │
+│ │             │             │             │              │ docker-com… │              │             │            │ │
+│ │             │             │             │              │ bottlerock… │              │             │            │ │
+│ │             │             │             │              │ my-app/my-… │              │             │            │ │
+│ │             │             │             │              │ artifact-t… │              │             │            │ │
+│ │             │             │             │              │ k8s/kube-b… │              │             │            │ │
+│ │             │             │             │              │ helm-test-… │              │             │            │ │
+│ │             │             │             │              │ pet-payfor… │              │             │            │ │
+│ │             │             │             │              │ k8s-cloudw… │              │             │            │ │
+│ │             │             │             │              │ custom-flu… │              │             │            │ │
+│ │             │             │             │              │ custom-kub… │              │             │            │ │
+│ │             │             │             │              │ java-gener… │              │             │            │ │
+│ │             │             │             │              │ sample-mic… │              │             │            │ │
+│ │             │             │             │              │ monolith-s… │              │             │            │ │
+│ │             │             │             │              │ ecrrepo-pb… │              │             │            │ │
+│ │             │             │             │              │ hello-world │              │             │            │ │
+│ │             │             │             │              │ pet-traffi… │              │             │            │ │
+│ │             │             │             │              │ custom-kub… │              │             │            │ │
+│ │             │             │             │              │ scanrepo-t… │              │             │            │ │
+│ │             │             │             │              │ websockets… │              │             │            │ │
+│ │             │             │             │              │ awscli      │              │             │            │ │
+│ │             │             │             │              │ bottlerock… │              │             │            │ │
+│ │             │             │             │              │ bottlerock… │              │             │            │ │
+│ │             │             │             │              │ ecsmultica… │              │             │            │ │
+│ │             │             │             │              │ fluent-bit… │              │             │            │ │
+│ │             │             │             │              │ sample-mic… │              │             │            │ │
+│ │             │             │             │              │ custom-kub… │              │             │            │ │
+│ │             │             │             │              │ artifact-t… │              │             │            │ │
+│ │             │             │             │              │ nginx       │              │             │            │ │
+│ │             │             │             │              │ ec2spotcus… │              │             │            │ │
+│ │             │             │             │              │ author-ser… │              │             │            │ │
+│ │             │             │             │              │ ephemeral-… │              │             │            │ │
+│ │             │             │             │              │ scanrepo-t… │              │             │            │ │
+│ │             │             │             │              │ aws-spring… │              │             │            │ │
+│ │             │             │             │              │ redis       │              │             │            │ │
+│ │             │             │             │              │ aws-spring… │              │             │            │ │
+│ │             │             │             │              │ colortelle… │              │             │            │ │
+│ │             │             │             │              │ sidecar-in… │              │             │            │ │
+│ │             │             │             │              │ howto-k8s-… │              │             │            │ │
+│ │             │             │             │              │ my-app/my-… │              │             │            │ │
+│ │             │             │             │              │ guestbook   │              │             │            │ │
+│ │             │             │             │              │ aws-spring… │              │             │            │ │
+│ │             │             │             │              │ app         │              │             │            │ │
+│ │             │             │             │              │ ecsmultica… │              │             │            │ │
+│ │             │             │             │              │ monte-carl… │              │             │            │ │
+│ │             │             │             │              │ eksvpccnit… │              │             │            │ │
+│ │             │             │             │              │ colortelle… │              │             │            │ │
+│ │             │             │             │              │ example-ap… │              │             │            │ │
+│ │             │             │             │              │ aws-spring… │              │             │            │ │
+│ │             │             │             │              │ eksvpccnit… │              │             │            │ │
+│ │             │             │             │              │ postgres    │              │             │            │ │
+│ │             │             │             │              │ scanrepo-p… │              │             │            │ │
+│ │             │             │             │              │ sample-ui-… │              │             │            │ │
+│ │             │             │             │              │ app-soci    │              │             │            │ │
+│ │             │             │             │              │ graviton2-… │              │             │            │ │
+│ │             │             │             │              │ appmesh-wo… │              │             │            │ │
+│ │             │             │             │              │ docker-com… │              │             │            │ │
+│ │             │             │             │              │ eks-exampl… │              │             │            │ │
+│ │             │             │             │              │ colortelle… │              │             │            │ │
+│ │             │             │             │              │ docker-com… │              │             │            │ │
+│ │             │             │             │              │ author-ser… │              │             │            │ │
+│ │             │             │             │              │ example-ap… │              │             │            │ │
+│ │             │             │             │              │ aws-spring… │              │             │            │ │
+│ │             │             │             │              │ eks-micros… │              │             │            │ │
+│ │             │             │             │              │ apprunnerw… │              │             │            │ │
+│ │             │             │             │              │ ecr-demo    │              │             │            │ │
+│ │             │             │             │              │ test        │              │             │            │ │
+│ │             │             │             │              │ route-guide │              │             │            │ │
+│ │             │             │             │              │ cdkstackal… │              │             │            │ │
+│ │             │             │             │              │ helloworld… │              │             │            │ │
+│ │             │             │             │              │ howto-k8s-… │              │             │            │ │
+│ │             │             │             │              │ monolith-s… │              │             │            │ │
+│ │             │             │             │              │ bluegreenu… │              │             │            │ │
+│ │             │             │             │              │ pet-listad… │              │             │            │ │
+│ │             │             │             │              │ pet-payfor… │              │             │            │ │
+│ │             │             │             │              │ appmesh-wo… │              │             │            │ │
+│ │             │             │             │              │ helloworld… │              │             │            │ │
+│ │             │             │             │              │ simple-exp… │              │             │            │ │
+│ │             │             │             │              │ bluegreenu… │              │             │            │ │
+│ │             │             │             │              │ graviton2-… │              │             │            │ │
+│ │             │             │             │              │ zstd-soci   │              │             │            │ │
+│ │             │             │             │              │ std/reverse │              │             │            │ │
+│ │             │             │             │              │ awscli-soci │              │             │            │ │
+│ └─────────────┴─────────────┴─────────────┴──────────────┴─────────────┴──────────────┴─────────────┴────────────┘ │
+╰────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
+
+╭─  Report for scalability pillar : 1/2 rules passed ────────────────────────────────────────────────────────────────╮
+│ ┏━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━┳━━━━━━━━━━┳━━━━━━━━━━━━━┳━━━━━━━━━━━━┓ │
+│ ┃              ┃              ┃              ┃ Rule         ┃              ┃          ┃ Resource    ┃            ┃ │
+│ ┃ Section      ┃ Namespace    ┃ Rule Name    ┃ Description  ┃ Info         ┃ Resource ┃ Type        ┃ Resolution ┃ │
+│ ┡━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━╇━━━━━━━━━━╇━━━━━━━━━━━━━╇━━━━━━━━━━━━┩ │
+│ │ control_pla… │ Cluster Wide │ check_EKS_v… │ EKS Version  │ EKS Cluster  │          │ EKS Cluster │ Link       │ │
+│ │              │              │              │ should be    │ Version      │          │ Version     │            │ │
+│ │              │              │              │ 1.27         │ 1.26.        │          │             │            │ │
+│ │              │              │              │              │ Upgrade to   │          │             │            │ │
+│ │              │              │              │              │ Latest       │          │             │            │ │
+│ │              │              │              │              │ Version 1.27 │          │             │            │ │
+│ │ control_pla… │ Cluster Wide │ check_kubec… │ `disable-co… │              │          │ Compression │ Link       │ │
+│ │              │              │              │ in           │              │          │ Setting     │            │ │
+│ │              │              │              │ kubeconfig   │              │          │             │            │ │
+│ │              │              │              │ should equal │              │          │             │            │ │
+│ │              │              │              │ True         │              │          │             │            │ │
+│ └──────────────┴──────────────┴──────────────┴──────────────┴──────────────┴──────────┴─────────────┴────────────┘ │
+╰────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
+
+╭─  Report for reliability pillar : 0/2 rules passed ────────────────────────────────────────────────────────────────╮
+│ ┏━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━┳━━━━━━┳━━━━━━━━━━┳━━━━━━━━━━━━━━━┳━━━━━━━━━━━━┓ │
+│ ┃              ┃              ┃                 ┃ Rule            ┃      ┃          ┃               ┃            ┃ │
+│ ┃ Section      ┃ Namespace    ┃ Rule Name       ┃ Description     ┃ Info ┃ Resource ┃ Resource Type ┃ Resolution ┃ │
+│ ┡━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━╇━━━━━━╇━━━━━━━━━━╇━━━━━━━━━━━━━━━╇━━━━━━━━━━━━┩ │
+│ │ applications │ Cluster Wide │ check_metrics_… │ Run Kubernetes  │      │          │ Service       │ Link       │ │
+│ │              │              │                 │ Metrics Server  │      │          │               │            │ │
+│ │ applications │ Cluster Wide │ check_vertical… │ Vertical pod    │      │          │ Deployment    │ Link       │ │
+│ │              │              │                 │ autoscaler is   │      │          │               │            │ │
+│ │              │              │                 │ not deployed.   │      │          │               │            │ │
+│ └──────────────┴──────────────┴─────────────────┴─────────────────┴──────┴──────────┴───────────────┴────────────┘ │
+╰────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
+
+╭─  Report for cluster_autoscaling pillar : 3/10 rules passed ───────────────────────────────────────────────────────╮
+│ ┏━━━━━━━━━━━━━┳━━━━━━━━━━━━━┳━━━━━━━━━━━━━┳━━━━━━━━━━━━━━┳━━━━━━━━━━━━━┳━━━━━━━━━━━━━━┳━━━━━━━━━━━━━┳━━━━━━━━━━━━┓ │
+│ ┃             ┃             ┃             ┃ Rule         ┃             ┃              ┃ Resource    ┃            ┃ │
+│ ┃ Section     ┃ Namespace   ┃ Rule Name   ┃ Description  ┃ Info        ┃ Resource     ┃ Type        ┃ Resolution ┃ │
+│ ┡━━━━━━━━━━━━━╇━━━━━━━━━━━━━╇━━━━━━━━━━━━━╇━━━━━━━━━━━━━━╇━━━━━━━━━━━━━╇━━━━━━━━━━━━━━╇━━━━━━━━━━━━━╇━━━━━━━━━━━━┩ │
+│ │ cluster_au… │ Cluster     │ check_any_… │ Deploy       │ Deployment  │              │ Deployment  │ Link       │ │
+│ │             │ Wide        │             │ either K8s   │ Status for  │              │             │            │ │
+│ │             │             │             │ Cluster      │ CA : False  │              │             │            │ │
+│ │             │             │             │ Autoscaler   │ and         │              │             │            │ │
+│ │             │             │             │ or Karpenter │ Karpenter : │              │             │            │ │
+│ │             │             │             │              │ True        │              │             │            │ │
+│ │ cluster_au… │ Cluster     │ ensure_clu… │ Ensure K8s   │ Kubernetes  │              │ Deployment  │ Link       │ │
+│ │             │ Wide        │             │ and CA       │ Cluster     │              │             │            │ │
+│ │             │             │             │ Versions     │ Autoscaler  │              │             │            │ │
+│ │             │             │             │ match        │ is not      │              │             │            │ │
+│ │             │             │             │              │ deployed in │              │             │            │ │
+│ │             │             │             │              │ the cluster │              │             │            │ │
+│ │ cluster_au… │ Cluster     │ ensure_clu… │ Operating    │ Kubernetes  │              │ Deployment  │ Link       │ │
+│ │             │ Wide        │             │ the Cluster  │ Cluster     │              │             │            │ │
+│ │             │             │             │ Autoscaler   │ Autoscaler  │              │             │            │ │
+│ │             │             │             │              │ is not      │              │             │            │ │
+│ │             │             │             │              │ deployed in │              │             │            │ │
+│ │             │             │             │              │ the cluster │              │             │            │ │
+│ │ cluster_au… │ Cluster     │ use_separa… │ Ensure K8s   │ Kubernetes  │              │ IRSA for    │ Link       │ │
+│ │             │ Wide        │             │ CA Uses      │ Cluster     │              │ K8s CA      │            │ │
+│ │             │             │             │ dedicated    │ Autoscaler  │              │             │            │ │
+│ │             │             │             │ IAM Role     │ is not      │              │             │            │ │
+│ │             │             │             │ (IRSA).      │ deployed in │              │             │            │ │
+│ │             │             │             │              │ the cluster │              │             │            │ │
+│ │ cluster_au… │ Cluster     │ employ_lea… │ Employ least │ Kubernetes  │              │ K8s CA IAM  │ Link       │ │
+│ │             │ Wide        │             │ privileged   │ Cluster     │              │ Role least  │            │ │
+│ │             │             │             │ access to    │ Autoscaler  │              │ privileged  │            │ │
+│ │             │             │             │ the IAM role │ is not      │              │ access      │            │ │
+│ │             │             │             │              │ deployed in │              │             │            │ │
+│ │             │             │             │              │ the cluster │              │             │            │ │
+│ │ cluster_au… │ Cluster     │ use_manage… │ Nodes are    │ All are EKS │              │ Node        │ Link       │ │
+│ │             │ Wide        │             │ recommended  │ Managed     │              │             │            │ │
+│ │             │             │             │ to be part   │ Node groups │              │             │            │ │
+│ │             │             │             │ of a managed │             │              │             │            │ │
+│ │             │             │             │ node group.  │             │              │             │            │ │
+│ │ cluster_au… │ Cluster     │ ensure_clu… │ Ensure       │ Kubernetes  │              │ K8s CA      │ Link       │ │
+│ │             │ Wide        │             │ Cluster      │ Cluster     │              │ Replica     │            │ │
+│ │             │             │             │ Autoscaler   │ Autoscaler  │              │ Count       │            │ │
+│ │             │             │             │ has 3        │ is not      │              │             │            │ │
+│ │             │             │             │ replicas for │ deployed in │              │             │            │ │
+│ │             │             │             │ HA           │ the cluster │              │             │            │ │
+│ │ cluster_au… │ Cluster     │ ensure_uni… │ Configuring  │ Node group  │ imdsv2       │ Uniform     │ Link       │ │
+│ │             │ Wide        │             │ your Node    │ has uniform │              │ Instance    │            │ │
+│ │             │             │             │ Groups       │ Instance    │              │ Types in    │            │ │
+│ │             │             │             │              │ Types       │              │ Node group  │            │ │
+│ │ cluster_au… │ Cluster     │ ensure_uni… │ Configuring  │ Node group  │ disablePodI… │ Uniform     │ Link       │ │
+│ │             │ Wide        │             │ your Node    │ has uniform │              │ Instance    │            │ │
+│ │             │             │             │ Groups       │ Instance    │              │ Types in    │            │ │
+│ │             │             │             │              │ Types       │              │ Node group  │            │ │
+│ │ cluster_au… │ Cluster     │ configure_… │ Configuring  │ MNGs with   │              │ MNG         │ Link       │ │
+│ │             │ Wide        │             │ your Node    │ no          │              │             │            │ │
+│ │             │             │             │ Groups       │ diversific… │              │             │            │ │
+│ │             │             │             │              │ br-mng      │              │             │            │ │
+│ │             │             │             │              │ disablePod… │              │             │            │ │
+│ │             │             │             │              │ imdsv2      │              │             │            │ │
+│ │             │             │             │              │ linux-ng    │              │             │            │ │
+│ │             │             │             │              │ mng         │              │             │            │ │
+│ │             │             │             │              │ windows-ma… │              │             │            │ │
+│ │ cluster_au… │ Cluster     │ configure_… │ Configuring  │ MNGs with   │              │ MNG         │ Link       │ │
+│ │             │ Wide        │             │ Node Groups  │ less 3      │              │             │            │ │
+│ │             │             │             │ for HA       │ Subnets     │              │             │            │ │
+│ │             │             │             │              │ br-mng      │              │             │            │ │
+│ │             │             │             │              │ disablePod… │              │             │            │ │
+│ │             │             │             │              │ imdsv2      │              │             │            │ │
+│ │             │             │             │              │ linux-ng    │              │             │            │ │
+│ │             │             │             │              │ mng         │              │             │            │ │
+│ │             │             │             │              │ windows-ma… │              │             │            │ │
+│ └─────────────┴─────────────┴─────────────┴──────────────┴─────────────┴──────────────┴─────────────┴────────────┘ │
+╰────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
+
+╭─  Report for cluster_data pillar : 7/7 rules passed ───────────────────────────────────────────────────────────────╮
+│ ┏━━━━━━━━━━━━━┳━━━━━━━━━━━━━┳━━━━━━━━━━━━━┳━━━━━━━━━━━━━━┳━━━━━━━━━━━━━┳━━━━━━━━━━━━━━┳━━━━━━━━━━━━━┳━━━━━━━━━━━━┓ │
+│ ┃             ┃             ┃             ┃ Rule         ┃             ┃              ┃ Resource    ┃            ┃ │
+│ ┃ Section     ┃ Namespace   ┃ Rule Name   ┃ Description  ┃ Info        ┃ Resource     ┃ Type        ┃ Resolution ┃ │
+│ ┡━━━━━━━━━━━━━╇━━━━━━━━━━━━━╇━━━━━━━━━━━━━╇━━━━━━━━━━━━━━╇━━━━━━━━━━━━━╇━━━━━━━━━━━━━━╇━━━━━━━━━━━━━╇━━━━━━━━━━━━┩ │
+│ │ control_pl… │ Cluster     │ get_EKS_ve… │ Get EKS      │ EKS Cluster │              │ EKS Cluster │ Link       │ │
+│ │             │ Wide        │             │ Cluster      │ Version     │              │ Version     │            │ │
+│ │             │             │             │ Version      │ 1.26        │              │             │            │ │
+│ │ control_pl… │ Cluster     │ get_EKS_cl… │ Get EKS      │             │ public:      │ EKS Cluster │ Link       │ │
+│ │             │ Wide        │             │ Cluster      │             │ True,        │ Endpoint    │            │ │
+│ │             │             │             │ Endpoint URL │             │ private:     │ URL         │            │ │
+│ │             │             │             │              │             │ True         │             │            │ │
+│ │             │             │             │              │             │ https://BF0… │             │            │ │
+│ │ data_plane  │ Cluster     │ get_cluste… │ Get EKS      │             │ vpcId        │ EKS Cluster │ Link       │ │
+│ │             │ Wide        │             │ Cluster VPC  │             │ vpc-03103b5… │ VPC &       │            │ │
+│ │             │             │             │ & Subnets    │             │ subnetIds    │ Subnet Ids  │            │ │
+│ │             │             │             │              │             │ subnet-014d… │             │            │ │
+│ │             │             │             │              │             │ subnet-0739… │             │            │ │
+│ │             │             │             │              │             │ subnet-0252… │             │            │ │
+│ │             │             │             │              │             │ subnet-0189… │             │            │ │
+│ │ data_plane  │ Cluster     │ get_availa… │ Check        │             │ Availablle   │ Available   │ Link       │ │
+│ │             │ Wide        │             │ Available    │             │ Free IPs     │ Free IPs in │            │ │
+│ │             │             │             │ Free IPs in  │             │ 32538        │ EKS VPC     │            │ │
+│ │             │             │             │ EKS VPC      │             │              │             │            │ │
+│ │ data_plane  │ Cluster     │ get_cluste… │ Get Cluster  │             │ Services :   │ Size of the │ Link       │ │
+│ │             │ Wide        │             │ Size Details │             │ 43           │ Cluster     │            │ │
+│ │             │             │             │              │             │ Deployments  │             │            │ │
+│ │             │             │             │              │             │ : 43 Pods:   │             │            │ │
+│ │             │             │             │              │             │ 111 Nodes: 5 │             │            │ │
+│ │ data_plane  │ Cluster     │ get_nodegr… │ Get Node     │             │ EKS MNG : 2  │ Node groups │ Link       │ │
+│ │             │ Wide        │             │ groups and   │             │ Self MNG : 0 │ and         │            │ │
+│ │             │             │             │ Provisioners │             │ Provisioner… │ Provisione… │            │ │
+│ │             │             │             │              │             │ 0 Linux NGs: │             │            │ │
+│ │             │             │             │              │             │ imdsv2       │             │            │ │
+│ │             │             │             │              │             │ disablePodI… │             │            │ │
+│ │             │             │             │              │             │ Windows NGs: │             │            │ │
+│ │ data_plane  │ Cluster     │ get_fargat… │ Get EKS      │ EKS Fargate │              │ EKS Fargate │ Link       │ │
+│ │             │ Wide        │             │ Fargate      │ Profiles:   │              │ Profiles    │            │ │
+│ │             │             │             │ Profiles     │             │              │             │            │ │
+│ └─────────────┴─────────────┴─────────────┴──────────────┴─────────────┴──────────────┴─────────────┴────────────┘ │
+╰────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
+
+

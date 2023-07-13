@@ -1,0 +1,1281 @@
+*  *  *  *  *  *  *  *  *  *  *  * HARDENEKS *  *  *  *  *  *  *  *  *  *  *  *
+You are operating at us-east-1
+Your context used is arn:aws:eks:us-east-1:000474600478:cluster/eks126
+Your cluster name is eks126
+You are using 
+/home/ec2-user/environment/jalawala/hardeneks/hardeneks/config.yaml as your 
+config file
+
+- - - - - - - - - - - - - Checking cluster wide rules - - - - - - - - - - - - -
+
+- - - - - - - - - - - -  Checking Namespace wide rules - - - - - - - - - - - - 
+
+- - - - - - - - - - - Generating the Consolidated Report - - - - - - - - - - - 
+
+╭─  Report for cluster_autoscaling pillar : 3/10 rules passed ────────────────╮
+│ ┏━━━━━━━━┳━━━━━━━━┳━━━━━━━━┳━━━━━━━━┳━━━━━━━━┳━━━━━━━━━┳━━━━━━━━┳━━━━━━━━━┓ │
+│ ┃        ┃        ┃ Rule   ┃ Rule   ┃        ┃         ┃ Resou… ┃         ┃ │
+│ ┃ Secti… ┃ Names… ┃ Name   ┃ Descr… ┃ Info   ┃ Resour… ┃ Type   ┃ Resolu… ┃ │
+│ ┡━━━━━━━━╇━━━━━━━━╇━━━━━━━━╇━━━━━━━━╇━━━━━━━━╇━━━━━━━━━╇━━━━━━━━╇━━━━━━━━━┩ │
+│ │ clust… │ Clust… │ check… │ Deploy │ Deplo… │         │ Deplo… │ Link    │ │
+│ │        │ Wide   │        │ either │ Status │         │        │         │ │
+│ │        │        │        │ K8s    │ for CA │         │        │         │ │
+│ │        │        │        │ Clust… │ :      │         │        │         │ │
+│ │        │        │        │ Autos… │ False  │         │        │         │ │
+│ │        │        │        │ or     │ and    │         │        │         │ │
+│ │        │        │        │ Karpe… │ Karpe… │         │        │         │ │
+│ │        │        │        │        │ : True │         │        │         │ │
+│ │ clust… │ Clust… │ ensur… │ Ensure │ Kuber… │         │ Deplo… │ Link    │ │
+│ │        │ Wide   │        │ K8s    │ Clust… │         │        │         │ │
+│ │        │        │        │ and CA │ Autos… │         │        │         │ │
+│ │        │        │        │ Versi… │ is not │         │        │         │ │
+│ │        │        │        │ match  │ deplo… │         │        │         │ │
+│ │        │        │        │        │ in the │         │        │         │ │
+│ │        │        │        │        │ clust… │         │        │         │ │
+│ │ clust… │ Clust… │ ensur… │ Opera… │ Kuber… │         │ Deplo… │ Link    │ │
+│ │        │ Wide   │        │ the    │ Clust… │         │        │         │ │
+│ │        │        │        │ Clust… │ Autos… │         │        │         │ │
+│ │        │        │        │ Autos… │ is not │         │        │         │ │
+│ │        │        │        │        │ deplo… │         │        │         │ │
+│ │        │        │        │        │ in the │         │        │         │ │
+│ │        │        │        │        │ clust… │         │        │         │ │
+│ │ clust… │ Clust… │ use_s… │ Ensure │ Kuber… │         │ IRSA   │ Link    │ │
+│ │        │ Wide   │        │ K8s CA │ Clust… │         │ for    │         │ │
+│ │        │        │        │ Uses   │ Autos… │         │ K8s CA │         │ │
+│ │        │        │        │ dedic… │ is not │         │        │         │ │
+│ │        │        │        │ IAM    │ deplo… │         │        │         │ │
+│ │        │        │        │ Role   │ in the │         │        │         │ │
+│ │        │        │        │ (IRSA… │ clust… │         │        │         │ │
+│ │ clust… │ Clust… │ emplo… │ Employ │ Kuber… │         │ K8s CA │ Link    │ │
+│ │        │ Wide   │        │ least  │ Clust… │         │ IAM    │         │ │
+│ │        │        │        │ privi… │ Autos… │         │ Role   │         │ │
+│ │        │        │        │ access │ is not │         │ least  │         │ │
+│ │        │        │        │ to the │ deplo… │         │ privi… │         │ │
+│ │        │        │        │ IAM    │ in the │         │ access │         │ │
+│ │        │        │        │ role   │ clust… │         │        │         │ │
+│ │ clust… │ Clust… │ use_m… │ Nodes  │ All    │         │ Node   │ Link    │ │
+│ │        │ Wide   │        │ are    │ are    │         │        │         │ │
+│ │        │        │        │ recom… │ EKS    │         │        │         │ │
+│ │        │        │        │ to be  │ Manag… │         │        │         │ │
+│ │        │        │        │ part   │ Node   │         │        │         │ │
+│ │        │        │        │ of a   │ groups │         │        │         │ │
+│ │        │        │        │ manag… │        │         │        │         │ │
+│ │        │        │        │ node   │        │         │        │         │ │
+│ │        │        │        │ group. │        │         │        │         │ │
+│ │ clust… │ Clust… │ ensur… │ Ensure │ Kuber… │         │ K8s CA │ Link    │ │
+│ │        │ Wide   │        │ Clust… │ Clust… │         │ Repli… │         │ │
+│ │        │        │        │ Autos… │ Autos… │         │ Count  │         │ │
+│ │        │        │        │ has 3  │ is not │         │        │         │ │
+│ │        │        │        │ repli… │ deplo… │         │        │         │ │
+│ │        │        │        │ for HA │ in the │         │        │         │ │
+│ │        │        │        │        │ clust… │         │        │         │ │
+│ │ clust… │ Clust… │ ensur… │ Confi… │ Node   │ imdsv2  │ Unifo… │ Link    │ │
+│ │        │ Wide   │        │ your   │ group  │         │ Insta… │         │ │
+│ │        │        │        │ Node   │ has    │         │ Types  │         │ │
+│ │        │        │        │ Groups │ unifo… │         │ in     │         │ │
+│ │        │        │        │        │ Insta… │         │ Node   │         │ │
+│ │        │        │        │        │ Types  │         │ group  │         │ │
+│ │ clust… │ Clust… │ ensur… │ Confi… │ Node   │ disabl… │ Unifo… │ Link    │ │
+│ │        │ Wide   │        │ your   │ group  │         │ Insta… │         │ │
+│ │        │        │        │ Node   │ has    │         │ Types  │         │ │
+│ │        │        │        │ Groups │ unifo… │         │ in     │         │ │
+│ │        │        │        │        │ Insta… │         │ Node   │         │ │
+│ │        │        │        │        │ Types  │         │ group  │         │ │
+│ │ clust… │ Clust… │ confi… │ Confi… │ MNGs   │         │ MNG    │ Link    │ │
+│ │        │ Wide   │        │ your   │ with   │         │        │         │ │
+│ │        │        │        │ Node   │ no     │         │        │         │ │
+│ │        │        │        │ Groups │ diver… │         │        │         │ │
+│ │        │        │        │        │ br-mng │         │        │         │ │
+│ │        │        │        │        │ disab… │         │        │         │ │
+│ │        │        │        │        │ imdsv2 │         │        │         │ │
+│ │        │        │        │        │ linux… │         │        │         │ │
+│ │        │        │        │        │ mng    │         │        │         │ │
+│ │        │        │        │        │ windo… │         │        │         │ │
+│ │ clust… │ Clust… │ confi… │ Confi… │ MNGs   │         │ MNG    │ Link    │ │
+│ │        │ Wide   │        │ Node   │ with   │         │        │         │ │
+│ │        │        │        │ Groups │ less 3 │         │        │         │ │
+│ │        │        │        │ for HA │ Subne… │         │        │         │ │
+│ │        │        │        │        │ br-mng │         │        │         │ │
+│ │        │        │        │        │ disab… │         │        │         │ │
+│ │        │        │        │        │ imdsv2 │         │        │         │ │
+│ │        │        │        │        │ linux… │         │        │         │ │
+│ │        │        │        │        │ mng    │         │        │         │ │
+│ │        │        │        │        │ windo… │         │        │         │ │
+│ └────────┴────────┴────────┴────────┴────────┴─────────┴────────┴─────────┘ │
+╰─────────────────────────────────────────────────────────────────────────────╯
+
+╭─  Report for scalability pillar : 1/2 rules passed ─────────────────────────╮
+│ ┏━━━━━━━━┳━━━━━━━━┳━━━━━━━━┳━━━━━━━━┳━━━━━━━━┳━━━━━━━━━┳━━━━━━━━┳━━━━━━━━━┓ │
+│ ┃        ┃        ┃ Rule   ┃ Rule   ┃        ┃         ┃ Resou… ┃         ┃ │
+│ ┃ Secti… ┃ Names… ┃ Name   ┃ Descr… ┃ Info   ┃ Resour… ┃ Type   ┃ Resolu… ┃ │
+│ ┡━━━━━━━━╇━━━━━━━━╇━━━━━━━━╇━━━━━━━━╇━━━━━━━━╇━━━━━━━━━╇━━━━━━━━╇━━━━━━━━━┩ │
+│ │ contr… │ Clust… │ check… │ EKS    │ EKS    │         │ EKS    │ Link    │ │
+│ │        │ Wide   │        │ Versi… │ Clust… │         │ Clust… │         │ │
+│ │        │        │        │ should │ Versi… │         │ Versi… │         │ │
+│ │        │        │        │ be     │ 1.26.  │         │        │         │ │
+│ │        │        │        │ 1.27   │ Upgra… │         │        │         │ │
+│ │        │        │        │        │ to     │         │        │         │ │
+│ │        │        │        │        │ Latest │         │        │         │ │
+│ │        │        │        │        │ Versi… │         │        │         │ │
+│ │        │        │        │        │ 1.27   │         │        │         │ │
+│ │ contr… │ Clust… │ check… │ `disa… │        │         │ Compr… │ Link    │ │
+│ │        │ Wide   │        │ in     │        │         │ Setti… │         │ │
+│ │        │        │        │ kubec… │        │         │        │         │ │
+│ │        │        │        │ should │        │         │        │         │ │
+│ │        │        │        │ equal  │        │         │        │         │ │
+│ │        │        │        │ True   │        │         │        │         │ │
+│ └────────┴────────┴────────┴────────┴────────┴─────────┴────────┴─────────┘ │
+╰─────────────────────────────────────────────────────────────────────────────╯
+
+╭─  Report for cluster_data pillar : 7/7 rules passed ────────────────────────╮
+│ ┏━━━━━━━━┳━━━━━━━━┳━━━━━━━━┳━━━━━━━━┳━━━━━━━━┳━━━━━━━━━┳━━━━━━━━┳━━━━━━━━━┓ │
+│ ┃        ┃        ┃ Rule   ┃ Rule   ┃        ┃         ┃ Resou… ┃         ┃ │
+│ ┃ Secti… ┃ Names… ┃ Name   ┃ Descr… ┃ Info   ┃ Resour… ┃ Type   ┃ Resolu… ┃ │
+│ ┡━━━━━━━━╇━━━━━━━━╇━━━━━━━━╇━━━━━━━━╇━━━━━━━━╇━━━━━━━━━╇━━━━━━━━╇━━━━━━━━━┩ │
+│ │ contr… │ Clust… │ get_E… │ Get    │ EKS    │         │ EKS    │ Link    │ │
+│ │        │ Wide   │        │ EKS    │ Clust… │         │ Clust… │         │ │
+│ │        │        │        │ Clust… │ Versi… │         │ Versi… │         │ │
+│ │        │        │        │ Versi… │ 1.26   │         │        │         │ │
+│ │ contr… │ Clust… │ get_E… │ Get    │        │ public: │ EKS    │ Link    │ │
+│ │        │ Wide   │        │ EKS    │        │ True,   │ Clust… │         │ │
+│ │        │        │        │ Clust… │        │ privat… │ Endpo… │         │ │
+│ │        │        │        │ Endpo… │        │ True    │ URL    │         │ │
+│ │        │        │        │ URL    │        │ https:… │        │         │ │
+│ │ data_… │ Clust… │ get_c… │ Get    │        │ vpcId   │ EKS    │ Link    │ │
+│ │        │ Wide   │        │ EKS    │        │ vpc-03… │ Clust… │         │ │
+│ │        │        │        │ Clust… │        │ subnet… │ VPC &  │         │ │
+│ │        │        │        │ VPC &  │        │ subnet… │ Subnet │         │ │
+│ │        │        │        │ Subne… │        │ subnet… │ Ids    │         │ │
+│ │        │        │        │        │        │ subnet… │        │         │ │
+│ │        │        │        │        │        │ subnet… │        │         │ │
+│ │ data_… │ Clust… │ get_a… │ Check  │        │ Availa… │ Avail… │ Link    │ │
+│ │        │ Wide   │        │ Avail… │        │ Free    │ Free   │         │ │
+│ │        │        │        │ Free   │        │ IPs     │ IPs in │         │ │
+│ │        │        │        │ IPs in │        │ 32538   │ EKS    │         │ │
+│ │        │        │        │ EKS    │        │         │ VPC    │         │ │
+│ │        │        │        │ VPC    │        │         │        │         │ │
+│ │ data_… │ Clust… │ get_c… │ Get    │        │ Servic… │ Size   │ Link    │ │
+│ │        │ Wide   │        │ Clust… │        │ : 43    │ of the │         │ │
+│ │        │        │        │ Size   │        │ Deploy… │ Clust… │         │ │
+│ │        │        │        │ Detai… │        │ : 43    │        │         │ │
+│ │        │        │        │        │        │ Pods:   │        │         │ │
+│ │        │        │        │        │        │ 111     │        │         │ │
+│ │        │        │        │        │        │ Nodes:  │        │         │ │
+│ │        │        │        │        │        │ 5       │        │         │ │
+│ │ data_… │ Clust… │ get_n… │ Get    │        │ EKS MNG │ Node   │ Link    │ │
+│ │        │ Wide   │        │ Node   │        │ : 2     │ groups │         │ │
+│ │        │        │        │ groups │        │ Self    │ and    │         │ │
+│ │        │        │        │ and    │        │ MNG : 0 │ Provi… │         │ │
+│ │        │        │        │ Provi… │        │ Provis… │        │         │ │
+│ │        │        │        │        │        │ 0 Linux │        │         │ │
+│ │        │        │        │        │        │ NGs:    │        │         │ │
+│ │        │        │        │        │        │ imdsv2  │        │         │ │
+│ │        │        │        │        │        │ disabl… │        │         │ │
+│ │        │        │        │        │        │ Windows │        │         │ │
+│ │        │        │        │        │        │ NGs:    │        │         │ │
+│ │ data_… │ Clust… │ get_f… │ Get    │ EKS    │         │ EKS    │ Link    │ │
+│ │        │ Wide   │        │ EKS    │ Farga… │         │ Farga… │         │ │
+│ │        │        │        │ Farga… │ Profi… │         │ Profi… │         │ │
+│ │        │        │        │ Profi… │        │         │        │         │ │
+│ └────────┴────────┴────────┴────────┴────────┴─────────┴────────┴─────────┘ │
+╰─────────────────────────────────────────────────────────────────────────────╯
+
+╭─  Report for reliability pillar : 5/9 rules passed ─────────────────────────╮
+│ ┏━━━━━━━━┳━━━━━━━━┳━━━━━━━━┳━━━━━━━━┳━━━━━━━━┳━━━━━━━━━┳━━━━━━━━┳━━━━━━━━━┓ │
+│ ┃        ┃        ┃ Rule   ┃ Rule   ┃        ┃         ┃ Resou… ┃         ┃ │
+│ ┃ Secti… ┃ Names… ┃ Name   ┃ Descr… ┃ Info   ┃ Resour… ┃ Type   ┃ Resolu… ┃ │
+│ ┡━━━━━━━━╇━━━━━━━━╇━━━━━━━━╇━━━━━━━━╇━━━━━━━━╇━━━━━━━━━╇━━━━━━━━╇━━━━━━━━━┩ │
+│ │ appli… │ Clust… │ check… │ Run    │        │         │ Servi… │ Link    │ │
+│ │        │ Wide   │        │ Kuber… │        │         │        │         │ │
+│ │        │        │        │ Metri… │        │         │        │         │ │
+│ │        │        │        │ Server │        │         │        │         │ │
+│ │ appli… │ Clust… │ check… │ Verti… │        │         │ Deplo… │ Link    │ │
+│ │        │ Wide   │        │ pod    │        │         │        │         │ │
+│ │        │        │        │ autos… │        │         │        │         │ │
+│ │        │        │        │ is not │        │         │        │         │ │
+│ │        │        │        │ deplo… │        │         │        │         │ │
+│ │ appli… │ stars  │ check… │ Deploy │        │         │ Deplo… │ Link    │ │
+│ │        │        │        │ horiz… │        │         │        │         │ │
+│ │        │        │        │ pod    │        │         │        │         │ │
+│ │        │        │        │ autos… │        │         │        │         │ │
+│ │        │        │        │ for    │        │         │        │         │ │
+│ │        │        │        │ deplo… │        │         │        │         │ │
+│ │ appli… │ stars  │ sched… │ Sched… │        │         │ Deplo… │ Link    │ │
+│ │        │        │        │ repli… │        │         │        │         │ │
+│ │        │        │        │ across │        │         │        │         │ │
+│ │        │        │        │ nodes  │        │         │        │         │ │
+│ │ appli… │ stars  │ run_m… │ Run    │        │         │ Deplo… │ Link    │ │
+│ │        │        │        │ multi… │        │         │        │         │ │
+│ │        │        │        │ repli… │        │         │        │         │ │
+│ │ appli… │ stars  │ avoid… │ Avoid  │        │         │ Pod    │ Link    │ │
+│ │        │        │        │ runni… │        │         │        │         │ │
+│ │        │        │        │ singl… │        │         │        │         │ │
+│ │        │        │        │ Pods   │        │         │        │         │ │
+│ │ appli… │ stars  │ check… │ Define │        │ backen… │ Pod    │ Link    │ │
+│ │        │        │        │ readi… │        │ fronte… │        │         │ │
+│ │        │        │        │ probes │        │         │        │         │ │
+│ │        │        │        │ for    │        │         │        │         │ │
+│ │        │        │        │ pods.  │        │         │        │         │ │
+│ │ appli… │ stars  │ check… │ Define │        │ backen… │ Pod    │ Link    │ │
+│ │        │        │        │ liven… │        │ fronte… │        │         │ │
+│ │        │        │        │ probes │        │         │        │         │ │
+│ │        │        │        │ for    │        │         │        │         │ │
+│ │        │        │        │ pods.  │        │         │        │         │ │
+│ │ appli… │ stars  │ check… │ Prote… │ All    │         │ Pod    │ Link    │ │
+│ │        │        │        │ criti… │ deplo… │         │        │         │ │
+│ │        │        │        │ workl… │ have   │         │        │         │ │
+│ │        │        │        │ with   │ PDBs   │         │        │         │ │
+│ │        │        │        │ Pod    │        │         │        │         │ │
+│ │        │        │        │ Disru… │        │         │        │         │ │
+│ │        │        │        │ Budge… │        │         │        │         │ │
+│ └────────┴────────┴────────┴────────┴────────┴─────────┴────────┴─────────┘ │
+╰─────────────────────────────────────────────────────────────────────────────╯
+
+╭─  Report for security pillar : 21/45 rules passed ──────────────────────────╮
+│ ┏━━━━━━━━┳━━━━━━━━┳━━━━━━━━┳━━━━━━━━┳━━━━━━━━┳━━━━━━━━━┳━━━━━━━━┳━━━━━━━━━┓ │
+│ ┃        ┃        ┃ Rule   ┃ Rule   ┃        ┃         ┃ Resou… ┃         ┃ │
+│ ┃ Secti… ┃ Names… ┃ Name   ┃ Descr… ┃ Info   ┃ Resour… ┃ Type   ┃ Resolu… ┃ │
+│ ┡━━━━━━━━╇━━━━━━━━╇━━━━━━━━╇━━━━━━━━╇━━━━━━━━╇━━━━━━━━━╇━━━━━━━━╇━━━━━━━━━┩ │
+│ │ iam    │ Clust… │ disab… │ Review │        │         │ Clust… │ Link    │ │
+│ │        │ Wide   │        │ and    │        │         │        │         │ │
+│ │        │        │        │ revoke │        │         │        │         │ │
+│ │        │        │        │ unnec… │        │         │        │         │ │
+│ │        │        │        │ anony… │        │         │        │         │ │
+│ │        │        │        │ access │        │         │        │         │ │
+│ │ iam    │ Clust… │ clust… │ Make   │ EKS    │         │ EKS    │ Link    │ │
+│ │        │ Wide   │        │ the    │ Clust… │         │ Clust… │         │ │
+│ │        │        │        │ EKS    │ Endpo… │         │ Endpo… │         │ │
+│ │        │        │        │ Clust… │ is     │         │ Mode   │         │ │
+│ │        │        │        │ Endpo… │ Public │         │        │         │ │
+│ │        │        │        │ priva… │ and    │         │        │         │ │
+│ │        │        │        │        │ Open   │         │        │         │ │
+│ │        │        │        │        │ to     │         │        │         │ │
+│ │        │        │        │        │ Inter… │         │        │         │ │
+│ │        │        │        │        │ Access │         │        │         │ │
+│ │        │        │        │        │ ['0.0… │         │        │         │ │
+│ │ iam    │ Clust… │ check… │ Update │ VPC    │         │ IRSA   │ Link    │ │
+│ │        │ Wide   │        │ the    │ CNI    │         │ for    │         │ │
+│ │        │        │        │ aws-n… │ uses   │         │ VPC    │         │ │
+│ │        │        │        │ daemo… │ separ… │         │ CNI    │         │ │
+│ │        │        │        │ to use │ IAM    │         │        │         │ │
+│ │        │        │        │ IRSA.  │ Role   │         │        │         │ │
+│ │        │        │        │        │ (IRSA) │         │        │         │ │
+│ │ iam    │ Clust… │ use_i… │ When   │ HttpP… │ i-09dd… │ Node   │ Link    │ │
+│ │        │ Wide   │        │ your   │ : 1    │         │        │         │ │
+│ │        │        │        │ appli… │ HttpE… │         │        │         │ │
+│ │        │        │        │ needs  │ :      │         │        │         │ │
+│ │        │        │        │ access │ enabl… │         │        │         │ │
+│ │        │        │        │ to     │ HttpT… │         │        │         │ │
+│ │        │        │        │ IMDS,  │ :      │         │        │         │ │
+│ │        │        │        │ use    │ requi… │         │        │         │ │
+│ │        │        │        │ IMDSv2 │        │         │        │         │ │
+│ │        │        │        │ and    │        │         │        │         │ │
+│ │        │        │        │ incre… │        │         │        │         │ │
+│ │        │        │        │ the    │        │         │        │         │ │
+│ │        │        │        │ hop    │        │         │        │         │ │
+│ │        │        │        │ limit  │        │         │        │         │ │
+│ │        │        │        │ on EC2 │        │         │        │         │ │
+│ │        │        │        │ insta… │        │         │        │         │ │
+│ │        │        │        │ to 2   │        │         │        │         │ │
+│ │ iam    │ Clust… │ restr… │ Restr… │ HttpP… │         │ Node   │ Link    │ │
+│ │        │ Wide   │        │ access │ : 1    │         │        │         │ │
+│ │        │        │        │ to the │ HttpE… │         │        │         │ │
+│ │        │        │        │ insta… │ :      │         │        │         │ │
+│ │        │        │        │ profi… │ enabl… │         │        │         │ │
+│ │        │        │        │ assig… │ HttpT… │         │        │         │ │
+│ │        │        │        │ to the │ :      │         │        │         │ │
+│ │        │        │        │ worker │ requi… │         │        │         │ │
+│ │        │        │        │ node   │        │         │        │         │ │
+│ │ iam    │ Clust… │ restr… │ Employ │        │ eks:se… │ Clust… │ Link    │ │
+│ │        │ Wide   │        │ least  │        │         │ Role   │         │ │
+│ │        │        │        │ privi… │        │         │        │         │ │
+│ │        │        │        │ access │        │         │        │         │ │
+│ │        │        │        │ when   │        │         │        │         │ │
+│ │        │        │        │ creat… │        │         │        │         │ │
+│ │        │        │        │ RoleB… │        │         │        │         │ │
+│ │        │        │        │ and    │        │         │        │         │ │
+│ │        │        │        │ Clust… │        │         │        │         │ │
+│ │ iam    │ Clust… │ restr… │ Employ │        │ eks:se… │ Clust… │ Link    │ │
+│ │        │ Wide   │        │ least  │        │         │ Role   │         │ │
+│ │        │        │        │ privi… │        │         │        │         │ │
+│ │        │        │        │ access │        │         │        │         │ │
+│ │        │        │        │ when   │        │         │        │         │ │
+│ │        │        │        │ creat… │        │         │        │         │ │
+│ │        │        │        │ RoleB… │        │         │        │         │ │
+│ │        │        │        │ and    │        │         │        │         │ │
+│ │        │        │        │ Clust… │        │         │        │         │ │
+│ │ iam    │ Clust… │ restr… │ Employ │        │ eks:se… │ Clust… │ Link    │ │
+│ │        │ Wide   │        │ least  │        │         │ Role   │         │ │
+│ │        │        │        │ privi… │        │         │        │         │ │
+│ │        │        │        │ access │        │         │        │         │ │
+│ │        │        │        │ when   │        │         │        │         │ │
+│ │        │        │        │ creat… │        │         │        │         │ │
+│ │        │        │        │ RoleB… │        │         │        │         │ │
+│ │        │        │        │ and    │        │         │        │         │ │
+│ │        │        │        │ Clust… │        │         │        │         │ │
+│ │ iam    │ Clust… │ restr… │ Employ │        │ eks:se… │ Clust… │ Link    │ │
+│ │        │ Wide   │        │ least  │        │         │ Role   │         │ │
+│ │        │        │        │ privi… │        │         │        │         │ │
+│ │        │        │        │ access │        │         │        │         │ │
+│ │        │        │        │ when   │        │         │        │         │ │
+│ │        │        │        │ creat… │        │         │        │         │ │
+│ │        │        │        │ RoleB… │        │         │        │         │ │
+│ │        │        │        │ and    │        │         │        │         │ │
+│ │        │        │        │ Clust… │        │         │        │         │ │
+│ │ iam    │ Clust… │ restr… │ Employ │        │ eks:se… │ Clust… │ Link    │ │
+│ │        │ Wide   │        │ least  │        │         │ Role   │         │ │
+│ │        │        │        │ privi… │        │         │        │         │ │
+│ │        │        │        │ access │        │         │        │         │ │
+│ │        │        │        │ when   │        │         │        │         │ │
+│ │        │        │        │ creat… │        │         │        │         │ │
+│ │        │        │        │ RoleB… │        │         │        │         │ │
+│ │        │        │        │ and    │        │         │        │         │ │
+│ │        │        │        │ Clust… │        │         │        │         │ │
+│ │ iam    │ Clust… │ restr… │ Employ │        │ eks:se… │ Clust… │ Link    │ │
+│ │        │ Wide   │        │ least  │        │         │ Role   │         │ │
+│ │        │        │        │ privi… │        │         │        │         │ │
+│ │        │        │        │ access │        │         │        │         │ │
+│ │        │        │        │ when   │        │         │        │         │ │
+│ │        │        │        │ creat… │        │         │        │         │ │
+│ │        │        │        │ RoleB… │        │         │        │         │ │
+│ │        │        │        │ and    │        │         │        │         │ │
+│ │        │        │        │ Clust… │        │         │        │         │ │
+│ │ iam    │ Clust… │ restr… │ Employ │        │ eks:se… │ Clust… │ Link    │ │
+│ │        │ Wide   │        │ least  │        │         │ Role   │         │ │
+│ │        │        │        │ privi… │        │         │        │         │ │
+│ │        │        │        │ access │        │         │        │         │ │
+│ │        │        │        │ when   │        │         │        │         │ │
+│ │        │        │        │ creat… │        │         │        │         │ │
+│ │        │        │        │ RoleB… │        │         │        │         │ │
+│ │        │        │        │ and    │        │         │        │         │ │
+│ │        │        │        │ Clust… │        │         │        │         │ │
+│ │ iam    │ Clust… │ restr… │ Employ │        │ eks:se… │ Clust… │ Link    │ │
+│ │        │ Wide   │        │ least  │        │         │ Role   │         │ │
+│ │        │        │        │ privi… │        │         │        │         │ │
+│ │        │        │        │ access │        │         │        │         │ │
+│ │        │        │        │ when   │        │         │        │         │ │
+│ │        │        │        │ creat… │        │         │        │         │ │
+│ │        │        │        │ RoleB… │        │         │        │         │ │
+│ │        │        │        │ and    │        │         │        │         │ │
+│ │        │        │        │ Clust… │        │         │        │         │ │
+│ │ iam    │ Clust… │ restr… │ Employ │        │ eks:se… │ Clust… │ Link    │ │
+│ │        │ Wide   │        │ least  │        │         │ Role   │         │ │
+│ │        │        │        │ privi… │        │         │        │         │ │
+│ │        │        │        │ access │        │         │        │         │ │
+│ │        │        │        │ when   │        │         │        │         │ │
+│ │        │        │        │ creat… │        │         │        │         │ │
+│ │        │        │        │ RoleB… │        │         │        │         │ │
+│ │        │        │        │ and    │        │         │        │         │ │
+│ │        │        │        │ Clust… │        │         │        │         │ │
+│ │ iam    │ Clust… │ restr… │ Employ │        │ eks:se… │ Clust… │ Link    │ │
+│ │        │ Wide   │        │ least  │        │         │ Role   │         │ │
+│ │        │        │        │ privi… │        │         │        │         │ │
+│ │        │        │        │ access │        │         │        │         │ │
+│ │        │        │        │ when   │        │         │        │         │ │
+│ │        │        │        │ creat… │        │         │        │         │ │
+│ │        │        │        │ RoleB… │        │         │        │         │ │
+│ │        │        │        │ and    │        │         │        │         │ │
+│ │        │        │        │ Clust… │        │         │        │         │ │
+│ │ iam    │ Clust… │ restr… │ Employ │        │ eks:se… │ Clust… │ Link    │ │
+│ │        │ Wide   │        │ least  │        │         │ Role   │         │ │
+│ │        │        │        │ privi… │        │         │        │         │ │
+│ │        │        │        │ access │        │         │        │         │ │
+│ │        │        │        │ when   │        │         │        │         │ │
+│ │        │        │        │ creat… │        │         │        │         │ │
+│ │        │        │        │ RoleB… │        │         │        │         │ │
+│ │        │        │        │ and    │        │         │        │         │ │
+│ │        │        │        │ Clust… │        │         │        │         │ │
+│ │ iam    │ Clust… │ restr… │ Employ │        │ eks:se… │ Clust… │ Link    │ │
+│ │        │ Wide   │        │ least  │        │         │ Role   │         │ │
+│ │        │        │        │ privi… │        │         │        │         │ │
+│ │        │        │        │ access │        │         │        │         │ │
+│ │        │        │        │ when   │        │         │        │         │ │
+│ │        │        │        │ creat… │        │         │        │         │ │
+│ │        │        │        │ RoleB… │        │         │        │         │ │
+│ │        │        │        │ and    │        │         │        │         │ │
+│ │        │        │        │ Clust… │        │         │        │         │ │
+│ │ iam    │ Clust… │ restr… │ Employ │        │ eks:se… │ Clust… │ Link    │ │
+│ │        │ Wide   │        │ least  │        │         │ Role   │         │ │
+│ │        │        │        │ privi… │        │         │        │         │ │
+│ │        │        │        │ access │        │         │        │         │ │
+│ │        │        │        │ when   │        │         │        │         │ │
+│ │        │        │        │ creat… │        │         │        │         │ │
+│ │        │        │        │ RoleB… │        │         │        │         │ │
+│ │        │        │        │ and    │        │         │        │         │ │
+│ │        │        │        │ Clust… │        │         │        │         │ │
+│ │ iam    │ Clust… │ restr… │ Employ │        │ eks:se… │ Clust… │ Link    │ │
+│ │        │ Wide   │        │ least  │        │         │ Role   │         │ │
+│ │        │        │        │ privi… │        │         │        │         │ │
+│ │        │        │        │ access │        │         │        │         │ │
+│ │        │        │        │ when   │        │         │        │         │ │
+│ │        │        │        │ creat… │        │         │        │         │ │
+│ │        │        │        │ RoleB… │        │         │        │         │ │
+│ │        │        │        │ and    │        │         │        │         │ │
+│ │        │        │        │ Clust… │        │         │        │         │ │
+│ │ iam    │ Clust… │ restr… │ Employ │        │ eks:se… │ Clust… │ Link    │ │
+│ │        │ Wide   │        │ least  │        │         │ Role   │         │ │
+│ │        │        │        │ privi… │        │         │        │         │ │
+│ │        │        │        │ access │        │         │        │         │ │
+│ │        │        │        │ when   │        │         │        │         │ │
+│ │        │        │        │ creat… │        │         │        │         │ │
+│ │        │        │        │ RoleB… │        │         │        │         │ │
+│ │        │        │        │ and    │        │         │        │         │ │
+│ │        │        │        │ Clust… │        │         │        │         │ │
+│ │ iam    │ Clust… │ restr… │ Employ │        │ eks:se… │ Clust… │ Link    │ │
+│ │        │ Wide   │        │ least  │        │         │ Role   │         │ │
+│ │        │        │        │ privi… │        │         │        │         │ │
+│ │        │        │        │ access │        │         │        │         │ │
+│ │        │        │        │ when   │        │         │        │         │ │
+│ │        │        │        │ creat… │        │         │        │         │ │
+│ │        │        │        │ RoleB… │        │         │        │         │ │
+│ │        │        │        │ and    │        │         │        │         │ │
+│ │        │        │        │ Clust… │        │         │        │         │ │
+│ │ iam    │ Clust… │ restr… │ Employ │        │ eks:se… │ Clust… │ Link    │ │
+│ │        │ Wide   │        │ least  │        │         │ Role   │         │ │
+│ │        │        │        │ privi… │        │         │        │         │ │
+│ │        │        │        │ access │        │         │        │         │ │
+│ │        │        │        │ when   │        │         │        │         │ │
+│ │        │        │        │ creat… │        │         │        │         │ │
+│ │        │        │        │ RoleB… │        │         │        │         │ │
+│ │        │        │        │ and    │        │         │        │         │ │
+│ │        │        │        │ Clust… │        │         │        │         │ │
+│ │ iam    │ Clust… │ restr… │ Employ │        │ gateke… │ Clust… │ Link    │ │
+│ │        │ Wide   │        │ least  │        │         │ Role   │         │ │
+│ │        │        │        │ privi… │        │         │        │         │ │
+│ │        │        │        │ access │        │         │        │         │ │
+│ │        │        │        │ when   │        │         │        │         │ │
+│ │        │        │        │ creat… │        │         │        │         │ │
+│ │        │        │        │ RoleB… │        │         │        │         │ │
+│ │        │        │        │ and    │        │         │        │         │ │
+│ │        │        │        │ Clust… │        │         │        │         │ │
+│ │ iam    │ Clust… │ restr… │ Employ │        │ gateke… │ Clust… │ Link    │ │
+│ │        │ Wide   │        │ least  │        │         │ Role   │         │ │
+│ │        │        │        │ privi… │        │         │        │         │ │
+│ │        │        │        │ access │        │         │        │         │ │
+│ │        │        │        │ when   │        │         │        │         │ │
+│ │        │        │        │ creat… │        │         │        │         │ │
+│ │        │        │        │ RoleB… │        │         │        │         │ │
+│ │        │        │        │ and    │        │         │        │         │ │
+│ │        │        │        │ Clust… │        │         │        │         │ │
+│ │ iam    │ Clust… │ restr… │ Employ │        │ gateke… │ Clust… │ Link    │ │
+│ │        │ Wide   │        │ least  │        │         │ Role   │         │ │
+│ │        │        │        │ privi… │        │         │        │         │ │
+│ │        │        │        │ access │        │         │        │         │ │
+│ │        │        │        │ when   │        │         │        │         │ │
+│ │        │        │        │ creat… │        │         │        │         │ │
+│ │        │        │        │ RoleB… │        │         │        │         │ │
+│ │        │        │        │ and    │        │         │        │         │ │
+│ │        │        │        │ Clust… │        │         │        │         │ │
+│ │ iam    │ Clust… │ restr… │ Employ │        │ gateke… │ Clust… │ Link    │ │
+│ │        │ Wide   │        │ least  │        │         │ Role   │         │ │
+│ │        │        │        │ privi… │        │         │        │         │ │
+│ │        │        │        │ access │        │         │        │         │ │
+│ │        │        │        │ when   │        │         │        │         │ │
+│ │        │        │        │ creat… │        │         │        │         │ │
+│ │        │        │        │ RoleB… │        │         │        │         │ │
+│ │        │        │        │ and    │        │         │        │         │ │
+│ │        │        │        │ Clust… │        │         │        │         │ │
+│ │ iam    │ Clust… │ restr… │ Employ │        │ kyvern… │ Clust… │ Link    │ │
+│ │        │ Wide   │        │ least  │        │         │ Role   │         │ │
+│ │        │        │        │ privi… │        │         │        │         │ │
+│ │        │        │        │ access │        │         │        │         │ │
+│ │        │        │        │ when   │        │         │        │         │ │
+│ │        │        │        │ creat… │        │         │        │         │ │
+│ │        │        │        │ RoleB… │        │         │        │         │ │
+│ │        │        │        │ and    │        │         │        │         │ │
+│ │        │        │        │ Clust… │        │         │        │         │ │
+│ │ iam    │ Clust… │ restr… │ Employ │        │ kyvern… │ Clust… │ Link    │ │
+│ │        │ Wide   │        │ least  │        │         │ Role   │         │ │
+│ │        │        │        │ privi… │        │         │        │         │ │
+│ │        │        │        │ access │        │         │        │         │ │
+│ │        │        │        │ when   │        │         │        │         │ │
+│ │        │        │        │ creat… │        │         │        │         │ │
+│ │        │        │        │ RoleB… │        │         │        │         │ │
+│ │        │        │        │ and    │        │         │        │         │ │
+│ │        │        │        │ Clust… │        │         │        │         │ │
+│ │ iam    │ Clust… │ restr… │ Employ │        │ kyvern… │ Clust… │ Link    │ │
+│ │        │ Wide   │        │ least  │        │         │ Role   │         │ │
+│ │        │        │        │ privi… │        │         │        │         │ │
+│ │        │        │        │ access │        │         │        │         │ │
+│ │        │        │        │ when   │        │         │        │         │ │
+│ │        │        │        │ creat… │        │         │        │         │ │
+│ │        │        │        │ RoleB… │        │         │        │         │ │
+│ │        │        │        │ and    │        │         │        │         │ │
+│ │        │        │        │ Clust… │        │         │        │         │ │
+│ │ iam    │ Clust… │ restr… │ Employ │        │ kyvern… │ Clust… │ Link    │ │
+│ │        │ Wide   │        │ least  │        │         │ Role   │         │ │
+│ │        │        │        │ privi… │        │         │        │         │ │
+│ │        │        │        │ access │        │         │        │         │ │
+│ │        │        │        │ when   │        │         │        │         │ │
+│ │        │        │        │ creat… │        │         │        │         │ │
+│ │        │        │        │ RoleB… │        │         │        │         │ │
+│ │        │        │        │ and    │        │         │        │         │ │
+│ │        │        │        │ Clust… │        │         │        │         │ │
+│ │ iam    │ Clust… │ restr… │ Employ │        │ kyvern… │ Clust… │ Link    │ │
+│ │        │ Wide   │        │ least  │        │         │ Role   │         │ │
+│ │        │        │        │ privi… │        │         │        │         │ │
+│ │        │        │        │ access │        │         │        │         │ │
+│ │        │        │        │ when   │        │         │        │         │ │
+│ │        │        │        │ creat… │        │         │        │         │ │
+│ │        │        │        │ RoleB… │        │         │        │         │ │
+│ │        │        │        │ and    │        │         │        │         │ │
+│ │        │        │        │ Clust… │        │         │        │         │ │
+│ │ iam    │ Clust… │ restr… │ Employ │        │ kyvern… │ Clust… │ Link    │ │
+│ │        │ Wide   │        │ least  │        │         │ Role   │         │ │
+│ │        │        │        │ privi… │        │         │        │         │ │
+│ │        │        │        │ access │        │         │        │         │ │
+│ │        │        │        │ when   │        │         │        │         │ │
+│ │        │        │        │ creat… │        │         │        │         │ │
+│ │        │        │        │ RoleB… │        │         │        │         │ │
+│ │        │        │        │ and    │        │         │        │         │ │
+│ │        │        │        │ Clust… │        │         │        │         │ │
+│ │ iam    │ Clust… │ restr… │ Employ │        │ tigera… │ Clust… │ Link    │ │
+│ │        │ Wide   │        │ least  │        │         │ Role   │         │ │
+│ │        │        │        │ privi… │        │         │        │         │ │
+│ │        │        │        │ access │        │         │        │         │ │
+│ │        │        │        │ when   │        │         │        │         │ │
+│ │        │        │        │ creat… │        │         │        │         │ │
+│ │        │        │        │ RoleB… │        │         │        │         │ │
+│ │        │        │        │ and    │        │         │        │         │ │
+│ │        │        │        │ Clust… │        │         │        │         │ │
+│ │ iam    │ Clust… │ do_no… │ Do not │ syste… │         │ least  │ Link    │ │
+│ │        │ Wide   │        │ assign │ exist  │         │ privi… │         │ │
+│ │        │        │        │ syste… │ in     │         │ rbac   │         │ │
+│ │        │        │        │ group  │ aws-a… │         │ role   │         │ │
+│ │        │        │        │ to     │ config │         │        │         │ │
+│ │        │        │        │ normal │ map    │         │        │         │ │
+│ │        │        │        │ users  │        │         │        │         │ │
+│ │ iam    │ Clust… │ use_i… │ Use    │ mapUs… │         │ iam    │ Link    │ │
+│ │        │ Wide   │        │ IAM    │ exist  │         │ users  │         │ │
+│ │        │        │        │ Roles  │ in     │         │        │         │ │
+│ │        │        │        │ when   │ aws-a… │         │        │         │ │
+│ │        │        │        │ multi… │ config │         │        │         │ │
+│ │        │        │        │ users  │ map    │         │        │         │ │
+│ │        │        │        │ need   │        │         │        │         │ │
+│ │        │        │        │ ident… │        │         │        │         │ │
+│ │        │        │        │ access │        │         │        │         │ │
+│ │        │        │        │ to the │        │         │        │         │ │
+│ │        │        │        │ clust… │        │         │        │         │ │
+│ │ iam    │ Clust… │ creat… │ Create │ IAM    │         │ dedic… │ Link    │ │
+│ │        │ Wide   │        │ the    │ Role   │         │ clust… │         │ │
+│ │        │        │        │ clust… │ arn:a… │         │ role   │         │ │
+│ │        │        │        │ with a │ has    │         │        │         │ │
+│ │        │        │        │ dedic… │ Admin… │         │        │         │ │
+│ │        │        │        │ IAM    │ policy │         │        │         │ │
+│ │        │        │        │ role   │        │         │        │         │ │
+│ │ multi… │ Clust… │ ensur… │ Names… │ Resou… │         │ Namep… │ Link    │ │
+│ │        │ Wide   │        │ should │ Quots  │         │        │         │ │
+│ │        │        │        │ have   │ does   │         │        │         │ │
+│ │        │        │        │ quotas │ not    │         │        │         │ │
+│ │        │        │        │ assig… │ exist  │         │        │         │ │
+│ │        │        │        │        │ for    │         │        │         │ │
+│ │        │        │        │        │ names… │         │        │         │ │
+│ │        │        │        │        │ :      │         │        │         │ │
+│ │        │        │        │        │ stars  │         │        │         │ │
+│ │ detec… │ Clust… │ check… │ Enable │  Logs  │         │ Log    │ Link    │ │
+│ │        │ Wide   │        │ audit  │ Enabl… │         │ Confi… │         │ │
+│ │        │        │        │ logs   │ : api  │         │        │         │ │
+│ │        │        │        │        │ audit  │         │        │         │ │
+│ │        │        │        │        │ Logs   │         │        │         │ │
+│ │        │        │        │        │ Disab… │         │        │         │ │
+│ │        │        │        │        │ :      │         │        │         │ │
+│ │        │        │        │        │ authe… │         │        │         │ │
+│ │        │        │        │        │ contr… │         │        │         │ │
+│ │        │        │        │        │ sched… │         │        │         │ │
+│ │        │        │        │        │ guard… │         │        │         │ │
+│ │        │        │        │        │ =      │         │        │         │ │
+│ │        │        │        │        │ ENABL… │         │        │         │ │
+│ │ netwo… │ Clust… │ check… │ Log    │        │         │ VPC    │ Link    │ │
+│ │        │ Wide   │        │ netwo… │        │         │ Confi… │         │ │
+│ │        │        │        │ traff… │        │         │        │         │ │
+│ │        │        │        │ metad… │        │         │        │         │ │
+│ │ netwo… │ Clust… │ check… │ Insta… │        │ aws-pr… │ Servi… │ Link    │ │
+│ │        │ Wide   │        │ aws    │        │         │        │         │ │
+│ │        │        │        │ priva… │        │         │        │         │ │
+│ │        │        │        │ issuer │        │         │        │         │ │
+│ │        │        │        │ for    │        │         │        │         │ │
+│ │        │        │        │ your   │        │         │        │         │ │
+│ │        │        │        │ certi… │        │         │        │         │ │
+│ │ netwo… │ Clust… │ check… │ Create │ defau… │         │ Names… │ Link    │ │
+│ │        │ Wide   │        │ a      │ deny   │         │        │         │ │
+│ │        │        │        │ defau… │ policy │         │        │         │ │
+│ │        │        │        │ deny   │ exist  │         │        │         │ │
+│ │        │        │        │ policy │ for    │         │        │         │ │
+│ │        │        │        │        │ all    │         │        │         │ │
+│ │        │        │        │        │ names… │         │        │         │ │
+│ │ encry… │ Clust… │ use_e… │ Encry… │        │ gp3     │ Stora… │ Link    │ │
+│ │        │ Wide   │        │ data   │        │         │        │         │ │
+│ │        │        │        │ at     │        │         │        │         │ │
+│ │        │        │        │ rest   │        │         │        │         │ │
+│ │ encry… │ Clust… │ use_e… │ EFS    │ EFS    │ efs-pvc │ Persi… │ Link    │ │
+│ │        │ Wide   │        │ Persi… │ PVs    │         │        │         │ │
+│ │        │        │        │ volum… │ witho… │         │        │         │ │
+│ │        │        │        │ should │ tls in │         │        │         │ │
+│ │        │        │        │ have   │ the    │         │        │         │ │
+│ │        │        │        │ tls    │ mount  │         │        │         │ │
+│ │        │        │        │ mount  │ option │         │        │         │ │
+│ │        │        │        │ optio… │ efs-p… │         │        │         │ │
+│ │        │        │        │        │ efs-p… │         │        │         │ │
+│ │        │        │        │        │ pvc-c… │         │        │         │ │
+│ │ encry… │ Clust… │ use_e… │ EFS    │ EFS    │ efs-pv… │ Persi… │ Link    │ │
+│ │        │ Wide   │        │ Persi… │ PVs    │         │        │         │ │
+│ │        │        │        │ volum… │ witho… │         │        │         │ │
+│ │        │        │        │ should │ tls in │         │        │         │ │
+│ │        │        │        │ have   │ the    │         │        │         │ │
+│ │        │        │        │ tls    │ mount  │         │        │         │ │
+│ │        │        │        │ mount  │ option │         │        │         │ │
+│ │        │        │        │ optio… │ efs-p… │         │        │         │ │
+│ │        │        │        │        │ efs-p… │         │        │         │ │
+│ │        │        │        │        │ pvc-c… │         │        │         │ │
+│ │ encry… │ Clust… │ use_e… │ EFS    │ EFS    │ pvc-c7… │ Persi… │ Link    │ │
+│ │        │ Wide   │        │ Persi… │ PVs    │         │        │         │ │
+│ │        │        │        │ volum… │ witho… │         │        │         │ │
+│ │        │        │        │ should │ tls in │         │        │         │ │
+│ │        │        │        │ have   │ the    │         │        │         │ │
+│ │        │        │        │ tls    │ mount  │         │        │         │ │
+│ │        │        │        │ mount  │ option │         │        │         │ │
+│ │        │        │        │ optio… │ efs-p… │         │        │         │ │
+│ │        │        │        │        │ efs-p… │         │        │         │ │
+│ │        │        │        │        │ pvc-c… │         │        │         │ │
+│ │ encry… │ Clust… │ use_e… │ Use    │ EFS    │ efs-pvc │ Persi… │ Link    │ │
+│ │        │ Wide   │        │ EFS    │ PVs    │         │        │         │ │
+│ │        │        │        │ access │ witho… │         │        │         │ │
+│ │        │        │        │ points │ access │         │        │         │ │
+│ │        │        │        │ to     │ points │         │        │         │ │
+│ │        │        │        │ simpl… │ efs-p… │         │        │         │ │
+│ │        │        │        │ access │ efs-p… │         │        │         │ │
+│ │        │        │        │ to     │        │         │        │         │ │
+│ │        │        │        │ shared │        │         │        │         │ │
+│ │        │        │        │ datas… │        │         │        │         │ │
+│ │ encry… │ Clust… │ use_e… │ Use    │ EFS    │ efs-pv… │ Persi… │ Link    │ │
+│ │        │ Wide   │        │ EFS    │ PVs    │         │        │         │ │
+│ │        │        │        │ access │ witho… │         │        │         │ │
+│ │        │        │        │ points │ access │         │        │         │ │
+│ │        │        │        │ to     │ points │         │        │         │ │
+│ │        │        │        │ simpl… │ efs-p… │         │        │         │ │
+│ │        │        │        │ access │ efs-p… │         │        │         │ │
+│ │        │        │        │ to     │        │         │        │         │ │
+│ │        │        │        │ shared │        │         │        │         │ │
+│ │        │        │        │ datas… │        │         │        │         │ │
+│ │ encry… │ Clust… │ rotat… │ Rotate │ EKS    │         │ EKS    │ Link    │ │
+│ │        │ Wide   │        │ KMS    │ Envel… │         │ Envel… │         │ │
+│ │        │        │        │ CMK    │ Encry… │         │ Encry… │         │ │
+│ │        │        │        │ for    │ is     │         │        │         │ │
+│ │        │        │        │ KMS    │ Enabl… │         │        │         │ │
+│ │        │        │        │ Envel… │ but    │         │        │         │ │
+│ │        │        │        │ Encry… │ Key    │         │        │         │ │
+│ │        │        │        │ of K8s │ Rotai… │         │        │         │ │
+│ │        │        │        │ Secre… │ is     │         │        │         │ │
+│ │        │        │        │        │ Disab… │         │        │         │ │
+│ │ encry… │ Clust… │ use_e… │ Use an │ ASCP   │         │ Servi… │ Link    │ │
+│ │        │ Wide   │        │ exter… │ is     │         │        │         │ │
+│ │        │        │        │ secre… │ deplo… │         │        │         │ │
+│ │        │        │        │ provi… │ Secre… │         │        │         │ │
+│ │        │        │        │        │ CSI    │         │        │         │ │
+│ │        │        │        │        │ Driver │         │        │         │ │
+│ │        │        │        │        │ is     │         │        │         │ │
+│ │        │        │        │        │ deplo… │         │        │         │ │
+│ │ infra… │ Clust… │ deplo… │ Deploy │        │         │ Node   │ Link    │ │
+│ │        │ Wide   │        │ worke… │        │         │        │         │ │
+│ │        │        │        │ onto   │        │         │        │         │ │
+│ │        │        │        │ priva… │        │         │        │         │ │
+│ │        │        │        │ subne… │        │         │        │         │ │
+│ │ infra… │ Clust… │ make_… │ Run    │        │         │ Inspe… │ Link    │ │
+│ │        │ Wide   │        │ Amazon │        │         │ Confi… │         │ │
+│ │        │        │        │ Inspe… │        │         │        │         │ │
+│ │        │        │        │ to     │        │         │        │         │ │
+│ │        │        │        │ assess │        │         │        │         │ │
+│ │        │        │        │ hosts  │        │         │        │         │ │
+│ │        │        │        │ for    │        │         │        │         │ │
+│ │        │        │        │ expos… │        │         │        │         │ │
+│ │        │        │        │ vulne… │        │         │        │         │ │
+│ │        │        │        │ and    │        │         │        │         │ │
+│ │        │        │        │ devia… │        │         │        │         │ │
+│ │        │        │        │ from   │        │         │        │         │ │
+│ │        │        │        │ best   │        │         │        │         │ │
+│ │        │        │        │ pract… │        │         │        │         │ │
+│ │ infra… │ Clust… │ use_O… │ Use an │ Node   │ Amazon  │ Node   │ Link    │ │
+│ │        │ Wide   │        │ OS     │ OS is  │ Linux 2 │ OS     │         │ │
+│ │        │        │        │ optim… │ not    │         │        │         │ │
+│ │        │        │        │ for    │ optim… │         │        │         │ │
+│ │        │        │        │ runni… │ for    │         │        │         │ │
+│ │        │        │        │ conta… │ conta… │         │        │         │ │
+│ │ pod_s… │ Clust… │ ensur… │ Use    │ Names… │         │ Names… │ Link    │ │
+│ │        │ Wide   │        │ multi… │ witho… │         │        │         │ │
+│ │        │        │        │ Pod    │ PSA    │         │        │         │ │
+│ │        │        │        │ Secur… │ labels │         │        │         │ │
+│ │        │        │        │ Admis… │ stars  │         │        │         │ │
+│ │        │        │        │ (PSA)  │        │         │        │         │ │
+│ │        │        │        │ modes  │        │         │        │         │ │
+│ │        │        │        │ for a  │        │         │        │         │ │
+│ │        │        │        │ better │        │         │        │         │ │
+│ │        │        │        │ user   │        │         │        │         │ │
+│ │        │        │        │ exper… │        │         │        │         │ │
+│ │ image… │ Clust… │ use_i… │ Make   │ ECR    │         │ ECR    │ Link    │ │
+│ │        │ Wide   │        │ image  │ Repos  │         │ Repos… │         │ │
+│ │        │        │        │ tags   │ witho… │         │        │         │ │
+│ │        │        │        │ immut… │ Immut… │         │        │         │ │
+│ │        │        │        │        │ Tags   │         │        │         │ │
+│ │        │        │        │        │ eksws… │         │        │         │ │
+│ │        │        │        │        │ zstd   │         │        │         │ │
+│ │        │        │        │        │ aws-s… │         │        │         │ │
+│ │        │        │        │        │ busyb… │         │        │         │ │
+│ │        │        │        │        │ ecr-d… │         │        │         │ │
+│ │        │        │        │        │ yelb-… │         │        │         │ │
+│ │        │        │        │        │ docke… │         │        │         │ │
+│ │        │        │        │        │ ec2sp… │         │        │         │ │
+│ │        │        │        │        │ node   │         │        │         │ │
+│ │        │        │        │        │ ecs-s… │         │        │         │ │
+│ │        │        │        │        │ java-… │         │        │         │ │
+│ │        │        │        │        │ eks-w… │         │        │         │ │
+│ │        │        │        │        │ inspe… │         │        │         │ │
+│ │        │        │        │        │ k8s/k… │         │        │         │ │
+│ │        │        │        │        │ eks-m… │         │        │         │ │
+│ │        │        │        │        │ eks-a… │         │        │         │ │
+│ │        │        │        │        │ flask… │         │        │         │ │
+│ │        │        │        │        │ docke… │         │        │         │ │
+│ │        │        │        │        │ bottl… │         │        │         │ │
+│ │        │        │        │        │ my-ap… │         │        │         │ │
+│ │        │        │        │        │ artif… │         │        │         │ │
+│ │        │        │        │        │ k8s/k… │         │        │         │ │
+│ │        │        │        │        │ helm-… │         │        │         │ │
+│ │        │        │        │        │ pet-p… │         │        │         │ │
+│ │        │        │        │        │ k8s-c… │         │        │         │ │
+│ │        │        │        │        │ custo… │         │        │         │ │
+│ │        │        │        │        │ custo… │         │        │         │ │
+│ │        │        │        │        │ java-… │         │        │         │ │
+│ │        │        │        │        │ sampl… │         │        │         │ │
+│ │        │        │        │        │ ecrre… │         │        │         │ │
+│ │        │        │        │        │ hello… │         │        │         │ │
+│ │        │        │        │        │ pet-t… │         │        │         │ │
+│ │        │        │        │        │ custo… │         │        │         │ │
+│ │        │        │        │        │ scanr… │         │        │         │ │
+│ │        │        │        │        │ webso… │         │        │         │ │
+│ │        │        │        │        │ awscli │         │        │         │ │
+│ │        │        │        │        │ bottl… │         │        │         │ │
+│ │        │        │        │        │ bottl… │         │        │         │ │
+│ │        │        │        │        │ ecsmu… │         │        │         │ │
+│ │        │        │        │        │ fluen… │         │        │         │ │
+│ │        │        │        │        │ sampl… │         │        │         │ │
+│ │        │        │        │        │ custo… │         │        │         │ │
+│ │        │        │        │        │ artif… │         │        │         │ │
+│ │        │        │        │        │ nginx  │         │        │         │ │
+│ │        │        │        │        │ ec2sp… │         │        │         │ │
+│ │        │        │        │        │ autho… │         │        │         │ │
+│ │        │        │        │        │ ephem… │         │        │         │ │
+│ │        │        │        │        │ scanr… │         │        │         │ │
+│ │        │        │        │        │ aws-s… │         │        │         │ │
+│ │        │        │        │        │ redis  │         │        │         │ │
+│ │        │        │        │        │ aws-s… │         │        │         │ │
+│ │        │        │        │        │ color… │         │        │         │ │
+│ │        │        │        │        │ sidec… │         │        │         │ │
+│ │        │        │        │        │ howto… │         │        │         │ │
+│ │        │        │        │        │ my-ap… │         │        │         │ │
+│ │        │        │        │        │ guest… │         │        │         │ │
+│ │        │        │        │        │ aws-s… │         │        │         │ │
+│ │        │        │        │        │ app    │         │        │         │ │
+│ │        │        │        │        │ ecsmu… │         │        │         │ │
+│ │        │        │        │        │ monte… │         │        │         │ │
+│ │        │        │        │        │ eksvp… │         │        │         │ │
+│ │        │        │        │        │ color… │         │        │         │ │
+│ │        │        │        │        │ examp… │         │        │         │ │
+│ │        │        │        │        │ aws-s… │         │        │         │ │
+│ │        │        │        │        │ eksvp… │         │        │         │ │
+│ │        │        │        │        │ postg… │         │        │         │ │
+│ │        │        │        │        │ scanr… │         │        │         │ │
+│ │        │        │        │        │ sampl… │         │        │         │ │
+│ │        │        │        │        │ app-s… │         │        │         │ │
+│ │        │        │        │        │ gravi… │         │        │         │ │
+│ │        │        │        │        │ appme… │         │        │         │ │
+│ │        │        │        │        │ docke… │         │        │         │ │
+│ │        │        │        │        │ eks-e… │         │        │         │ │
+│ │        │        │        │        │ color… │         │        │         │ │
+│ │        │        │        │        │ docke… │         │        │         │ │
+│ │        │        │        │        │ autho… │         │        │         │ │
+│ │        │        │        │        │ examp… │         │        │         │ │
+│ │        │        │        │        │ aws-s… │         │        │         │ │
+│ │        │        │        │        │ eks-m… │         │        │         │ │
+│ │        │        │        │        │ appru… │         │        │         │ │
+│ │        │        │        │        │ ecr-d… │         │        │         │ │
+│ │        │        │        │        │ test   │         │        │         │ │
+│ │        │        │        │        │ route… │         │        │         │ │
+│ │        │        │        │        │ cdkst… │         │        │         │ │
+│ │        │        │        │        │ hello… │         │        │         │ │
+│ │        │        │        │        │ howto… │         │        │         │ │
+│ │        │        │        │        │ blueg… │         │        │         │ │
+│ │        │        │        │        │ pet-l… │         │        │         │ │
+│ │        │        │        │        │ pet-p… │         │        │         │ │
+│ │        │        │        │        │ appme… │         │        │         │ │
+│ │        │        │        │        │ hello… │         │        │         │ │
+│ │        │        │        │        │ simpl… │         │        │         │ │
+│ │        │        │        │        │ blueg… │         │        │         │ │
+│ │        │        │        │        │ gravi… │         │        │         │ │
+│ │        │        │        │        │ zstd-… │         │        │         │ │
+│ │        │        │        │        │ std/r… │         │        │         │ │
+│ │        │        │        │        │ awscl… │         │        │         │ │
+│ │ image… │ Clust… │ scan_… │ Scan   │ ECR    │         │ ECR    │ Link    │ │
+│ │        │ Wide   │        │ images │ Repos  │         │ Repos… │         │ │
+│ │        │        │        │ for    │ with   │         │        │         │ │
+│ │        │        │        │ vulne… │ scanO… │         │        │         │ │
+│ │        │        │        │ regul… │ Disab… │         │        │         │ │
+│ │        │        │        │        │ eksws… │         │        │         │ │
+│ │        │        │        │        │ zstd   │         │        │         │ │
+│ │        │        │        │        │ aws-s… │         │        │         │ │
+│ │        │        │        │        │ busyb… │         │        │         │ │
+│ │        │        │        │        │ ecr-d… │         │        │         │ │
+│ │        │        │        │        │ yelb-… │         │        │         │ │
+│ │        │        │        │        │ docke… │         │        │         │ │
+│ │        │        │        │        │ ec2sp… │         │        │         │ │
+│ │        │        │        │        │ node   │         │        │         │ │
+│ │        │        │        │        │ ecs-s… │         │        │         │ │
+│ │        │        │        │        │ java-… │         │        │         │ │
+│ │        │        │        │        │ eks-w… │         │        │         │ │
+│ │        │        │        │        │ inspe… │         │        │         │ │
+│ │        │        │        │        │ k8s/k… │         │        │         │ │
+│ │        │        │        │        │ eks-m… │         │        │         │ │
+│ │        │        │        │        │ eks-a… │         │        │         │ │
+│ │        │        │        │        │ flask… │         │        │         │ │
+│ │        │        │        │        │ docke… │         │        │         │ │
+│ │        │        │        │        │ bottl… │         │        │         │ │
+│ │        │        │        │        │ my-ap… │         │        │         │ │
+│ │        │        │        │        │ artif… │         │        │         │ │
+│ │        │        │        │        │ k8s/k… │         │        │         │ │
+│ │        │        │        │        │ helm-… │         │        │         │ │
+│ │        │        │        │        │ pet-p… │         │        │         │ │
+│ │        │        │        │        │ k8s-c… │         │        │         │ │
+│ │        │        │        │        │ custo… │         │        │         │ │
+│ │        │        │        │        │ custo… │         │        │         │ │
+│ │        │        │        │        │ java-… │         │        │         │ │
+│ │        │        │        │        │ sampl… │         │        │         │ │
+│ │        │        │        │        │ monol… │         │        │         │ │
+│ │        │        │        │        │ ecrre… │         │        │         │ │
+│ │        │        │        │        │ hello… │         │        │         │ │
+│ │        │        │        │        │ pet-t… │         │        │         │ │
+│ │        │        │        │        │ custo… │         │        │         │ │
+│ │        │        │        │        │ scanr… │         │        │         │ │
+│ │        │        │        │        │ webso… │         │        │         │ │
+│ │        │        │        │        │ awscli │         │        │         │ │
+│ │        │        │        │        │ bottl… │         │        │         │ │
+│ │        │        │        │        │ bottl… │         │        │         │ │
+│ │        │        │        │        │ ecsmu… │         │        │         │ │
+│ │        │        │        │        │ fluen… │         │        │         │ │
+│ │        │        │        │        │ sampl… │         │        │         │ │
+│ │        │        │        │        │ custo… │         │        │         │ │
+│ │        │        │        │        │ artif… │         │        │         │ │
+│ │        │        │        │        │ nginx  │         │        │         │ │
+│ │        │        │        │        │ ec2sp… │         │        │         │ │
+│ │        │        │        │        │ autho… │         │        │         │ │
+│ │        │        │        │        │ ephem… │         │        │         │ │
+│ │        │        │        │        │ scanr… │         │        │         │ │
+│ │        │        │        │        │ aws-s… │         │        │         │ │
+│ │        │        │        │        │ redis  │         │        │         │ │
+│ │        │        │        │        │ aws-s… │         │        │         │ │
+│ │        │        │        │        │ color… │         │        │         │ │
+│ │        │        │        │        │ sidec… │         │        │         │ │
+│ │        │        │        │        │ howto… │         │        │         │ │
+│ │        │        │        │        │ my-ap… │         │        │         │ │
+│ │        │        │        │        │ guest… │         │        │         │ │
+│ │        │        │        │        │ aws-s… │         │        │         │ │
+│ │        │        │        │        │ app    │         │        │         │ │
+│ │        │        │        │        │ ecsmu… │         │        │         │ │
+│ │        │        │        │        │ monte… │         │        │         │ │
+│ │        │        │        │        │ eksvp… │         │        │         │ │
+│ │        │        │        │        │ color… │         │        │         │ │
+│ │        │        │        │        │ examp… │         │        │         │ │
+│ │        │        │        │        │ aws-s… │         │        │         │ │
+│ │        │        │        │        │ eksvp… │         │        │         │ │
+│ │        │        │        │        │ postg… │         │        │         │ │
+│ │        │        │        │        │ scanr… │         │        │         │ │
+│ │        │        │        │        │ sampl… │         │        │         │ │
+│ │        │        │        │        │ app-s… │         │        │         │ │
+│ │        │        │        │        │ gravi… │         │        │         │ │
+│ │        │        │        │        │ appme… │         │        │         │ │
+│ │        │        │        │        │ docke… │         │        │         │ │
+│ │        │        │        │        │ eks-e… │         │        │         │ │
+│ │        │        │        │        │ color… │         │        │         │ │
+│ │        │        │        │        │ docke… │         │        │         │ │
+│ │        │        │        │        │ autho… │         │        │         │ │
+│ │        │        │        │        │ examp… │         │        │         │ │
+│ │        │        │        │        │ aws-s… │         │        │         │ │
+│ │        │        │        │        │ eks-m… │         │        │         │ │
+│ │        │        │        │        │ appru… │         │        │         │ │
+│ │        │        │        │        │ ecr-d… │         │        │         │ │
+│ │        │        │        │        │ test   │         │        │         │ │
+│ │        │        │        │        │ route… │         │        │         │ │
+│ │        │        │        │        │ cdkst… │         │        │         │ │
+│ │        │        │        │        │ hello… │         │        │         │ │
+│ │        │        │        │        │ howto… │         │        │         │ │
+│ │        │        │        │        │ cdk-h… │         │        │         │ │
+│ │        │        │        │        │ monol… │         │        │         │ │
+│ │        │        │        │        │ blueg… │         │        │         │ │
+│ │        │        │        │        │ pet-l… │         │        │         │ │
+│ │        │        │        │        │ pet-p… │         │        │         │ │
+│ │        │        │        │        │ appme… │         │        │         │ │
+│ │        │        │        │        │ hello… │         │        │         │ │
+│ │        │        │        │        │ simpl… │         │        │         │ │
+│ │        │        │        │        │ blueg… │         │        │         │ │
+│ │        │        │        │        │ gravi… │         │        │         │ │
+│ │        │        │        │        │ zstd-… │         │        │         │ │
+│ │        │        │        │        │ std/r… │         │        │         │ │
+│ │        │        │        │        │ awscl… │         │        │         │ │
+│ │ image… │ Clust… │ check… │ Create │ ECR    │         │ ECR    │ Link    │ │
+│ │        │ Wide   │        │ IAM    │ Repos  │         │ Repos… │         │ │
+│ │        │        │        │ polic… │ witho… │         │        │         │ │
+│ │        │        │        │ for    │ IAM    │         │        │         │ │
+│ │        │        │        │ ECR    │ Polic… │         │        │         │ │
+│ │        │        │        │ repos… │ eksws… │         │        │         │ │
+│ │        │        │        │        │ zstd   │         │        │         │ │
+│ │        │        │        │        │ aws-s… │         │        │         │ │
+│ │        │        │        │        │ busyb… │         │        │         │ │
+│ │        │        │        │        │ yelb-… │         │        │         │ │
+│ │        │        │        │        │ docke… │         │        │         │ │
+│ │        │        │        │        │ ec2sp… │         │        │         │ │
+│ │        │        │        │        │ node   │         │        │         │ │
+│ │        │        │        │        │ ecs-s… │         │        │         │ │
+│ │        │        │        │        │ java-… │         │        │         │ │
+│ │        │        │        │        │ eks-w… │         │        │         │ │
+│ │        │        │        │        │ inspe… │         │        │         │ │
+│ │        │        │        │        │ k8s/k… │         │        │         │ │
+│ │        │        │        │        │ eks-m… │         │        │         │ │
+│ │        │        │        │        │ eks-a… │         │        │         │ │
+│ │        │        │        │        │ flask… │         │        │         │ │
+│ │        │        │        │        │ docke… │         │        │         │ │
+│ │        │        │        │        │ bottl… │         │        │         │ │
+│ │        │        │        │        │ artif… │         │        │         │ │
+│ │        │        │        │        │ k8s/k… │         │        │         │ │
+│ │        │        │        │        │ helm-… │         │        │         │ │
+│ │        │        │        │        │ pet-p… │         │        │         │ │
+│ │        │        │        │        │ k8s-c… │         │        │         │ │
+│ │        │        │        │        │ custo… │         │        │         │ │
+│ │        │        │        │        │ custo… │         │        │         │ │
+│ │        │        │        │        │ java-… │         │        │         │ │
+│ │        │        │        │        │ sampl… │         │        │         │ │
+│ │        │        │        │        │ monol… │         │        │         │ │
+│ │        │        │        │        │ ecrre… │         │        │         │ │
+│ │        │        │        │        │ hello… │         │        │         │ │
+│ │        │        │        │        │ pet-t… │         │        │         │ │
+│ │        │        │        │        │ custo… │         │        │         │ │
+│ │        │        │        │        │ scanr… │         │        │         │ │
+│ │        │        │        │        │ webso… │         │        │         │ │
+│ │        │        │        │        │ awscli │         │        │         │ │
+│ │        │        │        │        │ bottl… │         │        │         │ │
+│ │        │        │        │        │ bottl… │         │        │         │ │
+│ │        │        │        │        │ ecsmu… │         │        │         │ │
+│ │        │        │        │        │ fluen… │         │        │         │ │
+│ │        │        │        │        │ sampl… │         │        │         │ │
+│ │        │        │        │        │ custo… │         │        │         │ │
+│ │        │        │        │        │ artif… │         │        │         │ │
+│ │        │        │        │        │ nginx  │         │        │         │ │
+│ │        │        │        │        │ ec2sp… │         │        │         │ │
+│ │        │        │        │        │ autho… │         │        │         │ │
+│ │        │        │        │        │ scanr… │         │        │         │ │
+│ │        │        │        │        │ aws-s… │         │        │         │ │
+│ │        │        │        │        │ redis  │         │        │         │ │
+│ │        │        │        │        │ aws-s… │         │        │         │ │
+│ │        │        │        │        │ color… │         │        │         │ │
+│ │        │        │        │        │ sidec… │         │        │         │ │
+│ │        │        │        │        │ howto… │         │        │         │ │
+│ │        │        │        │        │ my-ap… │         │        │         │ │
+│ │        │        │        │        │ guest… │         │        │         │ │
+│ │        │        │        │        │ aws-s… │         │        │         │ │
+│ │        │        │        │        │ app    │         │        │         │ │
+│ │        │        │        │        │ ecsmu… │         │        │         │ │
+│ │        │        │        │        │ monte… │         │        │         │ │
+│ │        │        │        │        │ eksvp… │         │        │         │ │
+│ │        │        │        │        │ color… │         │        │         │ │
+│ │        │        │        │        │ examp… │         │        │         │ │
+│ │        │        │        │        │ aws-s… │         │        │         │ │
+│ │        │        │        │        │ eksvp… │         │        │         │ │
+│ │        │        │        │        │ postg… │         │        │         │ │
+│ │        │        │        │        │ scanr… │         │        │         │ │
+│ │        │        │        │        │ sampl… │         │        │         │ │
+│ │        │        │        │        │ app-s… │         │        │         │ │
+│ │        │        │        │        │ gravi… │         │        │         │ │
+│ │        │        │        │        │ appme… │         │        │         │ │
+│ │        │        │        │        │ docke… │         │        │         │ │
+│ │        │        │        │        │ eks-e… │         │        │         │ │
+│ │        │        │        │        │ color… │         │        │         │ │
+│ │        │        │        │        │ docke… │         │        │         │ │
+│ │        │        │        │        │ autho… │         │        │         │ │
+│ │        │        │        │        │ examp… │         │        │         │ │
+│ │        │        │        │        │ aws-s… │         │        │         │ │
+│ │        │        │        │        │ eks-m… │         │        │         │ │
+│ │        │        │        │        │ appru… │         │        │         │ │
+│ │        │        │        │        │ ecr-d… │         │        │         │ │
+│ │        │        │        │        │ test   │         │        │         │ │
+│ │        │        │        │        │ route… │         │        │         │ │
+│ │        │        │        │        │ cdkst… │         │        │         │ │
+│ │        │        │        │        │ hello… │         │        │         │ │
+│ │        │        │        │        │ howto… │         │        │         │ │
+│ │        │        │        │        │ monol… │         │        │         │ │
+│ │        │        │        │        │ blueg… │         │        │         │ │
+│ │        │        │        │        │ pet-l… │         │        │         │ │
+│ │        │        │        │        │ pet-p… │         │        │         │ │
+│ │        │        │        │        │ appme… │         │        │         │ │
+│ │        │        │        │        │ hello… │         │        │         │ │
+│ │        │        │        │        │ simpl… │         │        │         │ │
+│ │        │        │        │        │ blueg… │         │        │         │ │
+│ │        │        │        │        │ gravi… │         │        │         │ │
+│ │        │        │        │        │ zstd-… │         │        │         │ │
+│ │        │        │        │        │ awscl… │         │        │         │ │
+│ │ image… │ Clust… │ consi… │ Consi… │ VPC    │         │ ECR    │ Link    │ │
+│ │        │ Wide   │        │ using  │ Endpo… │         │ Repos… │         │ │
+│ │        │        │        │ ECR    │ for    │         │        │         │ │
+│ │        │        │        │ priva… │ ECR    │         │        │         │ │
+│ │        │        │        │ endpo… │ does   │         │        │         │ │
+│ │        │        │        │        │ not    │         │        │         │ │
+│ │        │        │        │        │ exist  │         │        │         │ │
+│ │        │        │        │        │ in VPC │         │        │         │ │
+│ │        │        │        │        │ :      │         │        │         │ │
+│ │        │        │        │        │ vpc-0… │         │        │         │ │
+│ │ image… │ Clust… │ check… │ Imple… │ VPC    │         │ ECR    │ Link    │ │
+│ │        │ Wide   │        │ endpo… │ Endpo… │         │ Repos… │         │ │
+│ │        │        │        │ polic… │ for    │         │        │         │ │
+│ │        │        │        │ for    │ ECR    │         │        │         │ │
+│ │        │        │        │ ECR    │ does   │         │        │         │ │
+│ │        │        │        │        │ not    │         │        │         │ │
+│ │        │        │        │        │ exist  │         │        │         │ │
+│ │        │        │        │        │ in VPC │         │        │         │ │
+│ │        │        │        │        │ :      │         │        │         │ │
+│ │        │        │        │        │ vpc-0… │         │        │         │ │
+│ │ image… │ Clust… │ imple… │ Imple… │ ECR    │         │ ECR    │ Link    │ │
+│ │        │ Wide   │        │ lifec… │ Repos  │         │ Repos… │         │ │
+│ │        │        │        │ polic… │ witho… │         │        │         │ │
+│ │        │        │        │ for    │ lifec… │         │        │         │ │
+│ │        │        │        │ ECR    │ Polic… │         │        │         │ │
+│ │        │        │        │        │ eksws… │         │        │         │ │
+│ │        │        │        │        │ zstd   │         │        │         │ │
+│ │        │        │        │        │ aws-s… │         │        │         │ │
+│ │        │        │        │        │ busyb… │         │        │         │ │
+│ │        │        │        │        │ ecr-d… │         │        │         │ │
+│ │        │        │        │        │ yelb-… │         │        │         │ │
+│ │        │        │        │        │ docke… │         │        │         │ │
+│ │        │        │        │        │ ec2sp… │         │        │         │ │
+│ │        │        │        │        │ node   │         │        │         │ │
+│ │        │        │        │        │ ecs-s… │         │        │         │ │
+│ │        │        │        │        │ java-… │         │        │         │ │
+│ │        │        │        │        │ eks-w… │         │        │         │ │
+│ │        │        │        │        │ inspe… │         │        │         │ │
+│ │        │        │        │        │ k8s/k… │         │        │         │ │
+│ │        │        │        │        │ eks-m… │         │        │         │ │
+│ │        │        │        │        │ eks-a… │         │        │         │ │
+│ │        │        │        │        │ flask… │         │        │         │ │
+│ │        │        │        │        │ docke… │         │        │         │ │
+│ │        │        │        │        │ bottl… │         │        │         │ │
+│ │        │        │        │        │ my-ap… │         │        │         │ │
+│ │        │        │        │        │ artif… │         │        │         │ │
+│ │        │        │        │        │ k8s/k… │         │        │         │ │
+│ │        │        │        │        │ helm-… │         │        │         │ │
+│ │        │        │        │        │ pet-p… │         │        │         │ │
+│ │        │        │        │        │ k8s-c… │         │        │         │ │
+│ │        │        │        │        │ custo… │         │        │         │ │
+│ │        │        │        │        │ custo… │         │        │         │ │
+│ │        │        │        │        │ java-… │         │        │         │ │
+│ │        │        │        │        │ sampl… │         │        │         │ │
+│ │        │        │        │        │ monol… │         │        │         │ │
+│ │        │        │        │        │ ecrre… │         │        │         │ │
+│ │        │        │        │        │ hello… │         │        │         │ │
+│ │        │        │        │        │ pet-t… │         │        │         │ │
+│ │        │        │        │        │ custo… │         │        │         │ │
+│ │        │        │        │        │ scanr… │         │        │         │ │
+│ │        │        │        │        │ webso… │         │        │         │ │
+│ │        │        │        │        │ awscli │         │        │         │ │
+│ │        │        │        │        │ bottl… │         │        │         │ │
+│ │        │        │        │        │ bottl… │         │        │         │ │
+│ │        │        │        │        │ ecsmu… │         │        │         │ │
+│ │        │        │        │        │ fluen… │         │        │         │ │
+│ │        │        │        │        │ sampl… │         │        │         │ │
+│ │        │        │        │        │ custo… │         │        │         │ │
+│ │        │        │        │        │ artif… │         │        │         │ │
+│ │        │        │        │        │ nginx  │         │        │         │ │
+│ │        │        │        │        │ ec2sp… │         │        │         │ │
+│ │        │        │        │        │ autho… │         │        │         │ │
+│ │        │        │        │        │ ephem… │         │        │         │ │
+│ │        │        │        │        │ scanr… │         │        │         │ │
+│ │        │        │        │        │ aws-s… │         │        │         │ │
+│ │        │        │        │        │ redis  │         │        │         │ │
+│ │        │        │        │        │ aws-s… │         │        │         │ │
+│ │        │        │        │        │ color… │         │        │         │ │
+│ │        │        │        │        │ sidec… │         │        │         │ │
+│ │        │        │        │        │ howto… │         │        │         │ │
+│ │        │        │        │        │ my-ap… │         │        │         │ │
+│ │        │        │        │        │ guest… │         │        │         │ │
+│ │        │        │        │        │ aws-s… │         │        │         │ │
+│ │        │        │        │        │ app    │         │        │         │ │
+│ │        │        │        │        │ ecsmu… │         │        │         │ │
+│ │        │        │        │        │ monte… │         │        │         │ │
+│ │        │        │        │        │ eksvp… │         │        │         │ │
+│ │        │        │        │        │ color… │         │        │         │ │
+│ │        │        │        │        │ examp… │         │        │         │ │
+│ │        │        │        │        │ aws-s… │         │        │         │ │
+│ │        │        │        │        │ eksvp… │         │        │         │ │
+│ │        │        │        │        │ postg… │         │        │         │ │
+│ │        │        │        │        │ scanr… │         │        │         │ │
+│ │        │        │        │        │ sampl… │         │        │         │ │
+│ │        │        │        │        │ app-s… │         │        │         │ │
+│ │        │        │        │        │ gravi… │         │        │         │ │
+│ │        │        │        │        │ appme… │         │        │         │ │
+│ │        │        │        │        │ docke… │         │        │         │ │
+│ │        │        │        │        │ eks-e… │         │        │         │ │
+│ │        │        │        │        │ color… │         │        │         │ │
+│ │        │        │        │        │ docke… │         │        │         │ │
+│ │        │        │        │        │ autho… │         │        │         │ │
+│ │        │        │        │        │ examp… │         │        │         │ │
+│ │        │        │        │        │ aws-s… │         │        │         │ │
+│ │        │        │        │        │ eks-m… │         │        │         │ │
+│ │        │        │        │        │ appru… │         │        │         │ │
+│ │        │        │        │        │ ecr-d… │         │        │         │ │
+│ │        │        │        │        │ test   │         │        │         │ │
+│ │        │        │        │        │ route… │         │        │         │ │
+│ │        │        │        │        │ cdkst… │         │        │         │ │
+│ │        │        │        │        │ hello… │         │        │         │ │
+│ │        │        │        │        │ howto… │         │        │         │ │
+│ │        │        │        │        │ monol… │         │        │         │ │
+│ │        │        │        │        │ blueg… │         │        │         │ │
+│ │        │        │        │        │ pet-l… │         │        │         │ │
+│ │        │        │        │        │ pet-p… │         │        │         │ │
+│ │        │        │        │        │ appme… │         │        │         │ │
+│ │        │        │        │        │ hello… │         │        │         │ │
+│ │        │        │        │        │ simpl… │         │        │         │ │
+│ │        │        │        │        │ blueg… │         │        │         │ │
+│ │        │        │        │        │ gravi… │         │        │         │ │
+│ │        │        │        │        │ zstd-… │         │        │         │ │
+│ │        │        │        │        │ std/r… │         │        │         │ │
+│ │        │        │        │        │ awscl… │         │        │         │ │
+│ │ iam    │ stars  │ disab… │ Don't  │ None   │         │ RoleB… │ Link    │ │
+│ │        │        │        │ bind   │ of the │         │        │         │ │
+│ │        │        │        │ roles  │ roles  │         │        │         │ │
+│ │        │        │        │ to     │ bound  │         │        │         │ │
+│ │        │        │        │ anony… │ to     │         │        │         │ │
+│ │        │        │        │ or     │ anony… │         │        │         │ │
+│ │        │        │        │ unaut… │ or     │         │        │         │ │
+│ │        │        │        │ group… │ unaut… │         │        │         │ │
+│ │        │        │        │        │ group… │         │        │         │ │
+│ │ iam    │ stars  │ restr… │ Roles  │ None   │         │ Role   │ Link    │ │
+│ │        │        │        │ should │ of the │         │        │         │ │
+│ │        │        │        │ not    │ roles  │         │        │         │ │
+│ │        │        │        │ have   │ have   │         │        │         │ │
+│ │        │        │        │ '*' in │ '*' in │         │        │         │ │
+│ │        │        │        │ Verbs  │ Verbs  │         │        │         │ │
+│ │        │        │        │ or     │ or     │         │        │         │ │
+│ │        │        │        │ Resou… │ Resou… │         │        │         │ │
+│ │ iam    │ stars  │ disab… │ Disab… │ Pods   │         │ Pod    │ Link    │ │
+│ │        │        │        │ auto-… │ with   │         │        │         │ │
+│ │        │        │        │ of     │ auto   │         │        │         │ │
+│ │        │        │        │ servi… │ mount… │         │        │         │ │
+│ │        │        │        │ accou… │ SA :   │         │        │         │ │
+│ │        │        │        │ tokens │ backe… │         │        │         │ │
+│ │        │        │        │        │ front… │         │        │         │ │
+│ │ iam    │ stars  │ disab… │ Runni… │ Pods   │         │ Pod    │ Link    │ │
+│ │        │        │        │ as     │ runni… │         │        │         │ │
+│ │        │        │        │ root   │ as     │         │        │         │ │
+│ │        │        │        │ is not │ root : │         │        │         │ │
+│ │        │        │        │ allow… │ backe… │         │        │         │ │
+│ │        │        │        │        │ front… │         │        │         │ │
+│ │ iam    │ stars  │ restr… │ Restr… │ All    │         │ Pod    │ Link    │ │
+│ │        │        │        │ the    │ pods   │         │        │         │ │
+│ │        │        │        │ conta… │ do not │         │        │         │ │
+│ │        │        │        │ that   │ run as │         │        │         │ │
+│ │        │        │        │ can    │ privi… │         │        │         │ │
+│ │        │        │        │ run as │        │         │        │         │ │
+│ │        │        │        │ privi… │        │         │        │         │ │
+│ │ iam    │ stars  │ use_d… │ Don't  │ There  │         │ Deplo… │ Link    │ │
+│ │        │        │        │ share  │ are no │         │        │         │ │
+│ │        │        │        │ servi… │ Deplo… │         │        │         │ │
+│ │        │        │        │ accou… │ in the │         │        │         │ │
+│ │        │        │        │ betwe… │ Names… │         │        │         │ │
+│ │        │        │        │ Deplo… │        │         │        │         │ │
+│ │ iam    │ stars  │ use_d… │ Don't  │ There  │         │ State… │ Link    │ │
+│ │        │        │        │ share  │ are no │         │        │         │ │
+│ │        │        │        │ servi… │ State… │         │        │         │ │
+│ │        │        │        │ accou… │ in the │         │        │         │ │
+│ │        │        │        │ betwe… │ Names… │         │        │         │ │
+│ │        │        │        │ State… │        │         │        │         │ │
+│ │ iam    │ stars  │ use_d… │ Don't  │ There  │         │ Daemo… │ Link    │ │
+│ │        │        │        │ share  │ are no │         │        │         │ │
+│ │        │        │        │ servi… │ Daemo… │         │        │         │ │
+│ │        │        │        │ accou… │ in the │         │        │         │ │
+│ │        │        │        │ betwe… │ Names… │         │        │         │ │
+│ │        │        │        │ Daemo… │        │         │        │         │ │
+│ │ pod_s… │ stars  │ disal… │ Never  │ None   │         │ Pod    │ Link    │ │
+│ │        │        │        │ run    │ of the │         │        │         │ │
+│ │        │        │        │ Docker │ Pods   │         │        │         │ │
+│ │        │        │        │ in     │ have   │         │        │         │ │
+│ │        │        │        │ Docker │ socket │         │        │         │ │
+│ │        │        │        │ or     │ mounts │         │        │         │ │
+│ │        │        │        │ mount  │        │         │        │         │ │
+│ │        │        │        │ the    │        │         │        │         │ │
+│ │        │        │        │ socket │        │         │        │         │ │
+│ │        │        │        │ in the │        │         │        │         │ │
+│ │        │        │        │ conta… │        │         │        │         │ │
+│ │ pod_s… │ stars  │ disal… │ Restr… │ None   │         │ Pod    │ Link    │ │
+│ │        │        │        │ the    │ of the │         │        │         │ │
+│ │        │        │        │ use of │ Pods   │         │        │         │ │
+│ │        │        │        │ hostP… │ have   │         │        │         │ │
+│ │        │        │        │ or if  │ Restr… │         │        │         │ │
+│ │        │        │        │ hostP… │ hostp… │         │        │         │ │
+│ │        │        │        │ is     │        │         │        │         │ │
+│ │        │        │        │ neces… │        │         │        │         │ │
+│ │        │        │        │ restr… │        │         │        │         │ │
+│ │        │        │        │ which  │        │         │        │         │ │
+│ │        │        │        │ prefi… │        │         │        │         │ │
+│ │        │        │        │ can be │        │         │        │         │ │
+│ │        │        │        │ used   │        │         │        │         │ │
+│ │        │        │        │ and    │        │         │        │         │ │
+│ │        │        │        │ confi… │        │         │        │         │ │
+│ │        │        │        │ the    │        │         │        │         │ │
+│ │        │        │        │ volume │        │         │        │         │ │
+│ │        │        │        │ as     │        │         │        │         │ │
+│ │        │        │        │ read-… │        │         │        │         │ │
+│ │ pod_s… │ stars  │ set_r… │ Set    │        │ backen… │ Pod    │ Link    │ │
+│ │        │        │        │ reque… │        │ fronte… │        │         │ │
+│ │        │        │        │ and    │        │         │        │         │ │
+│ │        │        │        │ limits │        │         │        │         │ │
+│ │        │        │        │ for    │        │         │        │         │ │
+│ │        │        │        │ each   │        │         │        │         │ │
+│ │        │        │        │ conta… │        │         │        │         │ │
+│ │        │        │        │ to     │        │         │        │         │ │
+│ │        │        │        │ avoid  │        │         │        │         │ │
+│ │        │        │        │ resou… │        │         │        │         │ │
+│ │        │        │        │ conte… │        │         │        │         │ │
+│ │        │        │        │ and    │        │         │        │         │ │
+│ │        │        │        │ DoS    │        │         │        │         │ │
+│ │        │        │        │ attac… │        │         │        │         │ │
+│ │ pod_s… │ stars  │ disal… │ Do not │        │         │ Pod    │ Link    │ │
+│ │        │        │        │ allow  │        │         │        │         │ │
+│ │        │        │        │ privi… │        │         │        │         │ │
+│ │        │        │        │ escal… │        │         │        │         │ │
+│ │ pod_s… │ stars  │ check… │ Confi… │        │         │ Pod    │ Link    │ │
+│ │        │        │        │ your   │        │         │        │         │ │
+│ │        │        │        │ images │        │         │        │         │ │
+│ │        │        │        │ with a │        │         │        │         │ │
+│ │        │        │        │ read-… │        │         │        │         │ │
+│ │        │        │        │ root   │        │         │        │         │ │
+│ │        │        │        │ file   │        │         │        │         │ │
+│ │        │        │        │ syste… │        │         │        │         │ │
+│ │ iam    │ stars  │ disab… │ Disab… │ Pods   │         │ Pod    │ Link    │ │
+│ │        │        │        │ servi… │ using  │         │        │         │ │
+│ │        │        │        │ disco… │ coreD… │         │        │         │ │
+│ │        │        │        │        │ for    │         │        │         │ │
+│ │        │        │        │        │ Servi… │         │        │         │ │
+│ │        │        │        │        │ Disco… │         │        │         │ │
+│ │        │        │        │        │ :      │         │        │         │ │
+│ │        │        │        │        │ backe… │         │        │         │ │
+│ │        │        │        │        │ front… │         │        │         │ │
+│ │ netwo… │ stars  │ use_e… │ Use    │        │ backend │ Servi… │ Link    │ │
+│ │        │        │        │ encry… │        │ fronte… │        │         │ │
+│ │        │        │        │ with   │        │         │        │         │ │
+│ │        │        │        │ AWS    │        │         │        │         │ │
+│ │        │        │        │ load   │        │         │        │         │ │
+│ │        │        │        │ balan… │        │         │        │         │ │
+│ │ encry… │ stars  │ disal… │ Use    │        │         │ Pod    │ Link    │ │
+│ │        │        │        │ volume │        │         │        │         │ │
+│ │        │        │        │ mounts │        │         │        │         │ │
+│ │        │        │        │ inste… │        │         │        │         │ │
+│ │        │        │        │ of     │        │         │        │         │ │
+│ │        │        │        │ envir… │        │         │        │         │ │
+│ │        │        │        │ varia… │        │         │        │         │ │
+│ └────────┴────────┴────────┴────────┴────────┴─────────┴────────┴─────────┘ │
+╰─────────────────────────────────────────────────────────────────────────────╯
+
+

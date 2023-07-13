@@ -132,6 +132,8 @@ def _get_filtered_namespaces(ignored_ns: list, selected_namespaces: str) -> list
     else:
         namespaces_not_available_in_cluster = []
         selected_namespaces_list = selected_namespaces.split(',')
+        
+        #print("selected_namespaces_list={}".format(selected_namespaces_list))
         for ns in selected_namespaces_list:
             if ns not in all_namespaces_in_cluster:
                 print("namespace {} does not exist in cluster. Removing it from the list".format(ns))
@@ -394,8 +396,6 @@ def run_hardeneks(
     ignoredNSList = config["ignore-namespaces"]
     namespaces = _get_filtered_namespaces(ignoredNSList, namespace)
     
-
-    #print("namespaces={}".format(namespaces))
     #namespaces = _get_namespaces(config["ignore-namespaces"])
     #print("namespaces={}".format(_get_namespaces(config["ignore-namespaces"])))
         
@@ -483,13 +483,9 @@ def run_hardeneks(
     resources = Resources(region, context, cluster, namespaces)
     resources.set_resources()
     
-
-        
-
-
-
     results = []
 
+    
     if not only_namespace_level_rules:
         console.rule("[b]Checking cluster wide rules", characters="- ")
         console.print()  
@@ -497,9 +493,11 @@ def run_hardeneks(
         results = results + cluster_wide_results
     #print("results={}".format(results))
 
+    
     if not only_cluster_level_rules:
         console.rule("[b]Checking Namespace wide rules", characters="- ")
         console.print()
+        
         for ns in namespaces:
             resources = NamespacedResources(region, context, cluster, ns)
             resources.set_resources()

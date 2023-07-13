@@ -1,6 +1,7 @@
 from ...resources import Resources
 from hardeneks.rules import Rule, Result
 import hardeneks
+import copy
 
 class ensure_namespace_quotas_exist(Rule):
     _type = "cluster_wide"
@@ -10,7 +11,8 @@ class ensure_namespace_quotas_exist(Rule):
     url = "https://aws.github.io/aws-eks-best-practices/security/docs/multitenancy/#quotas"
 
     def check(self, resources: Resources):
-        offenders = resources.namespaces
+        #offenders = resources.namespaces
+        offenders = copy.deepcopy(resources.namespaces)
         namespaces_with_resource_quotas = []
     
         for quota in resources.resource_quotas:
@@ -24,7 +26,8 @@ class ensure_namespace_quotas_exist(Rule):
          
         for ns in namespaces_with_resource_quotas:
             #print("Removing ns {} from list {}".format(ns, offenders))    
-            offenders.remove(ns)
+            if ns in offenders:
+                offenders.remove(ns)
         
         if offenders:
             Info = "Resource Quots does not exist for namespaces : " + " ".join(offenders)

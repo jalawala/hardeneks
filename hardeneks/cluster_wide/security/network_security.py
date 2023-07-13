@@ -6,7 +6,7 @@ import hardeneks
 from ...resources import Resources
 from hardeneks.rules import Rule, Result
 from hardeneks import helpers
-
+import copy
 
 class check_vpc_flow_logs(Rule):
     _type = "cluster_wide"
@@ -73,7 +73,7 @@ class check_default_deny_policy_exists(Rule):
         
         Info = "default deny policy exist for all namespaces"
         
-        offenders = resources.namespaces
+        offenders = copy.deepcopy(resources.namespaces)
 
         namespaces_with_network_policies = []
     
