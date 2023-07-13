@@ -6,6 +6,7 @@ import yaml
 import json
 import sys
 from collections import defaultdict
+import pprint
 
 from botocore.exceptions import EndpointConnectionError
 import boto3
@@ -14,6 +15,7 @@ from rich.console import Console
 from rich.table import Table
 from rich.panel import Panel
 import typer
+import boto3
 
 from .resources import (
     NamespacedResources,
@@ -78,6 +80,9 @@ def _get_cluster_context_and_name(contextFromUser, clusterFromUser):
     #print("contextFromUser={} clusterFromUser={}".format(contextFromUser, clusterFromUser))    
     
     contextList, active_context = kubernetes.config.list_kube_config_contexts()
+    
+    #print(pprint.pformat(active_context, indent=4))
+    #print(pprint.pformat(contextList, indent=4))
     
     if contextFromUser:
         contextName = contextFromUser
@@ -313,18 +318,22 @@ def run_hardeneks(
     only_cluster_level_rules: bool = typer.Option(
         False,
         "--only_cluster_level_rules",
+        help="To run checks only for cluster levels rules specified in config.yaml file.",
     ),
     only_namespace_level_rules: bool = typer.Option(
         False,
         "--only_namespace_level_rules",
+        help="To run checks only for namespaced levels rules specified in config.yaml file.",
     ),
     only_show_passed_rules_report: bool = typer.Option(
         False,
         "--only_show_passed_rules_report",
+        help="To show only passed rules in the final displayed report.",
     ),
     only_show_failed_rules_report: bool = typer.Option(
         False,
         "--only_show_failed_rules_report",
+        help="To show only failed rules in the final displayed report.",
     ),
     
 ):
@@ -400,11 +409,11 @@ def run_hardeneks(
     else:
         if not pillars:
             print("--pillars option must be used specifying only one pillar, when using --sections option. Exiting...")
-            exit()
+            sys.exit()
         else:
             if len(pillarsList) > 1:
                 print("Specify only one pillar with --pillars option when using --sections option. Exiting...")
-                exit()
+                sys.exit()
         pillar = pillarsList[0]
         sectionsList = sections.split(',')
         sectionsMap[pillar] = sectionsList
@@ -416,27 +425,27 @@ def run_hardeneks(
     else:
         if not pillars:
             print("--pillars option must be used specifying only one pillar, when using --rules option. Exiting...")
-            exit()
+            sys.exit()
         else:
             if len(pillarsList) > 1:
                 print("Specify only one pillar with --pillars option when using --rules option. Exiting...")
-                exit()
+                sys.exit()
             else:
                 pillar = pillarsList[0]
                 
         if not sections:
             print("--sections option must be used specifying only one section, when using --rules option. Exiting...")
-            exit()
+            sys.exit()
         else:
             if len(sectionsList) > 1:
                 print("Specify only one section with --sections option when using --rules option. Exiting...")
-                exit()
+                sys.exit()
             else:
                 section = sectionsList[0]
                 
         if not (only_namespace_level_rules or only_cluster_level_rules):
             print("one of options (--only_cluster_level_rules or --only_namespace_level_rules) must be set when using --rules option. Exiting...")
-            exit()
+            sys.exit()
         elif only_namespace_level_rules:
             _type = "namespace_based"
         elif only_cluster_level_rules:
@@ -449,7 +458,7 @@ def run_hardeneks(
         for rule in rulesList:
             if rule not in rulesPerSectionPerPillarList:
                 print("Given Rule {} does not exist in Section {} in Pillar {} at Scope {}. Please check config.yaml. Exiting...".format(rule, section, pillar, _type))
-                exit()
+                sys.exit()
 
             
     
@@ -461,10 +470,23 @@ def run_hardeneks(
         show_rules_status_color = None
         
         
+    try:
+        eksclient = boto3.client("eks", region_name=region)
+        cluster_metadata = eksclient.describe_cluster(name=cluster)
+    except Exception as exc:
+        print("The cluster {} does not exist in the region {}. Specify right cluster or region name. Error Message: {}".format(cluster, region, exc))
+        sys.exit()
+        
+                
     #print("Running hardeneks for selected pillars list={}, sectionsMap={} and namespaces={} rulesList={}".format(pillarsList, sectionsMap, namespaces, rulesList))
     
     resources = Resources(region, context, cluster, namespaces)
     resources.set_resources()
+    
+
+        
+
+
 
     results = []
 
