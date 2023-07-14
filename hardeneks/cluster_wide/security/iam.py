@@ -121,10 +121,10 @@ class check_aws_node_daemonset_service_account(Rule):
         
         if 'eks.amazonaws.com/role-arn' in sa_data.metadata.annotations.keys():
             Status = True
-            Info = "VPC CNI uses separate IAM Role (IRSA)"
+            Info = "aws-node daemonset is configured to use IRSA"
         else:
             Status = False
-            Info = "VPC CNI doesn't use separate IAM Role (IRSA)"            
+            Info = "Configure the aws-node daemonset to use IRSA"            
         
         self.result = Result(status=Status, resource_type="IRSA for VPC CNI",info=Info)    
     

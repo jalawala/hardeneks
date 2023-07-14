@@ -1,86 +1,85 @@
-{
-    "cluster_wide": {
-        "reliability": {
-            "applications": {
-                "Run Kubernetes Metrics Server": {
-                    "status": false,
-                    "resources": [
-                        ""
-                    ],
-                    "resource_type": "Service",
-                    "namespace": null
-                },
-                "Vertical pod autoscaler is not deployed.": {
-                    "status": false,
-                    "resources": [
-                        ""
-                    ],
-                    "resource_type": "Deployment",
-                    "namespace": null
-                }
-            }
-        }
-    },
-    "namespace_based": {
-        "reliability": {
-            "applications": {
-                "Deploy horizontal pod autoscaler for deployments.": {
-                    "status": false,
-                    "resources": [
-                        "tigera-operator"
-                    ],
-                    "resource_type": "Deployment",
-                    "namespace": "tigera-operator"
-                },
-                "Schedule replicas across nodes": {
-                    "status": false,
-                    "resources": [
-                        "tigera-operator"
-                    ],
-                    "resource_type": "Deployment",
-                    "namespace": "tigera-operator"
-                },
-                "Run multiple replicas": {
-                    "status": false,
-                    "resources": [
-                        "tigera-operator"
-                    ],
-                    "resource_type": "Deployment",
-                    "namespace": "tigera-operator"
-                },
-                "Avoid running singleton Pods": {
-                    "status": true,
-                    "resources": [
-                        ""
-                    ],
-                    "resource_type": "Pod",
-                    "namespace": "tigera-operator"
-                },
-                "Define readiness probes for pods.": {
-                    "status": false,
-                    "resources": [
-                        "tigera-operator-5d6845b496-wrcwq"
-                    ],
-                    "resource_type": "Pod",
-                    "namespace": "tigera-operator"
-                },
-                "Define liveness probes for pods.": {
-                    "status": false,
-                    "resources": [
-                        "tigera-operator-5d6845b496-wrcwq"
-                    ],
-                    "resource_type": "Pod",
-                    "namespace": "tigera-operator"
-                },
-                "Protect critical workload with Pod Disruption Budgets": {
-                    "status": false,
-                    "resources": [
-                        "tigera-operator"
-                    ],
-                    "resource_type": "Pod",
-                    "namespace": "tigera-operator"
-                }
-            }
-        }
-    }
+<!DOCTYPE html>
+<head>
+<meta charset="UTF-8">
+<style>
+.r1 {color: #00ff00; text-decoration-color: #00ff00}
+.r2 {font-weight: bold}
+.r3 {color: #008080; text-decoration-color: #008080; font-weight: bold}
+.r4 {color: #00ff00; text-decoration-color: #00ff00; font-weight: bold}
+.r5 {color: #800080; text-decoration-color: #800080}
+.r6 {color: #ff00ff; text-decoration-color: #ff00ff}
+.r7 {color: #008000; text-decoration-color: #008000}
+body {
+    color: #000000;
+    background-color: #ffffff;
 }
+</style>
+</head>
+<html>
+<body>
+    <code>
+        <pre style="font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"><span class="r1">*  *  *  *  *  *  *  *  *  *  *  *  *  *   </span><span class="r2">HARDENEKS</span><span class="r1"> *  *  *  *  *  *  *  *  *  *  *  *  *  *  *</span>
+You are operating at us-east-<span class="r3">1</span>
+Your context used is arn:aws:eks:us-east-<span class="r4">1:0004</span>7460<span class="r4">0478:c</span>luster/eks126
+Your cluster name is eks126
+You are using <span class="r5">/home/ec2-user/environment/jalawala/hardeneks/hardeneks/</span><span class="r6">config.yaml</span> as your config
+file
+
+<span class="r1">- - - - - - - - - - - - - - - - - </span><span class="r2">Checking cluster wide rules</span><span class="r1"> - - - - - - - - - - - - - - - - - </span>
+
+<span class="r1">- - - - - - - - - - - - - - - -  </span><span class="r2">Checking Namespace wide rules</span><span class="r1"> - - - - - - - - - - - - - - - - -</span>
+
+<span class="r1">- - - - - - - - - - - - - - -  </span><span class="r2">Generating the Consolidated Report</span><span class="r1"> - - - - - - - - - - - - - - - </span>
+
+╭─ <span class="r3"> Report for cluster_data pillar : 7/7 rules passed</span> ─────────────────────────────────────────╮
+│ ┏━━━━━━━━━━┳━━━━━━━━━━┳━━━━━━━━━━┳━━━━━━━━━━━┳━━━━━━━━━━┳━━━━━━━━━━━┳━━━━━━━━━━┳━━━━━━━━━━━┓ │
+│ ┃<span class="r2">          </span>┃<span class="r2">          </span>┃<span class="r2"> Rule     </span>┃<span class="r2"> Rule      </span>┃<span class="r2">          </span>┃<span class="r2">           </span>┃<span class="r2"> Resource </span>┃<span class="r2">           </span>┃ │
+│ ┃<span class="r2"> Section  </span>┃<span class="r2"> Namespa… </span>┃<span class="r2"> Name     </span>┃<span class="r2"> Descript… </span>┃<span class="r2"> Info     </span>┃<span class="r2"> Resource  </span>┃<span class="r2"> Type     </span>┃<span class="r2"> Resoluti… </span>┃ │
+│ ┡━━━━━━━━━━╇━━━━━━━━━━╇━━━━━━━━━━╇━━━━━━━━━━━╇━━━━━━━━━━╇━━━━━━━━━━━╇━━━━━━━━━━╇━━━━━━━━━━━┩ │
+│ │<span class="r7"> control… </span>│<span class="r7"> Cluster  </span>│<span class="r7"> get_EKS… </span>│<span class="r7"> Get EKS   </span>│<span class="r7"> EKS      </span>│<span class="r7">           </span>│<span class="r7"> EKS      </span>│<span class="r7"> </span><a class="r7" href="https://aws.github.io/aws-eks-best-practices/scalability/docs/control-plane/#use-eks-124-or-above">Link</a><span class="r7">      </span>│ │
+│ │<span class="r7">          </span>│<span class="r7"> Wide     </span>│<span class="r7">          </span>│<span class="r7"> Cluster   </span>│<span class="r7"> Cluster  </span>│<span class="r7">           </span>│<span class="r7"> Cluster  </span>│<span class="r7">           </span>│ │
+│ │<span class="r7">          </span>│<span class="r7">          </span>│<span class="r7">          </span>│<span class="r7"> Version   </span>│<span class="r7"> Version  </span>│<span class="r7">           </span>│<span class="r7"> Version  </span>│<span class="r7">           </span>│ │
+│ │<span class="r7">          </span>│<span class="r7">          </span>│<span class="r7">          </span>│<span class="r7">           </span>│<span class="r7"> 1.26     </span>│<span class="r7">           </span>│<span class="r7">          </span>│<span class="r7">           </span>│ │
+│ │<span class="r7"> control… </span>│<span class="r7"> Cluster  </span>│<span class="r7"> get_EKS… </span>│<span class="r7"> Get EKS   </span>│<span class="r7">          </span>│<span class="r7"> public:   </span>│<span class="r7"> EKS      </span>│<span class="r7"> </span><a class="r7" href="https://aws.github.io/aws-eks-best-practices/scalability/docs/control-plane/#use-eks-124-or-above">Link</a><span class="r7">      </span>│ │
+│ │<span class="r7">          </span>│<span class="r7"> Wide     </span>│<span class="r7">          </span>│<span class="r7"> Cluster   </span>│<span class="r7">          </span>│<span class="r7"> True,     </span>│<span class="r7"> Cluster  </span>│<span class="r7">           </span>│ │
+│ │<span class="r7">          </span>│<span class="r7">          </span>│<span class="r7">          </span>│<span class="r7"> Endpoint  </span>│<span class="r7">          </span>│<span class="r7"> private:  </span>│<span class="r7"> Endpoint </span>│<span class="r7">           </span>│ │
+│ │<span class="r7">          </span>│<span class="r7">          </span>│<span class="r7">          </span>│<span class="r7"> URL       </span>│<span class="r7">          </span>│<span class="r7"> True      </span>│<span class="r7"> URL      </span>│<span class="r7">           </span>│ │
+│ │<span class="r7">          </span>│<span class="r7">          </span>│<span class="r7">          </span>│<span class="r7">           </span>│<span class="r7">          </span>│<span class="r7"> https://… </span>│<span class="r7">          </span>│<span class="r7">           </span>│ │
+│ │<span class="r7"> data_pl… </span>│<span class="r7"> Cluster  </span>│<span class="r7"> get_clu… </span>│<span class="r7"> Get EKS   </span>│<span class="r7">          </span>│<span class="r7"> vpcId     </span>│<span class="r7"> EKS      </span>│<span class="r7"> </span><a class="r7" href="https://aws.github.io/aws-eks-best-practices/scalability/docs/control-plane/#use-eks-124-or-above">Link</a><span class="r7">      </span>│ │
+│ │<span class="r7">          </span>│<span class="r7"> Wide     </span>│<span class="r7">          </span>│<span class="r7"> Cluster   </span>│<span class="r7">          </span>│<span class="r7"> vpc-0310… </span>│<span class="r7"> Cluster  </span>│<span class="r7">           </span>│ │
+│ │<span class="r7">          </span>│<span class="r7">          </span>│<span class="r7">          </span>│<span class="r7"> VPC &amp;     </span>│<span class="r7">          </span>│<span class="r7"> subnetIds </span>│<span class="r7"> VPC &amp;    </span>│<span class="r7">           </span>│ │
+│ │<span class="r7">          </span>│<span class="r7">          </span>│<span class="r7">          </span>│<span class="r7"> Subnets   </span>│<span class="r7">          </span>│<span class="r7"> subnet-0… </span>│<span class="r7"> Subnet   </span>│<span class="r7">           </span>│ │
+│ │<span class="r7">          </span>│<span class="r7">          </span>│<span class="r7">          </span>│<span class="r7">           </span>│<span class="r7">          </span>│<span class="r7"> subnet-0… </span>│<span class="r7"> Ids      </span>│<span class="r7">           </span>│ │
+│ │<span class="r7">          </span>│<span class="r7">          </span>│<span class="r7">          </span>│<span class="r7">           </span>│<span class="r7">          </span>│<span class="r7"> subnet-0… </span>│<span class="r7">          </span>│<span class="r7">           </span>│ │
+│ │<span class="r7">          </span>│<span class="r7">          </span>│<span class="r7">          </span>│<span class="r7">           </span>│<span class="r7">          </span>│<span class="r7"> subnet-0… </span>│<span class="r7">          </span>│<span class="r7">           </span>│ │
+│ │<span class="r7"> data_pl… </span>│<span class="r7"> Cluster  </span>│<span class="r7"> get_ava… </span>│<span class="r7"> Check     </span>│<span class="r7">          </span>│<span class="r7"> Availabl… </span>│<span class="r7"> Availab… </span>│<span class="r7"> </span><a class="r7" href="https://aws.github.io/aws-eks-best-practices/scalability/docs/control-plane/#use-eks-124-or-above">Link</a><span class="r7">      </span>│ │
+│ │<span class="r7">          </span>│<span class="r7"> Wide     </span>│<span class="r7">          </span>│<span class="r7"> Available </span>│<span class="r7">          </span>│<span class="r7"> Free IPs  </span>│<span class="r7"> Free IPs </span>│<span class="r7">           </span>│ │
+│ │<span class="r7">          </span>│<span class="r7">          </span>│<span class="r7">          </span>│<span class="r7"> Free IPs  </span>│<span class="r7">          </span>│<span class="r7"> 32538     </span>│<span class="r7"> in EKS   </span>│<span class="r7">           </span>│ │
+│ │<span class="r7">          </span>│<span class="r7">          </span>│<span class="r7">          </span>│<span class="r7"> in EKS    </span>│<span class="r7">          </span>│<span class="r7">           </span>│<span class="r7"> VPC      </span>│<span class="r7">           </span>│ │
+│ │<span class="r7">          </span>│<span class="r7">          </span>│<span class="r7">          </span>│<span class="r7"> VPC       </span>│<span class="r7">          </span>│<span class="r7">           </span>│<span class="r7">          </span>│<span class="r7">           </span>│ │
+│ │<span class="r7"> data_pl… </span>│<span class="r7"> Cluster  </span>│<span class="r7"> get_clu… </span>│<span class="r7"> Get       </span>│<span class="r7">          </span>│<span class="r7"> Services  </span>│<span class="r7"> Size of  </span>│<span class="r7"> </span><a class="r7" href="https://aws.github.io/aws-eks-best-practices/scalability/docs/control-plane/#use-eks-124-or-above">Link</a><span class="r7">      </span>│ │
+│ │<span class="r7">          </span>│<span class="r7"> Wide     </span>│<span class="r7">          </span>│<span class="r7"> Cluster   </span>│<span class="r7">          </span>│<span class="r7"> : 43      </span>│<span class="r7"> the      </span>│<span class="r7">           </span>│ │
+│ │<span class="r7">          </span>│<span class="r7">          </span>│<span class="r7">          </span>│<span class="r7"> Size      </span>│<span class="r7">          </span>│<span class="r7"> Deployme… </span>│<span class="r7"> Cluster  </span>│<span class="r7">           </span>│ │
+│ │<span class="r7">          </span>│<span class="r7">          </span>│<span class="r7">          </span>│<span class="r7"> Details   </span>│<span class="r7">          </span>│<span class="r7"> : 43      </span>│<span class="r7">          </span>│<span class="r7">           </span>│ │
+│ │<span class="r7">          </span>│<span class="r7">          </span>│<span class="r7">          </span>│<span class="r7">           </span>│<span class="r7">          </span>│<span class="r7"> Pods: 111 </span>│<span class="r7">          </span>│<span class="r7">           </span>│ │
+│ │<span class="r7">          </span>│<span class="r7">          </span>│<span class="r7">          </span>│<span class="r7">           </span>│<span class="r7">          </span>│<span class="r7"> Nodes: 5  </span>│<span class="r7">          </span>│<span class="r7">           </span>│ │
+│ │<span class="r7"> data_pl… </span>│<span class="r7"> Cluster  </span>│<span class="r7"> get_nod… </span>│<span class="r7"> Get Node  </span>│<span class="r7">          </span>│<span class="r7"> EKS MNG : </span>│<span class="r7"> Node     </span>│<span class="r7"> </span><a class="r7" href="https://aws.github.io/aws-eks-best-practices/scalability/docs/control-plane/#use-eks-124-or-above">Link</a><span class="r7">      </span>│ │
+│ │<span class="r7">          </span>│<span class="r7"> Wide     </span>│<span class="r7">          </span>│<span class="r7"> groups    </span>│<span class="r7">          </span>│<span class="r7"> 2 Self    </span>│<span class="r7"> groups   </span>│<span class="r7">           </span>│ │
+│ │<span class="r7">          </span>│<span class="r7">          </span>│<span class="r7">          </span>│<span class="r7"> and       </span>│<span class="r7">          </span>│<span class="r7"> MNG : 0   </span>│<span class="r7"> and      </span>│<span class="r7">           </span>│ │
+│ │<span class="r7">          </span>│<span class="r7">          </span>│<span class="r7">          </span>│<span class="r7"> Provisio… </span>│<span class="r7">          </span>│<span class="r7"> Provisio… </span>│<span class="r7"> Provisi… </span>│<span class="r7">           </span>│ │
+│ │<span class="r7">          </span>│<span class="r7">          </span>│<span class="r7">          </span>│<span class="r7">           </span>│<span class="r7">          </span>│<span class="r7"> 0 Linux   </span>│<span class="r7">          </span>│<span class="r7">           </span>│ │
+│ │<span class="r7">          </span>│<span class="r7">          </span>│<span class="r7">          </span>│<span class="r7">           </span>│<span class="r7">          </span>│<span class="r7"> NGs:      </span>│<span class="r7">          </span>│<span class="r7">           </span>│ │
+│ │<span class="r7">          </span>│<span class="r7">          </span>│<span class="r7">          </span>│<span class="r7">           </span>│<span class="r7">          </span>│<span class="r7"> imdsv2    </span>│<span class="r7">          </span>│<span class="r7">           </span>│ │
+│ │<span class="r7">          </span>│<span class="r7">          </span>│<span class="r7">          </span>│<span class="r7">           </span>│<span class="r7">          </span>│<span class="r7"> disableP… </span>│<span class="r7">          </span>│<span class="r7">           </span>│ │
+│ │<span class="r7">          </span>│<span class="r7">          </span>│<span class="r7">          </span>│<span class="r7">           </span>│<span class="r7">          </span>│<span class="r7"> Windows   </span>│<span class="r7">          </span>│<span class="r7">           </span>│ │
+│ │<span class="r7">          </span>│<span class="r7">          </span>│<span class="r7">          </span>│<span class="r7">           </span>│<span class="r7">          </span>│<span class="r7"> NGs:      </span>│<span class="r7">          </span>│<span class="r7">           </span>│ │
+│ │<span class="r7"> data_pl… </span>│<span class="r7"> Cluster  </span>│<span class="r7"> get_far… </span>│<span class="r7"> Get EKS   </span>│<span class="r7"> EKS      </span>│<span class="r7">           </span>│<span class="r7"> EKS      </span>│<span class="r7"> </span><a class="r7" href="https://aws.github.io/aws-eks-best-practices/scalability/docs/control-plane/#use-eks-124-or-above">Link</a><span class="r7">      </span>│ │
+│ │<span class="r7">          </span>│<span class="r7"> Wide     </span>│<span class="r7">          </span>│<span class="r7"> Fargate   </span>│<span class="r7"> Fargate  </span>│<span class="r7">           </span>│<span class="r7"> Fargate  </span>│<span class="r7">           </span>│ │
+│ │<span class="r7">          </span>│<span class="r7">          </span>│<span class="r7">          </span>│<span class="r7"> Profiles  </span>│<span class="r7"> Profile… </span>│<span class="r7">           </span>│<span class="r7"> Profiles </span>│<span class="r7">           </span>│ │
+│ └──────────┴──────────┴──────────┴───────────┴──────────┴───────────┴──────────┴───────────┘ │
+╰──────────────────────────────────────────────────────────────────────────────────────────────╯
+
+</pre>
+    </code>
+</body>
+</html>
